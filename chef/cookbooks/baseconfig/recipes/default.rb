@@ -15,3 +15,19 @@ end
 execute 'ntp_restart' do
   command 'service ntp restart'
 end
+
+# Install node and npm
+package "npm"
+package "nodejs"
+package "nodejs-legacy"
+package "sqlite3"
+package "libsqlite3-dev"
+package "zlib1g-dev"
+execute 'install app dependencies' do
+	cwd '/home/ubuntu/project/app'
+	command 'npm install'
+end
+execute 'run server' do
+	cwd '/home/ubuntu/project/app'
+	command 'npm start'
+end
