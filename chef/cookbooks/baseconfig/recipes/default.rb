@@ -27,7 +27,10 @@ execute 'install app dependencies' do
 	cwd '/home/ubuntu/project/app'
 	command 'npm install'
 end
+execute 'install forever' do
+	command 'sudo npm install forever --global'
+end
 execute 'run server' do
 	cwd '/home/ubuntu/project/app'
-	command 'npm start &'
+	command 'forever start bin/www'
 end
