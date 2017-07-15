@@ -23,3 +23,16 @@ package "nodejs-legacy"
 package "sqlite3"
 package "libsqlite3-dev"
 package "zlib1g-dev"
+
+execute 'install express' do
+	command 'sudo npm install -g express'
+	command 'sudo npm install -g express-generator'
+end
+execute 'install forever' do
+	command 'sudo npm install forever --global'
+end
+execute 'run server' do
+	cwd '/home/ubuntu/project/app'
+	command 'forever start bin/www'
+end
+
