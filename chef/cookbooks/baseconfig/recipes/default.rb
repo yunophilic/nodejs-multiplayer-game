@@ -24,9 +24,11 @@ package "sqlite3"
 package "libsqlite3-dev"
 package "zlib1g-dev"
 
-execute 'install express' do
-	command 'sudo npm install -g express'
-	command 'sudo npm install -g express-generator'
+execute 'install app dependencies' do
+	command 'sudo npm update'
+	command 'sudo npm install'
+	cwd '/home/ubuntu/project/app'
+	user 'ubuntu'
 end
 execute 'install forever' do
 	command 'sudo npm install forever --global'
