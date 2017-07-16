@@ -47,8 +47,6 @@ end
 package "npm"
 package "nodejs"
 package "nodejs-legacy"
-
-Commands
 execute 'install app dependencies' do
 	cwd '/home/ubuntu/project/app'
 	command 'npm install'
