@@ -49,7 +49,7 @@ package "nodejs"
 package "nodejs-legacy"
 execute 'install app dependencies' do
 	cwd '/home/ubuntu/project/app'
-	command 'npm install'
+	command 'sudo npm install'
 end
 execute 'install forever' do
 	command 'sudo npm install forever --global'
