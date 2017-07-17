@@ -7,3 +7,6 @@
 Gemfile.lock
 log/*
 .bundle
+
+app/node_modules/*
+app/*.log
