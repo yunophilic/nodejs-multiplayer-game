@@ -7,6 +7,16 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var csrf = require('csurf');
 
+//authentation setup
+var mongoose = require('mongoose');
+var passport = require('passport');
+var flash    = require('connect-flash');
+var session  = require('express-session');
+var configDB = require('./config/database.js');
+
+var configPassport = require('./config/passport')(passport); // pass passport for configuration
+
+
 //controllers
 var index = require('./routes/index');
 var users = require('./routes/users');
@@ -31,6 +41,17 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/bootstrap', express.static(path.join(__dirname, 'node_modules/bootstrap/dist')));
 app.use('/jquery', express.static(path.join(__dirname, 'node_modules/jquery/dist')));
+
+//authentation setup
+app.use(morgan('dev')); // log every request to the console
+app.use(cookieParser()); // read cookies (needed for auth)
+app.use(bodyParser()); // get information from html forms
+app.use(session({ secret: 'testsecretforthisproject' })); // session secret - need to modify it later
+app.use(passport.initialize());
+app.use(passport.session()); // persistent login sessions
+app.use(flash()); // use connect-flash for flash messages stored in session
+require('./app/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport
+
 
 // csrf setup
 app.use(csrf({ cookie: true }));
