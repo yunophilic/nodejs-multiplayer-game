@@ -16,27 +16,45 @@ execute 'ntp_restart' do
   command 'service ntp restart'
 end
 
-# Install node and npm
+# Install and configure mongoDB
+execute 'create mongoDB list file' do
+	command 'echo "deb http://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.2 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.2.list'
+end
+execute 'import mongoDB public gpg key' do
+	command 'sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv EA312927'
+end
+execute 'apt-get update' do
+	command 'sudo apt-get update'
+end
+execute 'install mongodb-org' do
+	command 'sudo apt-get install -y mongodb-org'
+end
+execute 'stop mongod' do
+	command 'sudo service mongod stop'
+end
+execute 'run mongod' do
+	command 'sudo service mongod start'
+end
+execute 'wait' do
+	command 'sleep 5s'
+end
+execute 'create db' do
+	command 'echo "use appdb" | mongo'
+end
+
+
+# Install and configure node.js
 package "npm"
 package "nodejs"
 package "nodejs-legacy"
-package "sqlite3"
-package "libsqlite3-dev"
-package "zlib1g-dev"
-
 execute 'install app dependencies' do
-	command 'sudo npm cache clear -f'
-	command 'sudo npm set registry https://registry.npmjs.org/'
-	command 'sudo npm update'
-	command 'sudo npm install'
 	cwd '/home/ubuntu/project/app'
-	user 'ubuntu'
+	command 'sudo npm install'
 end
 execute 'install forever' do
 	command 'sudo npm install forever --global'
 end
 execute 'run server' do
 	cwd '/home/ubuntu/project/app'
-	command 'forever start bin/www'
+	command 'npm start'
 end
-
