@@ -25,6 +25,8 @@ package "libsqlite3-dev"
 package "zlib1g-dev"
 
 execute 'install app dependencies' do
+	command 'sudo npm cache clear -f'
+	command 'sudo npm set registry https://registry.npmjs.org/'
 	command 'sudo npm update'
 	command 'sudo npm install'
 	cwd '/home/ubuntu/project/app'
