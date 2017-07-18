@@ -103,8 +103,8 @@ router.param('id', function(req, res, next, id) {
 			// once validation is done save the new item in the req
 			req.id = id;
 			// go to the next thing
-			next(); 
-		} 
+			next();
+		}
 	});
 });
 
@@ -178,7 +178,7 @@ router.put('/:id/edit', function(req, res) {
 		}, function (err, updatedUser) {
 			if (err) {
 				res.send("There was a problem updating the information to the database: " + err);
-			} 
+			}
 			else {
 				//HTML responds by going back to the page or you can be fancy and create a new view that shows a success page.
 				res.format({

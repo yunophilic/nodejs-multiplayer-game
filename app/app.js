@@ -10,7 +10,7 @@ var csrf = require('csurf');
 //controllers
 var index = require('./routes/index');
 var users = require('./routes/users');
-
+var chat = require('./routes/chat');//adding path to chat
 //models
 var db = require('./models/db');
 var user = require('./models/user');
@@ -41,7 +41,7 @@ app.use(function(req, res, next) {
 
 app.use('/', index);
 app.use('/users', users);
-
+app.use('/chat', chat);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
 	var err = new Error('Not Found');
