@@ -1,29 +1,29 @@
+//obtain tools
 var express = require('express');
 var expressLayouts = require('express-ejs-layouts');
 var path = require('path');
 var favicon = require('serve-favicon');
-var logger = require('morgan');
+var morgan = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var csrf = require('csurf');
-
-//authentation setup
 var mongoose = require('mongoose');
-var flash    = require('connect-flash');
-var session  = require('express-session');
-var configDB = require('./config/database.js');
+var flash = require('connect-flash');
+var session = require('express-session');
 var passport = require('passport');
 
-mongoose.connect('mongodb://localhost/appdb');
-require('./config/passport')(passport); // pass passport for configuration
+//db setup
+var dbConfig = require('./config/db');
+mongoose.connect(dbConfig.url);
 
+//passport setup
+var passportConfig = require('./config/passport');
+passportConfig(passport); // pass passport for configuration
 
-//controllers
-var index = require('./routes/index');
-var users = require('./routes/users');
+//routes
+var home = require('./routes/home')(passport);
 
 //models
-var db = require('./models/db');
 var user = require('./models/user');
 
 var app = express();
@@ -35,7 +35,7 @@ app.use(expressLayouts);
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use(logger('dev'));
+app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -47,11 +47,11 @@ app.use('/jquery', express.static(path.join(__dirname, 'node_modules/jquery/dist
 
 //authentation setup
 app.use(morgan('dev')); // log every request to the console
-app.use(session({ secret: 'testsecretforthisproject' })); // session secret - need to modify it later
+app.use(session({ secret: 'secret' })); // session secret - need to modify it later
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
-require('./app/auth.js')(app, passport); // load our routes and pass in our app and fully configured passport
+/*require('./app/auth.js')(app, passport);*/ // load our routes and pass in our app and fully configured passport
 
 
 // csrf setup
@@ -61,8 +61,8 @@ app.use(function(req, res, next) {
 	next();
 });
 
-app.use('/', index);
-app.use('/users', users);
+app.use('/', home);
+/*app.use('/users', users);*/
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
