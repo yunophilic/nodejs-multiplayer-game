@@ -42,7 +42,7 @@ Game.prototype = {
 		tank.dead = true;
 		this.removeTank(tank.id);
 		//place explosion
-		this.$arena.append('<img id="expl' + tank.id + '" class="explosion" src="./img/explosion.gif">');
+		this.$arena.append('<img id="expl' + tank.id + '" class="explosion" src="/img/explosion.gif">');
 		$('#expl' + tank.id).css('left', (tank.x - 50)  + 'px');
 		$('#expl' + tank.id).css('top', (tank.y - 100)  + 'px');
 

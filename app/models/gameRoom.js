@@ -1,13 +1,13 @@
 var WIDTH = 1100;
 var HEIGHT = 580;
 
-function GameServer(){
+function GameRoom(){
 	this.tanks = [];
 	this.balls = [];
 	/*this.lastBallId = 0;*/
 }
 
-GameServer.prototype = {
+GameRoom.prototype = {
 
 	addTank: function(tank){
 		this.tanks.push(tank);
@@ -88,14 +88,7 @@ GameServer.prototype = {
 		this.balls = this.balls.filter(function(ball){
 			return !ball.out;
 		});
-	},
-
-	/*increaseLastBallId: function(){
-		this.lastBallId ++;
-		if(this.lastBallId > 1000){
-			this.lastBallId = 0;
-		}
-	}*/
+	}
 }
 
-module.exports = GameServer;
+module.exports = GameRoom;

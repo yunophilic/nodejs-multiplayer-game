@@ -1,8 +1,13 @@
 var express = require('express');
+var middlewares = require('../utils/middlewares');
 var router = express.Router();
 
-router.get('/', function(req, res, next) {
-	res.render('game/index', { title: 'Play the game' });
+router.get('/free-roam', middlewares.isLoggedIn, function(req, res, next) {
+	res.render('game/freeRoam', { title: 'Free Roam' });
+});
+
+router.get('/tank-name', middlewares.isLoggedIn, function(req, res, next) {
+	res.json({tankName: req.user.local.username});
 });
 
 module.exports = router;

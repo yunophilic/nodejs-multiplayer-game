@@ -1,9 +1,10 @@
+//imports
+var socketio = require('socket.io');
+var bindGameSocketEvents = require('./gameSocketEvents');
+var GameServer = require('../models/gameRoom');
+
 module.exports = function (server) {
-	var io = require('socket.io')(server);
-
-	var bindGameSocketEvents = require('./gameSocketEvents');
-
-	var GameServer = require('../models/gameServer');
+	var io = socketio(server);
 
 	//chatroom objects
 	var numUsers = 0;

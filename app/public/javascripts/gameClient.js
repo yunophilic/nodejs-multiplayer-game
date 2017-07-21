@@ -25,32 +25,29 @@ socket.on('removeTank', function(tankId){
 $(document).ready( function(){
 
 	$('#join').click( function(){
-		tankName = $('#tank-name').val();
-		joinGame(tankName, selectedTank, socket);
-	});
-
-	$('#tank-name').keyup( function(e){
-		tankName = $('#tank-name').val();
-		var k = e.keyCode || e.which;
-		if(k == 13){
+		$.get('/game/tank-name', function(data) {
+			tankName = data.tankName;
 			joinGame(tankName, selectedTank, socket);
-		}
+		});
+		
 	});
 
 	$('ul.tank-selection li').click( function(){
 		$('.tank-selection li').removeClass('selected')
 		$(this).addClass('selected');
-		selectedTank = $(this).data('tank');
+		selectedTank = $(this).data('tank');/*
+			joinGame(tankName, selectedTank, socket);
+		});*/
+		$('#join').trigger('click');
 	});
-
 });
 
-$(window).on('beforeunload', function(){
+$(window).on('beforeunload', function() {
 	socket.emit('leaveGame', tankName);
 });
 
-function joinGame(tankName, tankType, socket){
-	if(tankName != ''){
+function joinGame(tankName, tankType, socket) {
+	if(tankName != '') {
 		$('#prompt').hide();
 		socket.emit('joinGame', {id: tankName, type: tankType});
 	}
