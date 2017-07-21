@@ -21,8 +21,9 @@ module.exports = function(passport) {
 	// process the login form
 	router.post('/login', passport.authenticate('local-login', {
 		successRedirect : '/profile', // redirect to the secure profile section
-		failureRedirect : '/login', // redirect back to the signup page if there is an error
-		failureFlash : true // allow flash messages
+		failureRedirect : '/login', // redirect back to the login page if there is an error
+		badRequestMessage: 'All fields are required.',
+		failureFlash : { type: 'loginMessage' } // allow flash messages
 	}));
 
 	// =====================================
@@ -38,7 +39,8 @@ module.exports = function(passport) {
 	router.post('/signup', passport.authenticate('local-signup', {
 		successRedirect : '/profile', // redirect to the secure profile section
 		failureRedirect : '/signup', // redirect back to the signup page if there is an error
-		failureFlash : true // allow flash messages
+		badRequestMessage: 'All fields are required.',
+		failureFlash : { type: 'signupMessage' } // allow flash messages
 	}));
 
 	// =====================================
@@ -57,7 +59,7 @@ module.exports = function(passport) {
 	// =====================================
 	router.get('/logout', function(req, res) {
 		req.logout();
-		res.redirect('/');
+		res.redirect('/login');
 	});
 	
 	return router;
@@ -69,6 +71,6 @@ function isLoggedIn(req, res, next) {
 	if (req.isAuthenticated())
 		return next();
 
-	// if they aren't redirect them to the home page
-	res.redirect('/');
+	// if they aren't redirect them to the login page
+	res.redirect('/login');
 }
