@@ -271,7 +271,6 @@ Tank.prototype = {
 					t.dir.left = true;
 					break;
 			}
-
 		}).keyup( function(e){
 			var k = e.keyCode || e.which;
 			switch(k){
