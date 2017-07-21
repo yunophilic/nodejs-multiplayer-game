@@ -1,8 +1,15 @@
 module.exports = function (server) {
 	var io = require('socket.io')(server);
-	
-	/////////chatting room
+
+	var bindGameSocketEvents = require('./gameSocketEvents');
+
+	var GameServer = require('../models/gameServer');
+
+	//chatroom objects
 	var numUsers = 0;
+
+	//game objects
+	var game = new GameServer();
 
 	io.on('connection', function (socket) {
 		var addedUser = false;
@@ -61,5 +68,7 @@ module.exports = function (server) {
 				});
 			}
 		});
+
+		bindGameSocketEvents(socket, game);
 	});
 };
