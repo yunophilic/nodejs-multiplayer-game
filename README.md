@@ -15,3 +15,4 @@ URL:
 References:
 - https://scotch.io/tutorials/easy-node-authentication-setup-and-local
 - http://rubentd.com/blog/creating-a-multiplayer-game-with-node-js/ (game code and assets modified from this)
+- https://github.com/socketio/socket.io/blob/master/examples/chat/index.js
