@@ -11,4 +11,7 @@ router.get('/', middlewares.isLoggedIn, function(req, res) {
     user : req.user // get the user out of session and pass to template
   });
 });
+router.get('/chatname', middlewares.isLoggedIn, function(req, res, next) {
+	res.json({chatname: req.user.local.username});
+});
 module.exports = router;
