@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<title>App - <%= typeof title != "undefined" ? title : "" %></title>
-		
+
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -10,7 +10,7 @@
 		<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
 		<script src="/jquery/jquery.min.js"></script>
 		<script src="/bootstrap/js/bootstrap.min.js"></script>
-		
+
 		<!-- custom css and js -->
 		<link rel="stylesheet" href="/stylesheets/style.css" />
 		<link rel="stylesheet" href="/stylesheets/navbar.css" />
@@ -22,10 +22,11 @@
 		<% include _navbar %>
 		<% include _sidebar %>
 
-		<div id="page-content-wrapper">
+		<!-- <div id="page-content-wrapper">
 			<div class="container">
+					</div> -->
 				<%- body %>
-			</div>
+
 
 			<%- script %>
 		</div>
