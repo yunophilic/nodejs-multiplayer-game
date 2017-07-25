@@ -22,6 +22,8 @@ passportConfig(passport); // pass passport for configuration
 
 //routes
 var home = require('./routes/home')(passport);
+var chat = require('./routes/chat');
+var game = require('./routes/game');
 
 //models
 var user = require('./models/user');
@@ -31,6 +33,8 @@ var app = express();
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
+app.set("layout extractScripts", true)
+app.set("layout extractStyles", true)
 app.use(expressLayouts);
 
 // uncomment after placing your favicon in /public
@@ -64,6 +68,8 @@ app.use(function(req, res, next) {
 
 app.use('/', home);
 /*app.use('/users', users);*/
+app.use('/chat', chat);
+app.use('/game', game);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

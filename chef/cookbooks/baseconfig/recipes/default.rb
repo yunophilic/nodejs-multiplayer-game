@@ -51,6 +51,10 @@ execute 'install app dependencies' do
 	cwd '/home/ubuntu/project/app'
 	command 'sudo npm install'
 end
+execute 'install socket.io' do
+	cwd '/home/ubuntu/project/app'
+	command 'npm install --save socket.io'
+end
 execute 'install forever' do
 	command 'sudo npm install forever --global'
 end
