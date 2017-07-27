@@ -71,14 +71,15 @@ router.param('id', function(req, res, next, id) {
 });
 
 router.get('/:id', function(req, res) {
-   res.send('Hello World!')
-	/*mongoose.model('User').findById(req.id, function (err, user) {
+
+	mongoose.model('User').findById(req.id, function (err, user) {
 		if (err) {
 			console.log('GET Error: There was a problem retrieving: ' + err);
+      res.send('Error!')
 		} else {
 			console.log('GET Retrieving ID: ' + user._id);
 			//var userDob = user.dob.toISOString().substring(0, userdob.indexOf('T'));
-			res.format({
+			/*res.format({
         html: function(){
 					res.render('users/show', {
 						title: 'Users Profile',
@@ -88,9 +89,10 @@ router.get('/:id', function(req, res) {
 				json: function(){
 					res.json(user);
 				}
-			});
+			});*/
+      res.send('Pass' + req.id + user.local.usename);
 		}
-	});*/
+	});
 });
 
 module.exports = router;
