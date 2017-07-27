@@ -71,7 +71,8 @@ router.param('id', function(req, res, next, id) {
 });
 
 router.get('/:id', function(req, res) {
-	mongoose.model('User').findById(req.id, function (err, user) {
+   res.send('Hello World!')
+	/*mongoose.model('User').findById(req.id, function (err, user) {
 		if (err) {
 			console.log('GET Error: There was a problem retrieving: ' + err);
 		} else {
@@ -89,7 +90,7 @@ router.get('/:id', function(req, res) {
 				}
 			});
 		}
-	});
+	});*/
 });
 
 module.exports = router;
