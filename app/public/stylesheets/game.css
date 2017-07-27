@@ -10,7 +10,7 @@
 }
 
 .arena{
-	/*margin: 10px auto;*/
+	margin: 10px auto;
 	background-color: white;
 	position: relative;
 	pointer-events: none;
