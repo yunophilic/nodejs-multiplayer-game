@@ -60,5 +60,5 @@ execute 'install forever' do
 end
 execute 'run server' do
 	cwd '/home/ubuntu/project/app'
-  command 'npm start'
+	command 'npm start'
 end
