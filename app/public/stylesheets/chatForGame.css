@@ -20,11 +20,6 @@ html, input {
     sans-serif;
 }
 
-html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
 
 ul {
   list-style: none;
@@ -41,7 +36,7 @@ ul {
 }
 
 .page {
-  height: 100%;
+
   position: absolute;
   width: 100%;
 }
