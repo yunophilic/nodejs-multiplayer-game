@@ -1,8 +1,10 @@
 var express = require('express');
-var mongoose = require('mongoose'); //mongo connection
+//var mongoose = require('mongoose'); //mongo connection
 var bodyParser = require('body-parser'); //parses information from POST
 var methodOverride = require('method-override'); //used to manipulate POST
 var router = express.Router();
+
+var User = require('../models/user');
 
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(methodOverride(function(req, res){
@@ -17,7 +19,7 @@ router.use(methodOverride(function(req, res){
 /* GET users listing. */
 router.get('/', function(req, res, next) {
 	//retrieve all users from Monogo
-	mongoose.model('User').find({}, function (err, users) {
+	User.find({}, function (err, users) {
 		if (err) {
 			return console.error(err);
 		} else {
@@ -38,13 +40,13 @@ router.get('/', function(req, res, next) {
 	});
 });
 
-router.post('/', function(req, res) {
+/*router.post('/', function(req, res) {
 	// Get values from POST request. These can be done through forms or REST calls. These rely on the "name" attributes for forms
 	var username = req.body.username;
 	var email = req.body.email;
 	var dob = req.body.dob;
 	//call the create function for our database
-	mongoose.model('User').create({
+	User.create({
 		username : username,
 		email : email,
 		dob : dob
@@ -57,9 +59,7 @@ router.post('/', function(req, res) {
 			res.format({
 				//HTML response will set the location and redirect back to the home page. You could also create a 'success' page if that's your thing
 				html: function(){
-					// If it worked, set the header so the address bar doesn't still say /adduser
-					//res.location("users");
-					// And forward to success page
+					// Forward to success page
 					res.redirect("/users");
 				},
 				//JSON response will show the newly created user
@@ -69,18 +69,18 @@ router.post('/', function(req, res) {
 			});
 		}
 	})
-});
+});*/
 
 /* GET New User page. */
-router.get('/new', function(req, res) {
+/*router.get('/new', function(req, res) {
 	res.render('users/new', { title: 'Register' });
-});
+});*/
 
 // route middleware to validate :id
 router.param('id', function(req, res, next, id) {
 	//console.log('validating ' + id + ' exists');
 	//find the ID in the Database
-	mongoose.model('User').findById(id, function (err, user) {
+	User.findById(id, function (err, user) {
 		//if it isn't found, we are going to respond with 404
 		if (err) {
 			console.log(id + ' was not found');
@@ -108,9 +108,13 @@ router.param('id', function(req, res, next, id) {
 });
 
 router.get('/:id', function(req, res) {
-	mongoose.model('User').findById(req.id, function (err, user) {
+	User.findById(req.id, function (err, user) {
 		if (err) {
 			console.log('GET Error: There was a problem retrieving: ' + err);
+		} else if (
+			req.isAuthenticated() && 
+			req.user._id == user._id) { //user selects himself
+			res.redirect("/profile");
 		} else {
 			console.log('GET Retrieving ID: ' + user._id);
 			res.format({
@@ -130,7 +134,7 @@ router.get('/:id', function(req, res) {
 /* GET Edit User page. */
 /*router.get('/:id/edit', function(req, res) {
 	//search for the user within Mongo
-	mongoose.model('User').findById(req.id, function (err, user) {
+	User.findById(req.id, function (err, user) {
 		if (err) {
 			console.log('GET Error: There was a problem retrieving: ' + err);
 		} else {
@@ -166,7 +170,7 @@ router.get('/:id', function(req, res) {
 	var isloved = req.body.isloved;
 
 	//find the document by ID
-	mongoose.model('User').findById(req.id, function (err, user) {
+	User.findById(req.id, function (err, user) {
 		//update it
 		user.update({
 			username : username,
@@ -192,37 +196,15 @@ router.get('/:id', function(req, res) {
 	});
 });*/
 
-//DELETE a Blob by ID
-/*router.delete('/:id', function (req, res){
-	//find blob by ID
-	mongoose.model('User').findById(req.id, function (err, user) {
+router.put('/:id/add', function(req, res) {
+	User.findById(req.id), function(err, user) {
 		if (err) {
-			return console.error(err);
-		} else {
-			//remove it from Mongo
-			user.remove(function (err, deletedUser) {
-				if (err) {
-					return console.error(err);
-				} else {
-					//Returning success messages saying it was deleted
-					console.log('DELETE removing ID: ' + deletedUser._id);
-					res.format({
-						//HTML returns us back to the main page, or you can create a success page
-						html: function(){
-							res.redirect("/users");
-						},
-						//JSON returns the item that has been deleted
-						json: function(){
-							res.json({
-								message : 'deleted',
-								item : deletedUser
-							});
-						}
-					});
-				}
-			});
+			res.send("error adding friend");
+			return;
 		}
-	});
-});*/
+
+		user
+	}
+});
 
 module.exports = router;

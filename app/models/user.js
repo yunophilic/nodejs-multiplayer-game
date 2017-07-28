@@ -28,7 +28,8 @@ var userSchema = mongoose.Schema({
         email        : String,
         name         : String
     },
-	friends: 	[]
+	friends: 	[],
+    friendRequests: []
 });
 
 // methods ======================
