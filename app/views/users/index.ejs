@@ -1,12 +1,41 @@
-<h1>Users List</h1>
+<h1>Users</h1>
 
-<ul>
-	<% for(var i=0; i<users.length; i++) { %>
-		<% var user = users[i]; %>
-		<li>
-			<a href="/users/<%= user._id %>">
-				<%= user.local.username + "(" + user.local.email + ")" %>		
-			</a>
+<ng-view></ng-view>
+
+<!-- Template -->
+<script type="text/ng-template" id="/users.html">
+	Search: <input type="text" ng-model="search.local.username">
+	<ul>
+		<li ng-repeat="user in users | filter: search">
+			<a href="users/{{user._id}}">{{user.local.username}}</a>
 		</li>
-	<% } %>
-</ul>
+	</ul>
+</script>
+
+<script>
+	angular.module('app', ['ngRoute'])
+		//---------------
+		// Controllers
+		//---------------
+		.controller('UsersController', function ($scope, $http) {
+			$http.get('/users', {
+				headers: {
+					'Accept': 'application/json'
+				}
+			}).then(function(response) {
+				var users = response.data;
+				$scope.users = users;
+			});
+		})
+
+		//---------------
+		// Routes
+		//---------------
+		.config(['$routeProvider', function ($routeProvider) {
+			$routeProvider
+				.when('/', {
+					templateUrl: '/users.html',
+					controller: 'UsersController'
+				});
+		}]);
+</script>

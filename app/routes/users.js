@@ -26,8 +26,7 @@ router.get('/', function(req, res, next) {
 				//HTML response will render the index.ejs file in the views/users folder. We are also setting "users" to be an accessible variable in our jade view
 				html: function(){
 					res.render('users/index', {
-						title: 'All users',
-						"users" : users
+						title: 'Search users'
 					});
 				},
 				//JSON response will show all users in JSON format
@@ -114,11 +113,9 @@ router.get('/:id', function(req, res) {
 			console.log('GET Error: There was a problem retrieving: ' + err);
 		} else {
 			console.log('GET Retrieving ID: ' + user._id);
-			var userDob = user.dob.toISOString().substring(0, userdob.indexOf('T'));
 			res.format({
 				html: function(){
 					res.render('users/show', {
-						"userDob" : userDob,
 						"user" : user
 					});
 				},
@@ -131,7 +128,7 @@ router.get('/:id', function(req, res) {
 });
 
 /* GET Edit User page. */
-router.get('/:id/edit', function(req, res) {
+/*router.get('/:id/edit', function(req, res) {
 	//search for the user within Mongo
 	mongoose.model('User').findById(req.id, function (err, user) {
 		if (err) {
@@ -157,10 +154,10 @@ router.get('/:id/edit', function(req, res) {
 			});
 		}
 	});
-});
+});*/
 
 //PUT to update a blob by ID
-router.put('/:id/edit', function(req, res) {
+/*router.put('/:id/edit', function(req, res) {
 	// Get our REST or form values. These rely on the "name" attributes
 	var name = req.body.name;
 	var badge = req.body.badge;
@@ -193,10 +190,10 @@ router.put('/:id/edit', function(req, res) {
 			}
 		})
 	});
-});
+});*/
 
 //DELETE a Blob by ID
-router.delete('/:id', function (req, res){
+/*router.delete('/:id', function (req, res){
 	//find blob by ID
 	mongoose.model('User').findById(req.id, function (err, user) {
 		if (err) {
@@ -226,6 +223,6 @@ router.delete('/:id', function (req, res){
 			});
 		}
 	});
-});
+});*/
 
 module.exports = router;
