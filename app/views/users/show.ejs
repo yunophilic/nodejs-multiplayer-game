@@ -1,7 +1,17 @@
 <h1>Users Profile</h1>
 
 <%= "Username:" + user.local.username  %>
+<br>
 <%= "Email:" + user.local.email  %>
 
-<p>Add Friends?</p>
+<form action="/sharedetails" method="post">
+  <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
 
+  <div class="form-group">
+    <label>Friends id</label>
+    <br><%= user._id %><br>
+    <input type="hidden" name="id" value="<%= user._id %>" >
+  </div>
+
+  <button type="submit" class="btn btn-warning btn-lg">Share my info</button>
+</form>
