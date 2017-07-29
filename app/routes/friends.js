@@ -79,18 +79,17 @@ router.get('/:id', function(req, res) {
 		} else {
 			console.log('GET Retrieving ID: ' + user._id);
 			//var userDob = user.dob.toISOString().substring(0, userdob.indexOf('T'));
-			/*res.format({
+			res.format({
         html: function(){
-					res.render('users/show', {
-						title: 'Users Profile',
-						"users" : users
-					});
+          res.render('users/show', {
+            "user" : user
+          });
 				},
 				json: function(){
 					res.json(user);
 				}
-			});*/
-      res.send('Pass' + req.id + user.local.usename);
+			});
+      //res.send('Pass' + req.id + user.local.usename);
 		}
 	});
 });
