@@ -89,9 +89,14 @@ router.get('/:id', function(req, res) {
 					res.json(user);
 				}
 			});
-      //res.send('Pass' + req.id + user.local.usename);
 		}
 	});
 });
 
+// process the sharedetails form
+/*
+app.post('/sharedetails', parseForm, csrfProtection, function(req, res) {
+  res.send('data is being processed');
+});
+*/
 module.exports = router;
