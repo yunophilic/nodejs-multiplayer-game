@@ -25,7 +25,7 @@ router.get('/', function(req, res, next) {
 			res.format({
 				//HTML response will render the index.ejs file in the views/users folder. We are also setting "users" to be an accessible variable in our jade view
 				html: function(){
-					res.render('users/index', {
+					res.render('users/friends', {
 						title: 'All users',
 						"users" : users
 					});

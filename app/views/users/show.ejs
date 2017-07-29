@@ -1,8 +1,15 @@
 <h1>Users Profile</h1>
 
-<%= "Username:" + user.local.username  %>
-<br>
-<%= "Email:" + user.local.email  %>
+<div class="row">
+	<div class="col-sm-6">
+		<div class="well">
+			<p>
+				<strong>username</strong>: <%= user.local.username %><br>
+				<strong>email</strong>: <%= user.local.email %><br>
+			</p>
+		</div>
+	</div>
+</div>
 
 <form action="./sharedetails" method="post">
   <input type="hidden" name="_csrf" value="<%= csrfToken %>" />

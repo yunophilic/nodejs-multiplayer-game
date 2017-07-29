@@ -6,6 +6,7 @@
     "start": "forever start ./bin/www"
   },
   "dependencies": {
+    "angular": "^1.6.5",
     "bcrypt-nodejs": "latest",
     "body-parser": "^1.17.2",
     "bootstrap": "^3.3.7",
