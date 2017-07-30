@@ -57,29 +57,11 @@ module.exports = function(passport) {
 			user : req.user // get the user out of session and pass to template
 		});
 	});
-/*
-	router.post('/profile/upload', middlewares.isLoggedIn, function(req, res) {
-
-
-		var data = fs.readFileSync(imgPath);
-		var type = 'image/png';
-		mongoose.model('User').findById(req.id, function (err, user) {
-			if (err) {
-				console.log('GET Error: There was a problem retrieving: ' + err);
-			} else {
-				//update img values
-				user.update({
-					_id:req.id
-				},{
-					img.data: data,
-					img.contentType:type
-				})
-
-			}
-		})
-
+	router.get('/profile/edit', middlewares.isLoggedIn, function(req, res) {
+		res.render('home/editprofile', {
+			user : req.user // get the user out of session and pass to template
+		});
 	});
-*/
 	// =====================================
 	// LOGOUT ==============================
 	// =====================================

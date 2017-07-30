@@ -1,6 +1,6 @@
-<h1>User Registration</h1>
+<h1>Edit my Profile</h1>
 
-<form method="POST" action="/users">
+<form method="POST" action="/profile/edit">
 	<input type="hidden" name="_csrf" value="<%= csrfToken %>" />
 	<dl class="form">
 		<dt>
@@ -23,14 +23,12 @@
 		</dd>
 
 		<dt>
-			<label for="dob">DOB</label>
+			<label for="pic">Profile Picture</label>
 		</dt>
 		<dd>
-			<div class="field">
-				<input type="date" name="dob">
-			</div>
+
 		</dd>
 	</dl>
 
-	<input type="submit" value="Create">
+	<input type="submit" value="Update">
 </form>
