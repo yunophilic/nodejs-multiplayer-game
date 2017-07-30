@@ -55,16 +55,26 @@ module.exports = function(passport) {
 	router.get('/profile', middlewares.isLoggedIn, function(req, res) {
 		res.render('home/profile', {
 			user : req.user // get the user out of session and pass to template
+			//image: 'profile1.png'
 		});
 	});
+/*
+	router.post('/profile/upload', middlewares.isLoggedIn, function(req, res) {
 
-	/*router.post('/profile/upload', middlewares.isLoggedIn, function(req, res) {
 
+		var data = fs.readFileSync(imgPath);
+		var type = 'image/png';
 		mongoose.model('User').findById(req.id, function (err, user) {
 			if (err) {
 				console.log('GET Error: There was a problem retrieving: ' + err);
 			} else {
 				//update img values
+				user.update({
+					_id:req.id
+				},{
+					img.data: data,
+					img.contentType:type
+				})
 
 			}
 		})
