@@ -9,6 +9,9 @@ module.exports = function(passport) {
 	router.get('/', function(req, res) {
 		res.render('home/index'); // load the index.ejs file
 	});
+	router.get('/help', function(req, res) {
+		res.render('home/help'); // load the help.ejs file
+	});
 
 	// =====================================
 	// LOGIN ===============================
@@ -16,7 +19,7 @@ module.exports = function(passport) {
 	// show the login form
 	router.get('/login', function(req, res) {
 		// render the page and pass in any flash data if it exists
-		res.render('home/login', { message: req.flash('loginMessage') }); 
+		res.render('home/login', { message: req.flash('loginMessage') });
 	});
 
 	// process the login form
@@ -62,6 +65,6 @@ module.exports = function(passport) {
 		req.logout();
 		res.redirect('/login');
 	});
-	
+
 	return router;
 };
