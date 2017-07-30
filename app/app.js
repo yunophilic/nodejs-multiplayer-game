@@ -25,7 +25,7 @@ var home = require('./routes/home')(passport);
 var chat = require('./routes/chat');
 var game = require('./routes/game');
 var users = require('./routes/users');
-
+var friends = require('./routes/friends');
 //models
 var user = require('./models/user');
 
@@ -72,6 +72,7 @@ app.use('/', home);
 app.use('/users', users);
 app.use('/chat', chat);
 app.use('/game', game);
+app.use('/friends', friends);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

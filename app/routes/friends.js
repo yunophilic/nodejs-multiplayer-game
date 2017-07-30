@@ -25,7 +25,7 @@ router.get('/', function(req, res, next) {
 			res.format({
 				//HTML response will render the index.ejs file in the views/users folder. We are also setting "users" to be an accessible variable in our jade view
 				html: function(){
-					res.render('users/index', {
+					res.render('users/friends', {
 						title: 'All users',
 						"users" : users
 					});
@@ -79,20 +79,24 @@ router.get('/:id', function(req, res) {
 		} else {
 			console.log('GET Retrieving ID: ' + user._id);
 			//var userDob = user.dob.toISOString().substring(0, userdob.indexOf('T'));
-			/*res.format({
+			res.format({
         html: function(){
-					res.render('users/show', {
-						title: 'Users Profile',
-						"users" : users
-					});
+          res.render('users/show', {
+            "user" : user
+          });
 				},
 				json: function(){
 					res.json(user);
 				}
-			});*/
-      res.send('Pass' + req.id + user.local.usename);
+			});
 		}
 	});
 });
 
+// process the sharedetails form
+/*
+app.post('/sharedetails', parseForm, csrfProtection, function(req, res) {
+  res.send('data is being processed');
+});
+*/
 module.exports = router;

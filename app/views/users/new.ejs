@@ -1,0 +1,36 @@
+<h1>User Registration</h1>
+
+<form method="POST" action="/users">
+	<input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+	<dl class="form">
+		<dt>
+			<label for="username">User name</label>
+		</dt>
+		<dd>
+			<div class="field">
+				<input type="text" name="username">
+			</div>
+		</dd>
+
+		<dt>
+			<label for="email">Email</label>
+		</dt>
+
+		<dd>
+			<div class="field">
+				<input type="email" name="email">
+			</div>
+		</dd>
+
+		<dt>
+			<label for="dob">DOB</label>
+		</dt>
+		<dd>
+			<div class="field">
+				<input type="date" name="dob">
+			</div>
+		</dd>
+	</dl>
+
+	<input type="submit" value="Create">
+</form>
