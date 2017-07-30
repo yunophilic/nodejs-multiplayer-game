@@ -55,7 +55,6 @@ module.exports = function(passport) {
 	router.get('/profile', middlewares.isLoggedIn, function(req, res) {
 		res.render('home/profile', {
 			user : req.user // get the user out of session and pass to template
-			//image: 'profile1.png'
 		});
 	});
 /*
