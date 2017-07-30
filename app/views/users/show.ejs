@@ -11,5 +11,28 @@
 	</div>
 </div>
 
-<span class="btn btn-default">Add Friends</span>
-
+<% if(currentUser == undefined) { %>
+	<p><strong><%= user.local.username %></strong> is on Dawn Of The Tanks.</p>
+	<p>
+		To connect with <strong><%= user.local.username %></strong>, 
+		<a href="/login">login</a> or <a href="/signup">signup</a>
+	</p>
+<% } else if(user.friendRequests.includes(currentUser._id.toString())) {%>
+	<span id="cancel-req-btn" class="btn btn-danger">Cancel Friend Request</span>
+<% } else { %>
+	<span id="add-friend-btn" class="btn btn-info">Send Friend Request</span>
+<% } %>
+<script type="text/javascript">
+	$("#add-friend-btn").click(function() {
+		$.ajax({
+			url: "/users/<%= user._id %>/add",
+			type: 'PUT',
+			data: {
+				_csrf: '<%= csrfToken %>' //send csrf token
+			},
+			success: function(data) {
+				location.reload();
+			}
+		});
+	});
+</script>

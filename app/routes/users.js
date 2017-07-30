@@ -1,7 +1,8 @@
 var express = require('express');
-//var mongoose = require('mongoose'); //mongo connection
 var bodyParser = require('body-parser'); //parses information from POST
 var methodOverride = require('method-override'); //used to manipulate POST
+var middlewares = require('../utils/middlewares');
+var helpers = require('../utils/helpers');
 var router = express.Router();
 
 var User = require('../models/user');
@@ -111,16 +112,17 @@ router.get('/:id', function(req, res) {
 	User.findById(req.id, function (err, user) {
 		if (err) {
 			console.log('GET Error: There was a problem retrieving: ' + err);
-		} else if (
-			req.isAuthenticated() && 
-			req.user._id == user._id) { //user selects himself
+		} else if (req.isAuthenticated() && req.user._id.equals(user._id)) {
+			//user selects himself
 			res.redirect("/profile");
 		} else {
-			console.log('GET Retrieving ID: ' + user._id);
+			/*console.log('GET retrieving user: ' + user);
+			console.log('current user: ' + req.user);*/
 			res.format({
 				html: function(){
 					res.render('users/show', {
-						"user" : user
+						user: user,
+						currentUser: req.user
 					});
 				},
 				json: function(){
@@ -197,14 +199,28 @@ router.get('/:id', function(req, res) {
 });*/
 
 router.put('/:id/add', function(req, res) {
-	User.findById(req.id), function(err, user) {
+	//console.log("HHHHHHHHHHHHHHHHHHHHHHH");
+	User.findById(req.id, function(err, user) {
 		if (err) {
-			res.send("error adding friend");
+			console.log("error retrieving user");
+			helpers.setErrorResponse(res);
 			return;
 		}
 
-		user
-	}
+		console.log(req.user._id.toString());
+
+		if (!user.friendRequests.includes(req.user._id.toString())) {
+			user.friendRequests.push(req.user._id.toString());
+			user.save(function(err, updatedUser) {
+				if (err) {
+					console.log("error saving user");
+					helpers.setErrorResponse(res);
+					return;
+				}
+				res.json(updatedUser);
+			});
+		}
+	});
 });
 
 module.exports = router;

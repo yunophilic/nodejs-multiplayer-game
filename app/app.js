@@ -82,9 +82,15 @@ app.use(function(req, res, next) {
 
 // error handler
 app.use(function(err, req, res, next) {
+	console.log('ERROR HAPPEN');
+	console.log(err.message);
+	console.log(err);
+
 	// set locals, only providing error in development
 	res.locals.message = err.message;
 	res.locals.error = req.app.get('env') === 'development' ? err : {};
+	//required to prevent "esc is not a function" error
+	res.locals.loggedIn = req.isAuthenticated();
 
 	// render the error page
 	res.status(err.status || 500);
