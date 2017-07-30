@@ -1,5 +1,6 @@
 var express = require('express');
 var middlewares = require('../utils/middlewares');
+var mongoose = require('mongoose'); //mongo connection
 var router = express.Router();
 
 module.exports = function(passport) {
@@ -63,7 +64,9 @@ module.exports = function(passport) {
 		});
 	});
 
-	router.post('/profile/edit', function(req, res) {
+router.post('/profile/edit', function(req, res) {
+		//var userid = req.body.userid;
+		var userid = req.user._id
 		var img_req = req.body.profilePic;
 		var token = req.body._csrf;
 		var img;
@@ -83,7 +86,34 @@ switch(img_req) {
     default:
 	   img = "profile4.png"
 }
-		res.send('<br>'+img+ '<br>'+img_req)
+
+mongoose.model('User').findById(userid, function (err, user) {
+	res.send(user.local.email)
+
+	/*
+	//update it
+	user.update({
+		local.imgPath : img,
+	}, function (err, updatedUser) {
+		if (err) {
+			res.send("There was a problem updating the information to the database: " + err);
+		}
+		else {
+			//HTML responds by going back to the page or you can be fancy and create a new view that shows a success page.
+			res.format({
+				html: function(){
+					res.redirect("/profile/");
+				},
+				//JSON responds showing the updated values
+				json: function(){
+					res.json(updatedUser);
+				}
+			});
+		}
+	})
+*/
+});
+
 	});
 	// =====================================
 	// LOGOUT ==============================
