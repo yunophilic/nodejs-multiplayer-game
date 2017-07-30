@@ -64,11 +64,26 @@ module.exports = function(passport) {
 	});
 
 	router.post('/profile/edit', function(req, res) {
-		var username = req.body.username;
-		var email = req.body.email;
-		var img = req.body.profilePic;
+		var img_req = req.body.profilePic;
 		var token = req.body._csrf;
-		res.send(username+'<br>' + email + '<br>'+img+ '<br>'+token)
+		var img;
+switch(img_req) {
+  case '1':
+		img = "profile1.png"
+        break;
+	case '2':
+		img = "profile2.png"
+        break;
+	case '3':
+		img = "profile3.png"
+        break;
+	case '4':
+		img = "profile4.png"
+        break;
+    default:
+	   img = "profile4.png"
+}
+		res.send('<br>'+img+ '<br>'+img_req)
 	});
 	// =====================================
 	// LOGOUT ==============================
