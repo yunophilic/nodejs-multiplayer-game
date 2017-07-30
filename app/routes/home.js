@@ -9,6 +9,9 @@ module.exports = function(passport) {
 	router.get('/', function(req, res) {
 		res.render('home/index'); // load the index.ejs file
 	});
+	router.get('/help', function(req, res) {
+		res.render('home/help'); // load the help.ejs file
+	});
 
 	// =====================================
 	// LOGIN ===============================
