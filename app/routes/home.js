@@ -16,7 +16,7 @@ module.exports = function(passport) {
 	// show the login form
 	router.get('/login', function(req, res) {
 		// render the page and pass in any flash data if it exists
-		res.render('home/login', { message: req.flash('loginMessage') }); 
+		res.render('home/login', { message: req.flash('loginMessage') });
 	});
 
 	// process the login form
@@ -55,6 +55,19 @@ module.exports = function(passport) {
 		});
 	});
 
+	/*router.post('/profile/upload', middlewares.isLoggedIn, function(req, res) {
+
+		mongoose.model('User').findById(req.id, function (err, user) {
+			if (err) {
+				console.log('GET Error: There was a problem retrieving: ' + err);
+			} else {
+				//update img values
+
+			}
+		})
+
+	});
+*/
 	// =====================================
 	// LOGOUT ==============================
 	// =====================================
@@ -62,6 +75,6 @@ module.exports = function(passport) {
 		req.logout();
 		res.redirect('/login');
 	});
-	
+
 	return router;
 };

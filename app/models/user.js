@@ -27,8 +27,13 @@ var userSchema = mongoose.Schema({
         token        : String,
         email        : String,
         name         : String
-    }
+    },
+    img: {
+       data: Buffer,
+       contentType: String
+     }
 });
+//https://stackoverflow.com/questions/29780733/store-an-image-in-mongodb-using-node-js-express-and-mongoose
 
 // methods ======================
 // generating a hash
