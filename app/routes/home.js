@@ -62,6 +62,14 @@ module.exports = function(passport) {
 			user : req.user // get the user out of session and pass to template
 		});
 	});
+
+	router.post('/profile/edit', function(req, res) {
+		var username = req.body.username;
+		var email = req.body.email;
+		var img = req.body.profilePic;
+		var token = req.body._csrf;
+		res.send(username+'<br>' + email + '<br>'+img+ '<br>'+token)
+	});
 	// =====================================
 	// LOGOUT ==============================
 	// =====================================
