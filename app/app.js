@@ -47,7 +47,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/bootstrap', express.static(path.join(__dirname, 'node_modules/bootstrap/dist')));
 app.use('/jquery', express.static(path.join(__dirname, 'node_modules/jquery/dist')));
-
+app.use(express.static('publicImg'))
 
 
 //authentation setup
@@ -71,6 +71,7 @@ app.use('/', home);
 /*app.use('/users', users);*/
 app.use('/chat', chat);
 app.use('/game', game);
+app.use('/static', express.static('publicImg'))
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
