@@ -2,6 +2,8 @@ var express = require('express');
 var middlewares = require('../utils/middlewares');
 var mongoose = require('mongoose'); //mongo connection
 var router = express.Router();
+var bodyParser = require('body-parser'); //parses information from POST
+var methodOverride = require('method-override'); //used to manipulate POST
 
 module.exports = function(passport) {
 	// =====================================
@@ -70,6 +72,7 @@ router.post('/profile/edit', function(req, res) {
 		var img_req = req.body.profilePic;
 		var token = req.body._csrf;
 		var img;
+
 switch(img_req) {
   case '1':
 		img = "profile1.png"
@@ -87,34 +90,29 @@ switch(img_req) {
 	   img = "profile4.png"
 }
 
-mongoose.model('User').findById(userid, function (err, user) {
-	res.send(user.local.email)
 
-	/*
-	//update it
-	user.update({
-		local.imgPath : img,
-	}, function (err, updatedUser) {
-		if (err) {
-			res.send("There was a problem updating the information to the database: " + err);
-		}
-		else {
-			//HTML responds by going back to the page or you can be fancy and create a new view that shows a success page.
-			res.format({
-				html: function(){
-					res.redirect("/profile/");
-				},
-				//JSON responds showing the updated values
-				json: function(){
-					res.json(updatedUser);
-				}
-			});
-		}
-	})
-*/
+	mongoose.model('User').findByIdAndUpdate(
+		/*
+	{_id:req.user._id}, {$set:
+	{user.local.img: img},
+	{upsert:true},
+	 function (err, user) {
+	 if (err){
+	 console.log('error');
+ }else{
+	console.log(user);
+	res.status(204);
+	}
+}
+*/);
+
+	//mongoose.model('User').update({_id:req.user._id}, user, function (err, user) {
+	//res.send(user.local.email + "<br>" + user.local.img)
+
 });
 
-	});
+});
+
 	// =====================================
 	// LOGOUT ==============================
 	// =====================================
