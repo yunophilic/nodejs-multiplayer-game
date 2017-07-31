@@ -68,50 +68,49 @@ module.exports = function(passport) {
 
 router.post('/profile/edit', function(req, res) {
 		//var userid = req.body.userid;
-		var userid = req.user._id
+		var userid = req.user._id;
 		var img_req = req.body.profilePic;
 		var token = req.body._csrf;
 		var img;
 
 switch(img_req) {
   case '1':
-		img = "profile1.png"
+		img = "profile1.png";
         break;
 	case '2':
-		img = "profile2.png"
+		img = "profile2.png";
         break;
 	case '3':
-		img = "profile3.png"
+		img = "profile3.png";
         break;
 	case '4':
-		img = "profile4.png"
+		img = "profile4.png";
         break;
     default:
-	   img = "profile4.png"
+	   img = "profile4.png";
 }
 
-
-	mongoose.model('User').findByIdAndUpdate(
-		/*
-	{_id:req.user._id}, {$set:
-	{user.local.img: img},
-	{upsert:true},
-	 function (err, user) {
-	 if (err){
-	 console.log('error');
- }else{
-	console.log(user);
-	res.status(204);
-	}
-}
-*/);
-
-	//mongoose.model('User').update({_id:req.user._id}, user, function (err, user) {
-	//res.send(user.local.email + "<br>" + user.local.img)
-
+	mongoose.model('User').findOne({_id: userid}, function (err, foundObject){
+		if (err){
+			res.status(500).send();
+		} else {
+			if (!foundObject){
+				res.status(404).send();
+			}else{
+				foundObject.local.imgPath = img;
+			}
+			foundObject.save(function (err,updatedObejct){
+				if (err){
+					res.status(500).send();
+				}else{
+					//res.send(updatedObejct);
+					res.redirect('/profile/');
+				}
+			});
+		}
+	});
 });
 
-});
 
 	// =====================================
 	// LOGOUT ==============================
