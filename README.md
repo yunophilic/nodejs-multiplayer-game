@@ -11,6 +11,7 @@ URL:
 - localhost:3000/free-roam
 - localhost:3000/tank-name
 - localhost:3000/chat
+- localhost:3000/help
      
 References:
 - https://scotch.io/tutorials/easy-node-authentication-setup-and-local

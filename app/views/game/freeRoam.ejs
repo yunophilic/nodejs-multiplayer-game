@@ -1,5 +1,5 @@
 <link rel="stylesheet" href="/stylesheets/game.css">
-
+<link rel="stylesheet" href="/stylesheets/chatForGame.css">
 <div id="prompt" class="name-prompt">
 	<input id="join" type="hidden" class="btn btn-primary" type="submit" value="Join the battle">
 	<div class="tank-select col-md-12">
@@ -20,7 +20,23 @@
 
 <div id="arena" class="arena">
 </div>
+<!-- <div id="chatting" class="chatting"> -->
+	<ul class="pages">
+		<li class="chat page">
+			<div class="chatArea">
+				<ul class="messages"></ul>
+			</div>
+			<input class="inputMessage" placeholder="Type here..."/>
+		</li>
+		<li class="login page">
+			<div class="form">
+				<h3 class="title">Press Enter to start Chatting Room</h3>
+			</div>
+		</li>
+	</ul>
+<!-- </div> -->
 
 <script src="/socket.io/socket.io.js"></script>
 <script src="/javascripts/gameObjects.js"></script>
 <script src="/javascripts/gameClient.js"></script>
+<script src="/javascripts/chatForGame.js"></script>

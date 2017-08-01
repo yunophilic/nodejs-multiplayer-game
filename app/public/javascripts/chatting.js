@@ -6,10 +6,16 @@ $(function() {
     '#58dc00', '#287b00', '#a8f07a', '#4ae8c4',
     '#3b88eb', '#3824aa', '#a700ff', '#d300e7'
   ];
-
+  var chatname;
+  $.get('/chat/chatname', function(data) {
+    chatname = data.chatname;
+    console.log(chatname)
+  });
   // Initialize variables
+
   var $window = $(window);
-  var $usernameInput = $('.usernameInput'); // Input for username
+  // var $usernameInput = $('.usernameInput'); // Input for username
+
   var $messages = $('.messages'); // Messages area
   var $inputMessage = $('.inputMessage'); // Input message input box
 
@@ -21,8 +27,8 @@ $(function() {
   var connected = false;
   var typing = false;
   var lastTypingTime;
-  var $currentInput = $usernameInput.focus();
-
+  // var $currentInput = $usernameInput.focus();
+  var $currentInput;
   var socket = io();
 
   function addParticipantsMessage (data) {
@@ -37,14 +43,18 @@ $(function() {
 
   // Sets the client's username
   function setUsername () {
-    username = cleanInput($usernameInput.val().trim());
 
+
+    // username = cleanInput($usernameInput.val().trim());
+    username=chatname;
+    console.log("need call back in here")
     // If the username is valid
     if (username) {
       $loginPage.fadeOut();
       $chatPage.show();
       $loginPage.off('click');
       $currentInput = $inputMessage.focus();
+
 
       // Tell the server your username
       socket.emit('add user', username);
@@ -54,6 +64,7 @@ $(function() {
   // Sends a chat message
   function sendMessage () {
     var message = $inputMessage.val();
+    console.log(message);
     // Prevent markup from being injected into the message
     message = cleanInput(message);
     // if there is a non-empty message and a socket connection
@@ -188,13 +199,15 @@ $(function() {
     return COLORS[index];
   }
 
+
   // Keyboard events
 
   $window.keydown(function (event) {
+
     // Auto-focus the current input when a key is typed
-    if (!(event.ctrlKey || event.metaKey || event.altKey)) {
-      $currentInput.focus();
-    }
+    // if (!(event.ctrlKey || event.metaKey || event.altKey)) {
+    //   $currentInput.focus();
+    // }
     // When the client hits ENTER on their keyboard
     if (event.which === 13) {
       if (username) {
@@ -203,6 +216,7 @@ $(function() {
         typing = false;
       } else {
         setUsername();
+
       }
     }
   });
@@ -214,11 +228,11 @@ $(function() {
   // Click events
 
   // Focus input when clicking anywhere on login page
-  $loginPage.click(function () {
-    $currentInput.focus();
-  });
-
-  // Focus input when clicking on the message input's border
+  // $loginPage.click(function () {
+  //   $currentInput.focus();
+  // });
+  //
+  // // Focus input when clicking on the message input's border
   $inputMessage.click(function () {
     $inputMessage.focus();
   });
@@ -229,7 +243,7 @@ $(function() {
   socket.on('login', function (data) {
     connected = true;
     // Display the welcome message
-    var message = "Welcome to Socket.IO Chat – ";
+    var message = "Welcome to chatting room";
     log(message, {
       prepend: true
     });

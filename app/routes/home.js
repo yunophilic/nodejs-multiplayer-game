@@ -1,6 +1,9 @@
 var express = require('express');
 var middlewares = require('../utils/middlewares');
+var mongoose = require('mongoose'); //mongo connection
 var router = express.Router();
+var bodyParser = require('body-parser'); //parses information from POST
+var methodOverride = require('method-override'); //used to manipulate POST
 
 module.exports = function(passport) {
 	// =====================================
@@ -9,6 +12,9 @@ module.exports = function(passport) {
 	router.get('/', function(req, res) {
 		res.render('home/index'); // load the index.ejs file
 	});
+	router.get('/help', function(req, res) {
+		res.render('home/help'); // load the help.ejs file
+	});
 
 	// =====================================
 	// LOGIN ===============================
@@ -16,7 +22,7 @@ module.exports = function(passport) {
 	// show the login form
 	router.get('/login', function(req, res) {
 		// render the page and pass in any flash data if it exists
-		res.render('home/login', { message: req.flash('loginMessage') }); 
+		res.render('home/login', { message: req.flash('loginMessage') });
 	});
 
 	// process the login form
@@ -54,6 +60,57 @@ module.exports = function(passport) {
 			user : req.user // get the user out of session and pass to template
 		});
 	});
+	router.get('/profile/edit', middlewares.isLoggedIn, function(req, res) {
+		res.render('home/editprofile', {
+			user : req.user // get the user out of session and pass to template
+		});
+	});
+
+router.post('/profile/edit', function(req, res) {
+		//var userid = req.body.userid;
+		var userid = req.user._id;
+		var img_req = req.body.profilePic;
+		var token = req.body._csrf;
+		var img;
+
+switch(img_req) {
+  case '1':
+		img = "profile1.png";
+        break;
+	case '2':
+		img = "profile2.png";
+        break;
+	case '3':
+		img = "profile3.png";
+        break;
+	case '4':
+		img = "profile4.png";
+        break;
+    default:
+	   img = "profile4.png";
+}
+
+	mongoose.model('User').findOne({_id: userid}, function (err, foundObject){
+		if (err){
+			res.status(500).send();
+		} else {
+			if (!foundObject){
+				res.status(404).send();
+			}else{
+				foundObject.local.imgPath = img;
+			}
+			foundObject.save(function (err,updatedObejct){
+				if (err){
+					res.status(500).send();
+				}else{
+					//res.send(updatedObejct);
+					res.redirect('/profile/');
+				}
+			});
+		}
+	});
+});
+
 
 	// =====================================
 	// LOGOUT ==============================
@@ -62,6 +119,6 @@ module.exports = function(passport) {
 		req.logout();
 		res.redirect('/login');
 	});
-	
+
 	return router;
 };

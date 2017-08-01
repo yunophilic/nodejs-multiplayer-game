@@ -34,8 +34,9 @@ var app = express();
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
-app.set('layout extractScripts', true)
-app.set('layout extractStyles', true)
+app.set("layout extractScripts", true);
+app.set("layout extractStyles", true);
+app.set('layout', 'layouts/layout');
 app.use(expressLayouts);
 
 // uncomment after placing your favicon in /public
@@ -49,7 +50,7 @@ app.use('/bootstrap', express.static(path.join(__dirname, 'node_modules/bootstra
 app.use('/jquery', express.static(path.join(__dirname, 'node_modules/jquery/dist')));
 app.use('/angular', express.static(path.join(__dirname, 'node_modules/angular/')));
 app.use('/angular-route', express.static(path.join(__dirname, 'node_modules/angular-route/')));
-
+app.use(express.static('publicImg'));
 
 //authentation setup
 app.use(morgan('dev')); // log every request to the console
@@ -72,7 +73,11 @@ app.use('/', home);
 app.use('/users', users);
 app.use('/chat', chat);
 app.use('/game', game);
+<<<<<<< HEAD
 app.use('/friends', friends);
+=======
+app.use('/static', express.static('publicImg'))
+>>>>>>> master
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

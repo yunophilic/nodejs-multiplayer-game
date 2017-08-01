@@ -252,10 +252,9 @@ Tank.prototype = {
 
 	setControls: function(){
 		var t = this;
-
 		/* Detect both keypress and keyup to allow multiple keys
 		 and combined directions */
-		$(document).keypress( function(e){
+		$(document).on('keypress', function(e){
 			var k = e.keyCode || e.which;
 			switch(k){
 				case 119: //W
@@ -288,6 +287,7 @@ Tank.prototype = {
 					break;
 			}
 		}).mousemove( function(e){ //Detect mouse for aiming
+
 			t.mx = e.pageX - t.$arena.offset().left;
 			t.my = e.pageY - t.$arena.offset().top;
 			t.setCannonAngle();
