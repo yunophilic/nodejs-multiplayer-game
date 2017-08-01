@@ -116,9 +116,54 @@ switch(img_req) {
 Update username
 */
 
-router.post('/profile/editusername', passport.authenticate('local-updateUserName', {
-	
-}));
+router.post('/profile/editusername', function(req, res) {
+		var username = req.body.username;
+		username = encodeURI(username);
+		var userid = req.user._id;
+		if (username == "") {
+			res.send('All fields are required');
+		}else{
+			res.send(username);
+
+			// find a user whose email is the same as the forms email
+			// we are checking to see if the user trying to login already exists
+			User.findOne({ $or: [
+				{'local.username': username}
+			] }, function(err, user) {
+				// if there are any errors, return the error
+				if (err) {
+					res.status(500).send();
+				}
+
+				// check to see if theres already a user with that email
+				if (user) {
+					res.send('That username is already taken.');
+				} else {
+
+						User.findOne({_id: userid}, function (err, foundObject){
+							if (err){
+								res.send('Error while finding current user');
+							} else {
+								if (!foundObject){
+									res.send('Cannot find current user');
+								}else{
+									foundObject.local.username = username;
+								}
+								foundObject.save(function (err,updatedObejct){
+									if (err){
+										res.send('Error while updating current user');
+									}else{
+										res.redirect('/profile/');
+									}
+								});
+							}
+						});
+
+				}
+
+			});
+		}
+});
 
 	// =====================================
 	// LOGOUT ==============================
