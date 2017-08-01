@@ -22,6 +22,7 @@ passportConfig(passport); // pass passport for configuration
 
 //routes
 var home = require('./routes/home')(passport);
+var profile = require('./routes/profile');
 var chat = require('./routes/chat');
 var game = require('./routes/game');
 var users = require('./routes/users');
@@ -50,7 +51,7 @@ app.use('/bootstrap', express.static(path.join(__dirname, 'node_modules/bootstra
 app.use('/jquery', express.static(path.join(__dirname, 'node_modules/jquery/dist')));
 app.use('/angular', express.static(path.join(__dirname, 'node_modules/angular/')));
 app.use('/angular-route', express.static(path.join(__dirname, 'node_modules/angular-route/')));
-app.use(express.static('publicImg'));
+//app.use(express.static('publicImg'));
 
 //authentation setup
 app.use(morgan('dev')); // log every request to the console
@@ -70,14 +71,11 @@ app.use(function(req, res, next) {
 });
 
 app.use('/', home);
+app.use('/profile', profile);
 app.use('/users', users);
 app.use('/chat', chat);
 app.use('/game', game);
-<<<<<<< HEAD
-app.use('/friends', friends);
-=======
-app.use('/static', express.static('publicImg'))
->>>>>>> master
+//app.use('/static', express.static('publicImg'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
