@@ -9,7 +9,6 @@ $(function() {
   var chatname;
   $.get('/chat/chatname', function(data) {
     chatname = data.chatname;
-    console.log(chatname)
   });
   // Initialize variables
 
@@ -47,7 +46,7 @@ $(function() {
 
     // username = cleanInput($usernameInput.val().trim());
     username=chatname;
-    console.log("need call back in here")
+
     // If the username is valid
     if (username) {
       $loginPage.fadeOut();
@@ -64,7 +63,7 @@ $(function() {
   // Sends a chat message
   function sendMessage () {
     var message = $inputMessage.val();
-    console.log(message);
+    // console.log(message);
     // Prevent markup from being injected into the message
     message = cleanInput(message);
     // if there is a non-empty message and a socket connection
@@ -210,6 +209,7 @@ $(function() {
     // }
     // When the client hits ENTER on their keyboard
     if (event.which === 13) {
+      $(".chatArea").css("height", "270");
       if (username) {
         sendMessage();
         socket.emit('stop typing');
@@ -222,6 +222,7 @@ $(function() {
   });
 
   $inputMessage.on('input', function() {
+
     updateTyping();
   });
 
@@ -233,7 +234,8 @@ $(function() {
   // });
   //
   // // Focus input when clicking on the message input's border
-  $inputMessage.click(function () {
+  $(".inputMessage").click(function () {
+
     $inputMessage.focus();
   });
 

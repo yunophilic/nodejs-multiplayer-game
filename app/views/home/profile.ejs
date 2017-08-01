@@ -9,7 +9,21 @@
 			<p>
 				<strong>username</strong>: <%= user.local.username %><br>
 				<strong>email</strong>: <%= user.local.email %><br>
+
+				<strong>profile picture</strong> <br>
+				<img src= "/static/<%= user.local.imgPath %>">
+				<br>
+				<a href="/profile/edit">Edit My Profile Picture</a>
 			</p>
 		</div>
 	</div>
 </div>
+
+<!--
+<form action="/profile/upload/" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+          <label="name">Add a picture for your article</label>
+          <input id="upload-input" type="file" class="form-control" name="image"/>
+        </div>
+</form>
+-->

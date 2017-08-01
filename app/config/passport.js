@@ -50,7 +50,7 @@ module.exports = function(passport) {
 			// we are checking to see if the user trying to login already exists
 			User.findOne({ $or: [
 				{'local.username': username},
-				{'local.email':  email}  
+				{'local.email':  email}
 			] }, function(err, user) {
 				// if there are any errors, return the error
 				if (err) {
@@ -70,6 +70,7 @@ module.exports = function(passport) {
 					newUser.local.username = username;
 					newUser.local.email	= email;
 					newUser.local.password = newUser.generateHash(password);
+					newUser.local.imgPath = 'profile4.png';
 
 					// save the user
 					newUser.save(function(err) {
