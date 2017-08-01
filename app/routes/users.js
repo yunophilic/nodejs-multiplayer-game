@@ -42,42 +42,6 @@ router.get('/', function(req, res, next) {
 	});
 });
 
-/*router.post('/', function(req, res) {
-	// Get values from POST request. These can be done through forms or REST calls. These rely on the "name" attributes for forms
-	var username = req.body.username;
-	var email = req.body.email;
-	var dob = req.body.dob;
-	//call the create function for our database
-	User.create({
-		username : username,
-		email : email,
-		dob : dob
-	}, function (err, user) {
-		if (err) {
-			res.send("There was a problem adding the information to the database.");
-		} else {
-			//user has been created
-			console.log('POST creating new user: ' + user);
-			res.format({
-				//HTML response will set the location and redirect back to the home page. You could also create a 'success' page if that's your thing
-				html: function(){
-					// Forward to success page
-					res.redirect("/users");
-				},
-				//JSON response will show the newly created user
-				json: function(){
-					res.json(user);
-				}
-			});
-		}
-	})
-});*/
-
-/* GET New User page. */
-/*router.get('/new', function(req, res) {
-	res.render('users/new', { title: 'Register' });
-});*/
-
 // route middleware to validate :id
 router.param('id', function(req, res, next, id) {
 	//find the ID in the Database
@@ -199,7 +163,6 @@ router.get('/:id', function(req, res) {
 });*/
 
 router.put('/:id/add', function(req, res) {
-	//console.log("HHHHHHHHHHHHHHHHHHHHHHH");
 	User.findById(req.id, function(err, user) {
 		if (err) {
 			console.log("error retrieving user");
@@ -207,24 +170,26 @@ router.put('/:id/add', function(req, res) {
 			return;
 		}
 
-		console.log(req.user._id.toString());
+		var currentUserIdStr = req.user._id.toString();
 
-		if (!user.friendRequests.includes(req.user._id.toString())) {
-			user.friendRequests.push(req.user._id.toString());
+		if (!user.friendRequests.includes(currentUserIdStr)) {
+			user.friendRequests.push(currentUserIdStr);
 			user.save(function(err, updatedUser) {
 				if (err) {
 					console.log("error saving user");
 					helpers.setErrorResponse(res);
 					return;
 				}
-				res.json(updatedUser);
+
+				res.json({updatedUsers: [updatedUser]});
 			});
+		} else {
+			res.json({updatedUsers: []});
 		}
 	});
 });
 
 router.put('/:id/cancel', function(req, res) {
-	//console.log("HHHHHHHHHHHHHHHHHHHHHHH");
 	User.findById(req.id, function(err, user) {
 		if (err) {
 			console.log("error retrieving user");
@@ -232,18 +197,130 @@ router.put('/:id/cancel', function(req, res) {
 			return;
 		}
 
-		console.log(req.user._id.toString());
+		var currentUserIdStr = req.user._id.toString();
 
-		if (user.friendRequests.includes(req.user._id.toString())) {
-			user.friendRequests.remove(req.user._id.toString());
+		if (user.friendRequests.includes(currentUserIdStr)) {
+			user.friendRequests.remove(currentUserIdStr);
 			user.save(function(err, updatedUser) {
 				if (err) {
 					console.log("error saving user");
 					helpers.setErrorResponse(res);
 					return;
 				}
-				res.json(updatedUser);
+
+				res.json({updatedUsers: [updatedUser]});
 			});
+		} else {
+			res.json({updatedUsers: []});
+		}
+	});
+});
+
+router.put('/:id/accept', function(req, res) {
+	User.findById(req.id, function(err, user) {
+		if (err) {
+			console.log("error retrieving user");
+			helpers.setErrorResponse(res);
+			return;
+		}
+
+		var currentUser = req.user;
+		var userIdStr = user._id.toString();
+
+		if (currentUser.friendRequests.includes(userIdStr)) {
+			var updatedUsers = [];
+
+			currentUser.friendRequests.remove(userIdStr);
+			currentUser.friends.push(userIdStr)
+			currentUser.save(function(err, updatedUser) {
+				if (err) {
+					console.log("error saving user");
+					helpers.setErrorResponse(res);
+					return;
+				}
+
+				updatedUsers.push(updatedUser);
+			});
+
+			user.friends.push(currentUser._id.toString());
+			user.save(function(err, updatedUser) {
+				if (err) {
+					console.log("error saving user");
+					helpers.setErrorResponse(res);
+					return;
+				}
+
+				updatedUsers.push(updatedUser);
+			});
+
+			res.json({
+				updatedUsers: updatedUsers
+			})
+		} else {
+			res.json({updatedUsers: []});
+		}
+	});
+});
+
+router.put('/:id/reject', function(req, res) {
+	var currentUser = req.user;
+	if (currentUser.friendRequests.includes(req.id)) {
+		currentUser.friendRequests.remove(req.id);
+		currentUser.save(function(err, updatedUser) {
+			if (err) {
+				console.log("error saving user");
+				helpers.setErrorResponse(res);
+				return;
+			}
+
+			res.json({updatedUsers: [updatedUser]});
+		});
+	} else {
+		res.json({updatedUsers: []});
+	}
+});
+
+router.put('/:id/remove', function(req, res) {
+	User.findById(req.id, function(err, user) {
+		if (err) {
+			console.log("error retrieving user");
+			helpers.setErrorResponse(res);
+			return;
+		}
+
+		var userIdStr = user._id.toString();
+		var currentUser = req.user;
+		var currentUserIdStr = currentUser._id.toString();
+
+		if (user.friends.includes(currentUserIdStr) && 
+			currentUser.friends.includes(userIdStr)) {
+			var updatedUsers = [];
+
+			user.friends.remove(currentUserIdStr);
+			user.save(function(err, updatedUser) {
+				if (err) {
+					console.log("error saving user");
+					helpers.setErrorResponse(res);
+					return;
+				}
+
+				updatedUsers.push(updatedUser);
+			});
+
+			currentUser.friends.remove(userIdStr);
+			currentUser.save(function(err, updatedUser) {
+				if (err) {
+					console.log("error saving user");
+					helpers.setErrorResponse(res);
+					return;
+				}
+
+				updatedUsers.push(updatedUser);
+			});
+
+			res.json({updatedUsers: updatedUsers});
+		} else {
+			res.json({updatedUsers: []});
 		}
 	});
 });
