@@ -1,0 +1,24 @@
+<h1>Edit my Profile</h1>
+
+<form method="POST" action="/profile/edit">
+	<input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+	<dl class="form">
+		<dt>
+			<h3>Current Profile Picture:</h3><br>
+			<img src= "/img/<%= user.local.imgPath %>"><br>
+			<h3>All Picture</h3>
+		<div>
+			<input type="radio" name="profilePic" value="1" required> <img src= "/img/profile1.png"><br>
+  		<input type="radio" name="profilePic" value="2"> <img src= "/img/profile2.png"><br>
+  		<input type="radio" name="profilePic" value="3"> <img src= "/img/profile3.png"><br>
+			<input type="radio" name="profilePic" value="4"> <img src= "/img/profile4.png"><br>
+		</div>
+
+		</dt>
+		<dd>
+
+		</dd>
+	</dl>
+	<input type= "hidden" name="userid" value ="<%= user._id %>">
+	<input type="submit" value="Update">
+</form>
