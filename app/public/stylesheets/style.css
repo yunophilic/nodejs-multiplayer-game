@@ -1,14 +1,31 @@
 body, legend {
-    background-color: #404040;
+    background-image: url(/static/bgimage4.jpg);
     color: #AAAAAA;
+    background-size: 100%;
     font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+    background-repeat: no-repeat;
+}
+h1{
+  text-align: center;
+  font-family: "Comic Sans MS", cursive, sans-serif;
 }
 
-a {
-	color: #00B7FF;
-}
 
 img {
     max-width: 100%;
     height: auto;
+}
+#bgm{
+  display: none;
+  text-align: center;
+}
+#bg-music{
+  width: 300px;
+  height: 33px;
+
+}
+#buttonarea{
+  margin-top: 100px;
+  margin-bottom: 100px;
+  text-align: center;
 }

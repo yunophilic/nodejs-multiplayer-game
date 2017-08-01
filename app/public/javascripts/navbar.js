@@ -13,3 +13,13 @@ $(document).ready(function() {
 	var pathname = window.location.pathname;
 	$('.nav > li > a[href="'+pathname+'"]').parent().addClass('active');
 });
+
+$(document).ready(function() {
+	$("#toggle-background-music").click(function(e) {
+		$("#bgm").toggle();
+		var thissound=document.getElementById("bg-music");
+		thissound.pause();
+		thissound.currentTime = 0;
+
+	});
+});
