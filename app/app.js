@@ -22,6 +22,7 @@ passportConfig(passport); // pass passport for configuration
 
 //routes
 var home = require('./routes/home')(passport);
+var profile = require('./routes/profile');
 var chat = require('./routes/chat');
 var game = require('./routes/game');
 
@@ -47,7 +48,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/bootstrap', express.static(path.join(__dirname, 'node_modules/bootstrap/dist')));
 app.use('/jquery', express.static(path.join(__dirname, 'node_modules/jquery/dist')));
-app.use(express.static('publicImg'))
+//app.use(express.static('publicImg'));
 
 
 //authentation setup
@@ -68,10 +69,11 @@ app.use(function(req, res, next) {
 });
 
 app.use('/', home);
+app.use('/profile', profile);
 /*app.use('/users', users);*/
 app.use('/chat', chat);
 app.use('/game', game);
-app.use('/static', express.static('publicImg'))
+//app.use('/static', express.static('publicImg'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -85,7 +87,9 @@ app.use(function(err, req, res, next) {
 	// set locals, only providing error in development
 	res.locals.message = err.message;
 	res.locals.error = req.app.get('env') === 'development' ? err : {};
-
+	//required to prevent "esc is not a function" error
+	res.locals.loggedIn = req.isAuthenticated();
+	
 	// render the error page
 	res.status(err.status || 500);
 	res.render('error');
