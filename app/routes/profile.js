@@ -1,4 +1,5 @@
 var express = require('express');
+var mongoose = require('mongoose');
 var middlewares = require('../utils/middlewares');
 var router = express.Router();
 
@@ -14,6 +15,26 @@ var User = require('../models/user');
 router.get('/', middlewares.isLoggedIn, function(req, res) {
 	res.render('profile/index', {
 		user : req.user // get the user out of session and pass to template
+	});
+});
+
+router.get('/friend-requests', middlewares.isLoggedIn, function(req, res) {
+	res.format({
+		html: function() {
+			res.render('profile/friend-requests', {
+				title : "Friend Requests",
+				layout: 'layouts/angular'
+			});
+		},
+		json: function() {
+			User.find({ _id: { $in: req.user.friendRequests } }, function(err, users) {
+				if (err) {
+					return console.error(err);
+				} else {
+					res.json(users);
+				}
+			});
+		}
 	});
 });
 

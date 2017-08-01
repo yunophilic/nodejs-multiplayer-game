@@ -26,16 +26,22 @@ module.exports = function(passport) {
 	// show the login form
 	router.get('/login', function(req, res) {
 		// render the page and pass in any flash data if it exists
-		res.render('home/login', { message: req.flash('loginMessage') });
+		res.render('home/login', { 
+			next: req.query.next,
+			message: req.flash('loginMessage') 
+		});
 	});
 
 	// process the login form
 	router.post('/login', passport.authenticate('local-login', {
-		successRedirect : '/profile', // redirect to the secure profile section
+		//successRedirect : '/profile', // redirect to the secure profile section
 		failureRedirect : '/login', // redirect back to the login page if there is an error
 		badRequestMessage: 'All fields are required.',
 		failureFlash : { type: 'loginMessage' } // allow flash messages
-	}));
+	}), function(req, res) {
+		var next = req.query.next;
+		res.redirect(next ? next : '/profile');
+	});
 
 	// =====================================
 	// SIGNUP ==============================

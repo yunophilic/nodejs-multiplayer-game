@@ -30,8 +30,8 @@ var userSchema = mongoose.Schema({
         name         : String
     },
 
-	friends: 	[],
-    friendRequests: [],
+	friends: 	[String],
+    friendRequests: [String],
 
     img: {
         data: Buffer,

@@ -26,7 +26,8 @@ var profile = require('./routes/profile');
 var chat = require('./routes/chat');
 var game = require('./routes/game');
 var users = require('./routes/users');
-var friends = require('./routes/friends');
+//var friends = require('./routes/friends');
+
 //models
 var user = require('./models/user');
 

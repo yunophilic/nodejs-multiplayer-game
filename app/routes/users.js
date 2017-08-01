@@ -19,21 +19,22 @@ router.use(methodOverride(function(req, res){
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-	//retrieve all users from Monogo
-	User.find({}, function (err, users) {
-		if (err) {
-			return console.error(err);
-		} else {
-			//respond to both HTML and JSON. JSON responses require 'Accept: application/json;' in the Request Header
-			res.format({
-				//HTML response will render the index.ejs file in the views/users folder. We are also setting "users" to be an accessible variable in our jade view
-				html: function(){
-					res.render('users/index', {
-						title: 'Search users'
-					});
-				},
-				//JSON response will show all users in JSON format
-				json: function(){
+	//respond to both HTML and JSON. JSON responses require 'Accept: application/json;' in the Request Header
+	res.format({
+		//HTML response will render the index.ejs file in the views/users folder. We are also setting "users" to be an accessible variable in our jade view
+		html: function(){
+			res.render('users/index', {
+				title: 'Search users',
+				layout: 'layouts/angular'
+			});
+		},
+		//JSON response will show all users in JSON format
+		json: function(){
+			//retrieve all users from Monogo
+			User.find({}, function (err, users) {
+				if (err) {
+					return console.error(err);
+				} else {
 					res.json(users);
 				}
 			});
@@ -79,11 +80,10 @@ router.get('/', function(req, res, next) {
 
 // route middleware to validate :id
 router.param('id', function(req, res, next, id) {
-	//console.log('validating ' + id + ' exists');
 	//find the ID in the Database
 	User.findById(id, function (err, user) {
 		//if it isn't found, we are going to respond with 404
-		if (err) {
+		if (err || user == null) {
 			console.log(id + ' was not found');
 			res.status(404)
 			var err = new Error('Not Found');
@@ -223,7 +223,7 @@ router.put('/:id/add', function(req, res) {
 	});
 });
 
-router.delete('/:id/remove', function(req, res) {
+router.put('/:id/cancel', function(req, res) {
 	//console.log("HHHHHHHHHHHHHHHHHHHHHHH");
 	User.findById(req.id, function(err, user) {
 		if (err) {
@@ -247,6 +247,5 @@ router.delete('/:id/remove', function(req, res) {
 		}
 	});
 });
-
 
 module.exports = router;
