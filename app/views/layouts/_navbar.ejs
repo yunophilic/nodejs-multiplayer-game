@@ -11,9 +11,13 @@
 		<div class="collapse navbar-collapse" id="app-navbar">
 			<ul class="nav navbar-nav">
 				<li><a href="/">Home</a></li>
-				<li><a href="/users">Users</a></li>
-				<li><a href="/chat">Chatting Room</a></li>
 				<li><a href="/help">Help</a></li>
+				<li><a href="/users">Users</a></li>
+				<% if (loggedIn) { %>
+					<li><a href="/chat">Chatting Room</a></li>
+					<li><a href="/profile/friend-requests">Friend Requests</a></li>
+					<li><a href="/profile/friends">Friends</a></li>
+				<% } %>	
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
 				<% if (loggedIn) { %>

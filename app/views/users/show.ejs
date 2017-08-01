@@ -15,16 +15,20 @@
 	<p><strong><%= user.local.username %></strong> is on Dawn Of The Tanks.</p>
 	<p>
 		To connect with <strong><%= user.local.username %></strong>, 
-		<a href="/login">login</a> or <a href="/signup">signup</a>
+		<a href="/login?next=/users/<% user._id %>">login</a> or <a href="/signup">signup</a>
 	</p>
 <% } else if (user.friendRequests.includes(currentUser._id.toString())) { %>
 	<span id="cancel-req-btn" class="btn btn-danger">Cancel Friend Request</span>
 <% } else if (currentUser.friendRequests.includes(user._id.toString())) { %>
 	<span id="accept-req-btn" class="btn btn-info">Accept Friend Request</span>
 	<span id="reject-req-btn" class="btn btn-danger">Reject Friend Request</span>
+<% } else if (currentUser.friends.includes(user._id.toString()) &&
+			user.friends.includes(currentUser.id.toString())) { %>
+	<span id="remove-friend-btn" class="btn btn-danger">Unfriend</span>
 <% } else { %>
 	<span id="send-req-btn" class="btn btn-info">Send Friend Request</span>
 <% } %>
+
 <script type="text/javascript">
 	$("#send-req-btn").click(function() {
 		$.ajax({
@@ -33,7 +37,7 @@
 			data: {
 				_csrf: '<%= csrfToken %>' //send csrf token
 			},
-			success: function(data) {
+			success: function() {
 				location.reload();
 			}
 		});
@@ -44,11 +48,50 @@
 			url: "/users/<%= user._id %>/cancel",
 			type: 'PUT',
 			data: {
-				_csrf: '<%= csrfToken %>' //send csrf token
+				_csrf: '<%= csrfToken %>'
 			},
-			success: function(data) {
+			success: function() {
 				location.reload();
 			}
 		});
 	});
+
+	$("#accept-req-btn").click(function() {
+		$.ajax({
+			url: '/users/<%= user._id %>/accept',
+			type: 'PUT',
+			data: {
+				_csrf: '<%= csrfToken %>'
+			},
+			success: function() {
+				location.reload();
+			}
+		});
+	});
+
+	$("#reject-req-btn").click(function() {
+		$.ajax({
+			url: '/users/<%= user._id %>/reject',
+			type: 'PUT',
+			data: {
+				_csrf: '<%= csrfToken %>'
+			},
+			success: function() {
+				location.reload();
+			}
+		});
+	});
+
+	$("#remove-friend-btn").click(function() {
+		$.ajax({
+			url: '/users/<%= user._id %>/remove',
+			type: 'PUT',
+			data: {
+				_csrf: '<%= csrfToken %>'
+			},
+			success: function() {
+				location.reload();
+			}
+		});
+	})
 </script>

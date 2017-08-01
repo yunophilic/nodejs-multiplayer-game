@@ -1,0 +1,41 @@
+<h1>Friends</h1>
+
+<ng-view></ng-view>
+
+<!-- Template -->
+<script type="text/ng-template" id="/users.html">
+	Search: <input type="text" ng-model="search.local.username">
+	<ul>
+		<li ng-repeat="user in users | filter: search">
+			<a href="/users/{{user._id}}">{{user.local.username}}</a>
+		</li>
+	</ul>
+</script>
+
+<script>
+	angular.module('app', ['ngRoute'])
+		//---------------
+		// Controllers
+		//---------------
+		.controller('UsersController', function ($scope, $http) {
+			$http.get('/profile/friends', {
+				headers: {
+					'Accept': 'application/json'
+				}
+			}).then(function(response) {
+				var users = response.data;
+				$scope.users = users;
+			});
+		})
+
+		//---------------
+		// Routes
+		//---------------
+		.config(['$routeProvider', function ($routeProvider) {
+			$routeProvider
+				.when('/', {
+					templateUrl: '/users.html',
+					controller: 'UsersController'
+				});
+		}]);
+</script>
