@@ -5,10 +5,11 @@ body, legend {
     font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
     background-repeat: no-repeat;
 }
-
-a {
-	color: #00B7FF;
+h1{
+  text-align: center;
+  font-family: "Comic Sans MS", cursive, sans-serif;
 }
+
 
 img {
     max-width: 100%;
