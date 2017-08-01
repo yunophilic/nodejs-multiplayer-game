@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html ng-app="app">
+<html>
 	<head>
-		<title>App - <%= typeof title != "undefined" ? title : "" %></title>
+		<title>Dawn of Tank</title>
 
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -24,7 +24,9 @@
 		<% include _navbar %>
 		<% include _sidebar %>
 
-		<%- body %>
-		<%- script %>
+		<div class="container" ng-app="app">
+			<%- body %>
+			<%- script %>
+		</div>
 	</body>
 </html>

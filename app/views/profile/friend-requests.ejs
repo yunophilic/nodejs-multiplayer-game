@@ -1,4 +1,4 @@
-<h1>Users</h1>
+<h1>Friend Requests</h1>
 
 <ng-view></ng-view>
 
@@ -18,7 +18,7 @@
 		// Controllers
 		//---------------
 		.controller('UsersController', function ($scope, $http) {
-			$http.get('/users', {
+			$http.get('/profile/friend-requests', {
 				headers: {
 					'Accept': 'application/json'
 				}

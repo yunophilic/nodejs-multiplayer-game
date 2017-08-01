@@ -1,0 +1,54 @@
+<h1>Users Profile</h1>
+
+<div class="row">
+	<div class="col-sm-6">
+		<div class="well">
+			<p>
+				<strong>username</strong>: <%= user.local.username %><br>
+				<strong>email</strong>: <%= user.local.email %><br>
+			</p>
+		</div>
+	</div>
+</div>
+
+<% if (currentUser == undefined) { %>
+	<p><strong><%= user.local.username %></strong> is on Dawn Of The Tanks.</p>
+	<p>
+		To connect with <strong><%= user.local.username %></strong>, 
+		<a href="/login">login</a> or <a href="/signup">signup</a>
+	</p>
+<% } else if (user.friendRequests.includes(currentUser._id.toString())) { %>
+	<span id="cancel-req-btn" class="btn btn-danger">Cancel Friend Request</span>
+<% } else if (currentUser.friendRequests.includes(user._id.toString())) { %>
+	<span id="accept-req-btn" class="btn btn-info">Accept Friend Request</span>
+	<span id="reject-req-btn" class="btn btn-danger">Reject Friend Request</span>
+<% } else { %>
+	<span id="send-req-btn" class="btn btn-info">Send Friend Request</span>
+<% } %>
+<script type="text/javascript">
+	$("#send-req-btn").click(function() {
+		$.ajax({
+			url: "/users/<%= user._id %>/add",
+			type: 'PUT',
+			data: {
+				_csrf: '<%= csrfToken %>' //send csrf token
+			},
+			success: function(data) {
+				location.reload();
+			}
+		});
+	});
+
+	$("#cancel-req-btn").click(function() {
+		$.ajax({
+			url: "/users/<%= user._id %>/cancel",
+			type: 'PUT',
+			data: {
+				_csrf: '<%= csrfToken %>' //send csrf token
+			},
+			success: function(data) {
+				location.reload();
+			}
+		});
+	});
+</script>

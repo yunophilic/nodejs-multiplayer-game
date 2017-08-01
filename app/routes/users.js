@@ -1,8 +1,11 @@
 var express = require('express');
-var mongoose = require('mongoose'); //mongo connection
 var bodyParser = require('body-parser'); //parses information from POST
 var methodOverride = require('method-override'); //used to manipulate POST
+var middlewares = require('../utils/middlewares');
+var helpers = require('../utils/helpers');
 var router = express.Router();
+
+var User = require('../models/user');
 
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(methodOverride(function(req, res){
@@ -16,22 +19,22 @@ router.use(methodOverride(function(req, res){
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-	//retrieve all users from Monogo
-	mongoose.model('User').find({}, function (err, users) {
-		if (err) {
-			return console.error(err);
-		} else {
-			//respond to both HTML and JSON. JSON responses require 'Accept: application/json;' in the Request Header
-			res.format({
-				//HTML response will render the index.ejs file in the views/users folder. We are also setting "users" to be an accessible variable in our jade view
-				html: function(){
-					res.render('users/index', {
-						title: 'All users',
-						"users" : users
-					});
-				},
-				//JSON response will show all users in JSON format
-				json: function(){
+	//respond to both HTML and JSON. JSON responses require 'Accept: application/json;' in the Request Header
+	res.format({
+		//HTML response will render the index.ejs file in the views/users folder. We are also setting "users" to be an accessible variable in our jade view
+		html: function(){
+			res.render('users/index', {
+				title: 'Search users',
+				layout: 'layouts/angular'
+			});
+		},
+		//JSON response will show all users in JSON format
+		json: function(){
+			//retrieve all users from Monogo
+			User.find({}, function (err, users) {
+				if (err) {
+					return console.error(err);
+				} else {
 					res.json(users);
 				}
 			});
@@ -39,13 +42,13 @@ router.get('/', function(req, res, next) {
 	});
 });
 
-router.post('/', function(req, res) {
+/*router.post('/', function(req, res) {
 	// Get values from POST request. These can be done through forms or REST calls. These rely on the "name" attributes for forms
 	var username = req.body.username;
 	var email = req.body.email;
 	var dob = req.body.dob;
 	//call the create function for our database
-	mongoose.model('User').create({
+	User.create({
 		username : username,
 		email : email,
 		dob : dob
@@ -58,9 +61,7 @@ router.post('/', function(req, res) {
 			res.format({
 				//HTML response will set the location and redirect back to the home page. You could also create a 'success' page if that's your thing
 				html: function(){
-					// If it worked, set the header so the address bar doesn't still say /adduser
-					//res.location("users");
-					// And forward to success page
+					// Forward to success page
 					res.redirect("/users");
 				},
 				//JSON response will show the newly created user
@@ -70,20 +71,19 @@ router.post('/', function(req, res) {
 			});
 		}
 	})
-});
+});*/
 
 /* GET New User page. */
-router.get('/new', function(req, res) {
+/*router.get('/new', function(req, res) {
 	res.render('users/new', { title: 'Register' });
-});
+});*/
 
 // route middleware to validate :id
 router.param('id', function(req, res, next, id) {
-	//console.log('validating ' + id + ' exists');
 	//find the ID in the Database
-	mongoose.model('User').findById(id, function (err, user) {
+	User.findById(id, function (err, user) {
 		//if it isn't found, we are going to respond with 404
-		if (err) {
+		if (err || user == null) {
 			console.log(id + ' was not found');
 			res.status(404)
 			var err = new Error('Not Found');
@@ -109,17 +109,20 @@ router.param('id', function(req, res, next, id) {
 });
 
 router.get('/:id', function(req, res) {
-	mongoose.model('User').findById(req.id, function (err, user) {
+	User.findById(req.id, function (err, user) {
 		if (err) {
 			console.log('GET Error: There was a problem retrieving: ' + err);
+		} else if (req.isAuthenticated() && req.user._id.equals(user._id)) {
+			//user selects himself
+			res.redirect("/profile");
 		} else {
-			console.log('GET Retrieving ID: ' + user._id);
-			var userDob = user.dob.toISOString().substring(0, userdob.indexOf('T'));
+			/*console.log('GET retrieving user: ' + user);
+			console.log('current user: ' + req.user);*/
 			res.format({
 				html: function(){
 					res.render('users/show', {
-						"userDob" : userDob,
-						"user" : user
+						user: user,
+						currentUser: req.user
 					});
 				},
 				json: function(){
@@ -131,9 +134,9 @@ router.get('/:id', function(req, res) {
 });
 
 /* GET Edit User page. */
-router.get('/:id/edit', function(req, res) {
+/*router.get('/:id/edit', function(req, res) {
 	//search for the user within Mongo
-	mongoose.model('User').findById(req.id, function (err, user) {
+	User.findById(req.id, function (err, user) {
 		if (err) {
 			console.log('GET Error: There was a problem retrieving: ' + err);
 		} else {
@@ -157,10 +160,10 @@ router.get('/:id/edit', function(req, res) {
 			});
 		}
 	});
-});
+});*/
 
 //PUT to update a blob by ID
-router.put('/:id/edit', function(req, res) {
+/*router.put('/:id/edit', function(req, res) {
 	// Get our REST or form values. These rely on the "name" attributes
 	var name = req.body.name;
 	var badge = req.body.badge;
@@ -169,7 +172,7 @@ router.put('/:id/edit', function(req, res) {
 	var isloved = req.body.isloved;
 
 	//find the document by ID
-	mongoose.model('User').findById(req.id, function (err, user) {
+	User.findById(req.id, function (err, user) {
 		//update it
 		user.update({
 			username : username,
@@ -193,36 +196,53 @@ router.put('/:id/edit', function(req, res) {
 			}
 		})
 	});
+});*/
+
+router.put('/:id/add', function(req, res) {
+	//console.log("HHHHHHHHHHHHHHHHHHHHHHH");
+	User.findById(req.id, function(err, user) {
+		if (err) {
+			console.log("error retrieving user");
+			helpers.setErrorResponse(res);
+			return;
+		}
+
+		console.log(req.user._id.toString());
+
+		if (!user.friendRequests.includes(req.user._id.toString())) {
+			user.friendRequests.push(req.user._id.toString());
+			user.save(function(err, updatedUser) {
+				if (err) {
+					console.log("error saving user");
+					helpers.setErrorResponse(res);
+					return;
+				}
+				res.json(updatedUser);
+			});
+		}
+	});
 });
 
-//DELETE a Blob by ID
-router.delete('/:id', function (req, res){
-	//find blob by ID
-	mongoose.model('User').findById(req.id, function (err, user) {
+router.put('/:id/cancel', function(req, res) {
+	//console.log("HHHHHHHHHHHHHHHHHHHHHHH");
+	User.findById(req.id, function(err, user) {
 		if (err) {
-			return console.error(err);
-		} else {
-			//remove it from Mongo
-			user.remove(function (err, deletedUser) {
+			console.log("error retrieving user");
+			helpers.setErrorResponse(res);
+			return;
+		}
+
+		console.log(req.user._id.toString());
+
+		if (user.friendRequests.includes(req.user._id.toString())) {
+			user.friendRequests.remove(req.user._id.toString());
+			user.save(function(err, updatedUser) {
 				if (err) {
-					return console.error(err);
-				} else {
-					//Returning success messages saying it was deleted
-					console.log('DELETE removing ID: ' + deletedUser._id);
-					res.format({
-						//HTML returns us back to the main page, or you can create a success page
-						html: function(){
-							res.redirect("/users");
-						},
-						//JSON returns the item that has been deleted
-						json: function(){
-							res.json({
-								message : 'deleted',
-								item : deletedUser
-							});
-						}
-					});
+					console.log("error saving user");
+					helpers.setErrorResponse(res);
+					return;
 				}
+				res.json(updatedUser);
 			});
 		}
 	});

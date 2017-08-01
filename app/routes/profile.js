@@ -1,7 +1,10 @@
 var express = require('express');
+var mongoose = require('mongoose');
 var middlewares = require('../utils/middlewares');
-var mongoose = require('mongoose'); //mongo connection
 var router = express.Router();
+
+//models
+var User = require('../models/user');
 
 // =====================================
 // PROFILE SECTION =====================
@@ -12,6 +15,26 @@ var router = express.Router();
 router.get('/', middlewares.isLoggedIn, function(req, res) {
 	res.render('profile/index', {
 		user : req.user // get the user out of session and pass to template
+	});
+});
+
+router.get('/friend-requests', middlewares.isLoggedIn, function(req, res) {
+	res.format({
+		html: function() {
+			res.render('profile/friend-requests', {
+				title : "Friend Requests",
+				layout: 'layouts/angular'
+			});
+		},
+		json: function() {
+			User.find({ _id: { $in: req.user.friendRequests } }, function(err, users) {
+				if (err) {
+					return console.error(err);
+				} else {
+					res.json(users);
+				}
+			});
+		}
 	});
 });
 
@@ -45,7 +68,7 @@ router.post('/edit', middlewares.isLoggedIn, function(req, res) {
 			img = "profile4.png";
 	}
 
-	mongoose.model('User').findOne({_id: userid}, function (err, foundObject){
+	User.findOne({_id: userid}, function (err, foundObject){
 		if (err){
 			res.status(500).send();
 		} else {
@@ -64,6 +87,58 @@ router.post('/edit', middlewares.isLoggedIn, function(req, res) {
 			});
 		}
 	});
+});
+
+/*
+Update username
+*/
+router.post('/editusername', function(req, res) {
+		var username = req.body.username;
+		username = encodeURI(username);
+		var userid = req.user._id;
+		if (username == "") {
+			res.send('All fields are required');
+		}else{
+			//res.send(username);
+
+			// find a user whose email is the same as the forms email
+			// we are checking to see if the user trying to login already exists
+			User.findOne({ $or: [
+				{'local.username': username}
+			] }, function(err, user) {
+				// if there are any errors, return the error
+				if (err) {
+					res.status(500).send();
+				}
+
+				// check to see if theres already a user with that email
+				if (user) {
+					res.send('That username is already taken.');
+				} else {
+
+						User.findOne({_id: userid}, function (err, foundObject){
+							if (err){
+								res.send('Error while finding current user');
+							} else {
+								if (!foundObject){
+									res.send('Cannot find current user');
+								}else{
+									foundObject.local.username = username;
+								}
+								foundObject.save(function (err,updatedObejct){
+									if (err){
+										res.send('Error while updating current user');
+									}else{
+										res.redirect('/profile/');
+									}
+								});
+							}
+						});
+
+				}
+
+			});
+		}
 });
 
 module.exports = router;
