@@ -29,12 +29,13 @@ var userSchema = mongoose.Schema({
         email        : String,
         name         : String
     },
-	  friends: 	[],
-    friendRequests: [],
     img: {
        data: Buffer,
        contentType: String
-     }
+     },
+	  friends: 	[],
+    friendRequests: []
+
 
 });
 //https://stackoverflow.com/questions/29780733/store-an-image-in-mongodb-using-node-js-express-and-mongoose

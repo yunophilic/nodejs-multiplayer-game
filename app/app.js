@@ -34,14 +34,9 @@ var app = express();
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
-<<<<<<< HEAD
 app.set('layout extractScripts', true)
 app.set('layout extractStyles', true)
-=======
-app.set("layout extractScripts", true);
-app.set("layout extractStyles", true);
 app.set('layout', 'layouts/layout');
->>>>>>> 0242c308c3b0a5cbb0ab39ab3853a7ef485d437d
 app.use(expressLayouts);
 
 // uncomment after placing your favicon in /public
@@ -53,12 +48,9 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/bootstrap', express.static(path.join(__dirname, 'node_modules/bootstrap/dist')));
 app.use('/jquery', express.static(path.join(__dirname, 'node_modules/jquery/dist')));
-<<<<<<< HEAD
 app.use('/angular', express.static(path.join(__dirname, 'node_modules/angular/')));
 app.use('/angular-route', express.static(path.join(__dirname, 'node_modules/angular-route/')));
-=======
 app.use(express.static('publicImg'))
->>>>>>> 0242c308c3b0a5cbb0ab39ab3853a7ef485d437d
 
 
 //authentation setup
@@ -82,11 +74,8 @@ app.use('/', home);
 app.use('/users', users);
 app.use('/chat', chat);
 app.use('/game', game);
-<<<<<<< HEAD
 app.use('/friends', friends);
-=======
 app.use('/static', express.static('publicImg'))
->>>>>>> 0242c308c3b0a5cbb0ab39ab3853a7ef485d437d
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
