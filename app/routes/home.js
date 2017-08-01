@@ -123,11 +123,11 @@ router.post('/profile/editusername', function(req, res) {
 		if (username == "") {
 			res.send('All fields are required');
 		}else{
-			res.send(username);
+			//res.send(username);
 
 			// find a user whose email is the same as the forms email
 			// we are checking to see if the user trying to login already exists
-			User.findOne({ $or: [
+			mongoose.model('User').findOne({ $or: [
 				{'local.username': username}
 			] }, function(err, user) {
 				// if there are any errors, return the error
@@ -140,7 +140,7 @@ router.post('/profile/editusername', function(req, res) {
 					res.send('That username is already taken.');
 				} else {
 
-						User.findOne({_id: userid}, function (err, foundObject){
+						mongoose.model('User').findOne({_id: userid}, function (err, foundObject){
 							if (err){
 								res.send('Error while finding current user');
 							} else {
