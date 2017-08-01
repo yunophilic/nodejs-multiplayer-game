@@ -35,4 +35,17 @@
 			}
 		});
 	});
+
+	$("#cancel-req-btn").click(function() {
+		$.ajax({
+			url: "/users/<%= user._id %>/remove",
+			type: 'DELETE',
+			data: {
+				_csrf: '<%= csrfToken %>' //send csrf token
+			},
+			success: function(data) {
+				location.reload();
+			}
+		});
+	});
 </script>

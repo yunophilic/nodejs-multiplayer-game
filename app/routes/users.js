@@ -223,4 +223,30 @@ router.put('/:id/add', function(req, res) {
 	});
 });
 
+router.delete('/:id/remove', function(req, res) {
+	//console.log("HHHHHHHHHHHHHHHHHHHHHHH");
+	User.findById(req.id, function(err, user) {
+		if (err) {
+			console.log("error retrieving user");
+			helpers.setErrorResponse(res);
+			return;
+		}
+
+		console.log(req.user._id.toString());
+
+		if (user.friendRequests.includes(req.user._id.toString())) {
+			user.friendRequests.remove(req.user._id.toString());
+			user.save(function(err, updatedUser) {
+				if (err) {
+					console.log("error saving user");
+					helpers.setErrorResponse(res);
+					return;
+				}
+				res.json(updatedUser);
+			});
+		}
+	});
+});
+
+
 module.exports = router;
