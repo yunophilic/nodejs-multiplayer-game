@@ -15,7 +15,7 @@
 	<p><strong><%= user.local.username %></strong> is on Dawn Of The Tanks.</p>
 	<p>
 		To connect with <strong><%= user.local.username %></strong>, 
-		<a href="/login">login</a> or <a href="/signup">signup</a>
+		<a href="/login?next=/users/<% user._id %>">login</a> or <a href="/signup">signup</a>
 	</p>
 <% } else if (user.friendRequests.includes(currentUser._id.toString())) { %>
 	<span id="cancel-req-btn" class="btn btn-danger">Cancel Friend Request</span>

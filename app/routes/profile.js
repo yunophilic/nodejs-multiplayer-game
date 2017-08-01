@@ -38,6 +38,28 @@ router.get('/friend-requests', middlewares.isLoggedIn, function(req, res) {
 	});
 });
 
+router.get('/friends', middlewares.isLoggedIn, function(req, res) {
+	res.format({
+		html: function() {
+			res.render('profile/friends', {
+				title : "Friends",
+				layout: 'layouts/angular'
+			});
+		},
+		json: function() {
+			console.log(req.user.friends);
+			User.find({ _id: { $in: req.user.friends } }, function(err, users) {
+				if (err) {
+					return console.error(err);
+				} else {
+					console.log(users);
+					res.json(users);
+				}
+			});
+		}
+	});
+});
+
 router.get('/edit', middlewares.isLoggedIn, function(req, res) {
 	res.render('profile/edit', {
 		user : req.user // get the user out of session and pass to template
