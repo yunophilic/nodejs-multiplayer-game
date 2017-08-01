@@ -123,3 +123,62 @@ module.exports = function(passport) {
 
 	}));
 };
+
+/*
+update UserName
+*/
+passport.use('local-updateUserName', new LocalStrategy({
+	passReqToCallback : true // allows us to pass back the entire request to the callback
+},
+function(req, done) {
+	// asynchronous
+	// User.findOne wont fire unless data is sent back
+	process.nextTick(function() {
+		var username = req.body.username;
+		username = encodeURI(username);
+		var userid = req.user._id;
+		if (username == "") {
+			return done(null, false, req.flash('ErrMsg', 'All fields are required'));
+		}
+
+		// find a user whose email is the same as the forms email
+		// we are checking to see if the user trying to login already exists
+		User.findOne({ $or: [
+			{'local.username': username}
+		] }, function(err, user) {
+			// if there are any errors, return the error
+			if (err) {
+				return done(err);
+			}
+
+			// check to see if theres already a user with that email
+			if (user) {
+				return done(null, false, req.flash('ErrMsg', 'That username is already taken.'));
+			} else {
+
+					User.findOne({_id: userid}, function (err, foundObject){
+						if (err){
+							return done(null, false, req.flash('ErrMsg', 'Error while finding current user'));
+						} else {
+							if (!foundObject){
+								return done(null, false, req.flash('ErrMsg', 'Cannot find current user'));
+							}else{
+								foundObject.local.username = username;
+							}
+							foundObject.save(function (err,updatedObejct){
+								if (err){
+									return done(null, false, req.flash('ErrMsg', 'Error while updating current user'));
+								}else{
+									return done(null, updatedObejct);
+								}
+							});
+						}
+					});
+
+			}
+
+		});
+
+	});
+
+}));

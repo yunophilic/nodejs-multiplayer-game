@@ -50,6 +50,7 @@ module.exports = function(passport) {
 		failureFlash : { type: 'signupMessage' } // allow flash messages
 	}));
 
+
 	// =====================================
 	// PROFILE SECTION =====================
 	// =====================================
@@ -111,6 +112,13 @@ switch(img_req) {
 	});
 });
 
+/*
+Update username
+*/
+
+router.post('/profile/editusername', passport.authenticate('local-updateUserName', {
+	
+}));
 
 	// =====================================
 	// LOGOUT ==============================
