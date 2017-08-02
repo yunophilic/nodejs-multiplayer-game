@@ -71,9 +71,9 @@ router.post('/edit', middlewares.isLoggedIn, function(req, res) {
 /*
 Update username
 */
-router.post('/editusername', function(req, res) {
+router.post('/editusername',middlewares.isLoggedIn, function(req, res) {
 		var username = req.body.username;
-		username = encodeURI(username);
+		//username = encodeURI(username);
 		var userid = req.user._id;
 		if (username == "") {
 			res.send('All fields are required');
