@@ -2,7 +2,6 @@ var express = require('express');
 var bodyParser = require('body-parser'); //parses information from POST
 var methodOverride = require('method-override'); //used to manipulate POST
 var middlewares = require('../utils/middlewares');
-var helpers = require('../utils/helpers');
 var router = express.Router();
 
 var User = require('../models/user');
@@ -33,7 +32,7 @@ router.get('/', function(req, res, next) {
 			//retrieve all users from Monogo
 			User.find({}, function (err, users) {
 				if (err) {
-					return console.error(err);
+					return next(err);
 				} else {
 					res.json(users);
 				}
@@ -47,7 +46,7 @@ router.param('id', function(req, res, next, id) {
 	//find the ID in the Database
 	User.findById(id, function (err, user) {
 		//if it isn't found, we are going to respond with 404
-		if (err || user == null) {
+		if (err || !user) {
 			console.log(id + ' was not found');
 			res.status(404)
 			var err = new Error('Not Found');
@@ -57,7 +56,10 @@ router.param('id', function(req, res, next, id) {
 					next(err);
 				},
 				json: function() {
-					res.json({message : err.status	+ ' ' + err});
+					res.json({
+						status: err.status,
+						message: err.message
+					});
 				}
 			});
 		//if it is found we continue on
@@ -75,13 +77,11 @@ router.param('id', function(req, res, next, id) {
 router.get('/:id', function(req, res) {
 	User.findById(req.id, function (err, user) {
 		if (err) {
-			console.log('GET Error: There was a problem retrieving: ' + err);
+			next(err);
 		} else if (req.isAuthenticated() && req.user._id.equals(user._id)) {
 			//user selects himself
 			res.redirect("/profile");
 		} else {
-			/*console.log('GET retrieving user: ' + user);
-			console.log('current user: ' + req.user);*/
 			res.format({
 				html: function(){
 					res.render('users/show', {
@@ -97,77 +97,11 @@ router.get('/:id', function(req, res) {
 	});
 });
 
-/* GET Edit User page. */
-/*router.get('/:id/edit', function(req, res) {
-	//search for the user within Mongo
-	User.findById(req.id, function (err, user) {
-		if (err) {
-			console.log('GET Error: There was a problem retrieving: ' + err);
-		} else {
-			//Return the user
-			console.log('GET Retrieving ID: ' + user._id);
-			//format the date properly for the value to show correctly in our edit form
-			var userDob = user.dob.toISOString().substring(0, userdob.indexOf('T'))
-			res.format({
-				//HTML response will render the 'edit.jade' template
-				html: function(){
-					res.render('users/edit', {
-						title: 'User' + user._id,
-						"userDob" : userDob,
-						"user" : user
-					});
-				},
-				 //JSON response will return the JSON output
-				json: function(){
-					res.json(user);
-				}
-			});
-		}
-	});
-});*/
-
-//PUT to update a blob by ID
-/*router.put('/:id/edit', function(req, res) {
-	// Get our REST or form values. These rely on the "name" attributes
-	var name = req.body.name;
-	var badge = req.body.badge;
-	var dob = req.body.dob;
-	var company = req.body.company;
-	var isloved = req.body.isloved;
-
-	//find the document by ID
-	User.findById(req.id, function (err, user) {
-		//update it
-		user.update({
-			username : username,
-			email : email,
-			dob : dob
-		}, function (err, updatedUser) {
-			if (err) {
-				res.send("There was a problem updating the information to the database: " + err);
-			}
-			else {
-				//HTML responds by going back to the page or you can be fancy and create a new view that shows a success page.
-				res.format({
-					html: function(){
-						res.redirect("/users/" + updatedUser._id);
-					},
-					//JSON responds showing the updated values
-					json: function(){
-						res.json(updatedUser);
-					}
-				});
-			}
-		})
-	});
-});*/
-
 router.put('/:id/add', function(req, res) {
 	User.findById(req.id, function(err, user) {
 		if (err) {
 			console.log("error retrieving user");
-			helpers.setErrorResponse(res);
-			return;
+			return next(err);
 		}
 
 		var currentUserIdStr = req.user._id.toString();
@@ -177,8 +111,7 @@ router.put('/:id/add', function(req, res) {
 			user.save(function(err, updatedUser) {
 				if (err) {
 					console.log("error saving user");
-					helpers.setErrorResponse(res);
-					return;
+					return next(err);
 				}
 
 				res.json({updatedUsers: [updatedUser]});
@@ -193,8 +126,7 @@ router.put('/:id/cancel', function(req, res) {
 	User.findById(req.id, function(err, user) {
 		if (err) {
 			console.log("error retrieving user");
-			helpers.setErrorResponse(res);
-			return;
+			return next(err);
 		}
 
 		var currentUserIdStr = req.user._id.toString();
@@ -204,8 +136,7 @@ router.put('/:id/cancel', function(req, res) {
 			user.save(function(err, updatedUser) {
 				if (err) {
 					console.log("error saving user");
-					helpers.setErrorResponse(res);
-					return;
+					return next(err);
 				}
 
 				res.json({updatedUsers: [updatedUser]});
@@ -220,8 +151,7 @@ router.put('/:id/accept', function(req, res) {
 	User.findById(req.id, function(err, user) {
 		if (err) {
 			console.log("error retrieving user");
-			helpers.setErrorResponse(res);
-			return;
+			return next(err);
 		}
 
 		var currentUser = req.user;
@@ -235,8 +165,7 @@ router.put('/:id/accept', function(req, res) {
 			currentUser.save(function(err, updatedUser) {
 				if (err) {
 					console.log("error saving user");
-					helpers.setErrorResponse(res);
-					return;
+					return next(err);
 				}
 
 				updatedUsers.push(updatedUser);
@@ -246,8 +175,7 @@ router.put('/:id/accept', function(req, res) {
 			user.save(function(err, updatedUser) {
 				if (err) {
 					console.log("error saving user");
-					helpers.setErrorResponse(res);
-					return;
+					return next(err);
 				}
 
 				updatedUsers.push(updatedUser);
@@ -269,8 +197,7 @@ router.put('/:id/reject', function(req, res) {
 		currentUser.save(function(err, updatedUser) {
 			if (err) {
 				console.log("error saving user");
-				helpers.setErrorResponse(res);
-				return;
+				return next(err);
 			}
 
 			res.json({updatedUsers: [updatedUser]});
@@ -284,8 +211,7 @@ router.put('/:id/remove', function(req, res) {
 	User.findById(req.id, function(err, user) {
 		if (err) {
 			console.log("error retrieving user");
-			helpers.setErrorResponse(res);
-			return;
+			return next(err);
 		}
 
 		var userIdStr = user._id.toString();
@@ -300,8 +226,7 @@ router.put('/:id/remove', function(req, res) {
 			user.save(function(err, updatedUser) {
 				if (err) {
 					console.log("error saving user");
-					helpers.setErrorResponse(res);
-					return;
+					return next(err);
 				}
 
 				updatedUsers.push(updatedUser);
@@ -311,8 +236,7 @@ router.put('/:id/remove', function(req, res) {
 			currentUser.save(function(err, updatedUser) {
 				if (err) {
 					console.log("error saving user");
-					helpers.setErrorResponse(res);
-					return;
+					return next(err);
 				}
 
 				updatedUsers.push(updatedUser);

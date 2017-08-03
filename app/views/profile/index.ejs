@@ -5,35 +5,57 @@
 <div class="row">
 	<div class="col-sm-6">
 		<div class="well">
-			<h3>Local Login</h3>
-			<p>
-				<strong>username</strong>: <%= user.local.username %><br>
-				<form method="POST" action="/profile/editusername/">
-					<input type="hidden" name="_csrf" value="<%= csrfToken %>" />
-						<label>Update UserName</label>
+			<h3>Details</h3>
+			<br>
+			<p><strong>username</strong>: <%= user.local.username %></p>
+			<p><strong>email</strong>: <%= user.local.email %><br></p>
+			<p><strong>profile picture</strong></p>
+			<img src= "/img/<%= user.local.imgPath %>">
+			<p><a href="/profile/edit">Edit My Profile Picture</a></p>
+		</div>
+	</div>
+
+	<div class="col-sm-6">
+		<div class="well">
+			<h3>Update</h3>
+			<br>
+
+			<form method="POST" action="/profile/update-username">
+				<input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+				<div class="form-group">
+					<label>Update Username</label>
+
+					<div class="form-inline">
 						<input type="text" class="form-control" name="username" required>
-						<button type="submit" class="btn btn-warning btn-lg">Update</button>
-				</form>
-				<strong>email</strong>: <%= user.local.email %><br>
-				<form method="POST" action="/profile/editemail/">
-					<input type="hidden" name="_csrf" value="<%= csrfToken %>" />
-						<label>Update Email</label>
-							<input type="text" class="form-control" name="email" required>
-						<button type="submit" class="btn btn-warning btn-lg">Update</button>
-				</form>
-				<form method="POST" action="/profile/editpassword/">
-					<input type="hidden" name="_csrf" value="<%= csrfToken %>" />
-						<label>Reset Password</label>
-						<input type="text" class="form-control" name="password" required>
-						<button type="submit" class="btn btn-warning btn-lg">Update</button>
-				</form>
+						<button type="submit" class="btn btn-warning">Update</button>
+					</div>
+				</div>
+			</form>
 
-				<strong>profile picture</strong> <br>
-				<img src= "/img/<%= user.local.imgPath %>">
-				<br>
-				<a href="/profile/edit">Edit My Profile Picture</a>
-			</p>
+			<form method="POST" action="/profile/update-email">
+				<input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+				<div class="form-group">
+					<label>Update Email</label>
 
+					<div class="form-inline">
+						<input type="text" class="form-control" name="email" required>
+						<button type="submit" class="btn btn-warning">Update</button>
+					</div>
+				</div>
+			</form>
+
+			<form method="POST" action="/profile/update-password">
+				<input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+				<div class="form-group">
+					<label>Reset Password</label>
+
+					<div class="form-inline">
+						<input type="password" class="form-control" name="password" placeholder="New Password" required>
+						<input type="password" class="form-control" name="confirmPassword" placeholder="Confirm New Password" required>
+						<button type="submit" class="btn btn-warning">Update</button>
+					</div>
+				</div>
+			</form>
 		</div>
 	</div>
 </div>

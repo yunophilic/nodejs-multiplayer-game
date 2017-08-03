@@ -129,126 +129,144 @@ router.post('/edit', middlewares.isLoggedIn, function(req, res) {
 /*
 Update username
 */
-router.post('/editusername',middlewares.isLoggedIn, function(req, res) {
-		var username = req.body.username;
-		//username = encodeURI(username);
-		var userid = req.user._id;
-		if (username == "") {
-			res.send('All fields are required');
-		}else{
-			//res.send(username);
+router.post('/update-username',middlewares.isLoggedIn, function(req, res, next) {
+	var username = req.body.username;
+	if (username == '') {
+		var err = new Error('Username cannot be empty.');
+		err.status = 400;
+		return next(err);
+	}
 
-			// find a user whose email is the same as the forms email
-			// we are checking to see if the user trying to login already exists
-			User.findOne({ $or: [
-				{'local.username': username}
-			] }, function(err, user) {
-				// if there are any errors, return the error
-				if (err) {
-					res.status(500).send();
-				}
-
-				// check to see if theres already a user with that email
-				if (user) {
-					res.send('That username is already taken.');
-				} else {
-
-						User.findOne({_id: userid}, function (err, foundObject){
-							if (err){
-								res.send('Error while finding current user');
-							} else {
-								if (!foundObject){
-									res.send('Cannot find current user');
-								}else{
-									foundObject.local.username = username;
-								}
-								foundObject.save(function (err,updatedObejct){
-									if (err){
-										res.send('Error while updating current user');
-									}else{
-										res.redirect('/profile/');
-									}
-								});
-							}
-						});
-
-				}
-
-			});
+	// find a user whose username is the same as the form username
+	// we are checking to see if the user trying to login already exists
+	User.findOne({'local.username': username}, function(err, existingUser) {
+		// if there are any errors, return the error
+		if (err) {
+			next(err);
 		}
+
+		// check to see if theres already a user with that email
+		if (existingUser) {
+			var err = new Error('That username is already taken.');
+			err.status = 400;
+			next(err);
+		}
+
+		User.findById(
+			req.user._id, 
+			function (err, user) {
+				if (err) {
+					return next(err);
+				}
+
+				if (!user) {
+					var err = new Error('Cannot find current user.');
+					err.status = 404;
+					return next(err);
+				}
+
+				user.local.username = username;
+				user.save(function (err, updatedUser){
+					if (err){
+						return next(err);
+					}
+					res.redirect('/profile');
+				});
+			}
+		);
+		
+	});
 });
+
 /*
 Update email
 */
-router.post('/editemail',middlewares.isLoggedIn, function(req, res) {
-		var email = req.body.email;
-		var userid = req.user._id;
-		if (email == "") {
-			res.send('All fields are required');
-		}else{
-			// find a user whose email is the same as the forms email
-			// we are checking to see if the user trying to login already exists
-			User.findOne({ $or: [
-				{'local.email': email}
-			] }, function(err, user) {
-				// if there are any errors, return the error
-				if (err) {
-					res.status(500).send();
+router.post('/update-email', middlewares.isLoggedIn, function(req, res, next) {
+	var email = req.body.email;
+	if (email == '') {
+		var err = new Error('Email cannot be empty.');
+		err.status = 400;
+		return next(err);
+	}
+
+	// find a user whose email is the same as the forms email
+	// we are checking to see if the user trying to login already exists
+	User.findOne({'local.email': email}, function(err, existingUser) {
+		// if there are any errors, return the error
+		if (err) {
+			return next(err);
+		}
+
+		// check to see if theres already a user with that email
+		if (existingUser) {
+			var err = new Error('That email is already taken.');
+			err.status = 400;
+			return next(err);
+		}
+
+		User.findById(
+			req.user._id,
+			function (err, user){
+				if (err){
+					return next(err);
 				}
 
-				// check to see if theres already a user with that email
-				if (user) {
-					res.send('That email is already taken.');
-				} else {
-
-						User.findOne({_id: userid}, function (err, foundObject){
-							if (err){
-								res.send('Error while finding current user');
-							} else {
-								if (!foundObject){
-									res.send('Cannot find current user');
-								}else{
-									foundObject.local.email = email;
-								}
-								foundObject.save(function (err,updatedObejct){
-									if (err){
-										res.send('Error while updating current user');
-									}else{
-										res.redirect('/profile/');
-									}
-								});
-							}
-						});
-
+				if (!user){
+					var err = new Error('Cannot find current user.');
+					err.status = 404;
+					return next(err);
 				}
 
+				user.local.email = email;
+				user.save(function (err, updatedUser){
+					if (err){
+						return next(err);
+					}
+					res.redirect('/profile');
+				});
+			}
+		);
+	});
+});
+
+
+router.post('/update-password',middlewares.isLoggedIn, function(req, res, next) {
+	var password = req.body.password;
+	var confirmPassword = req.body.confirmPassword;
+
+	if (password == '') {
+		var err = new Error('Password cannot be empty.');
+		err.status = 400;
+		return next(err);
+	}
+
+	if (password != confirmPassword) {
+		var err = new Error('Password and confirm password do not match.');
+		err.status = 400;
+		return next(err);
+	}
+
+	User.findById(
+		req.user._id,
+		function (err, user){
+			if (err){
+				return next(err);
+			}
+
+			if (!user){
+				var err = new Error('Cannot find current user.');
+				err.status = 404;
+				return next(err);
+			}
+
+			user.local.password = user.generateHash(password);
+			user.save(function (err, updatedUser){
+				if (err){
+					return next(err);
+				}
+				res.redirect('/profile');
 			});
 		}
-});
-router.post('/editpassword',middlewares.isLoggedIn, function(req, res) {
-		var password = req.body.password;
-		var userid = req.user._id;
-		if (password == "") {
-			res.send('All fields are required');
-		}else{
-						User.findOne({_id: userid}, function (err, foundObject){
-							if (err){
-								res.send('Error while finding current user');
-							} else {
-								if (!foundObject){
-									res.send('Cannot find current user');
-								}else{
-									foundObject.local.password = foundObject.generateHash(password);
-								}
-								foundObject.save(function (err,updatedObejct){
-									if (err){
-										res.send('Error while updating current user');
-									}else{
-										res.redirect('/profile/');
-									}
-								});
-							}
-						});
-				}
+	);
 });
 module.exports = router;
