@@ -2,7 +2,7 @@ const TANK_INIT_HP = 100;
 
 var Ball = require('../models/ball.js');
 
-module.exports = function(socket, gameServer) {
+module.exports = function(socket, gameRoom) {
 	console.log('User connected');
 
 	socket.on('joinGame', function(tank){
@@ -12,34 +12,34 @@ module.exports = function(socket, gameServer) {
 		socket.emit('addTank', { id: tank.id, type: tank.type, isLocal: true, x: initX, y: initY, hp: TANK_INIT_HP });
 		socket.broadcast.emit('addTank', { id: tank.id, type: tank.type, isLocal: false, x: initX, y: initY, hp: TANK_INIT_HP} );
 
-		gameServer.addTank({ id: tank.id, type: tank.type, hp: TANK_INIT_HP});
+		gameRoom.addTank({ id: tank.id, type: tank.type, hp: TANK_INIT_HP});
 	});
 
 	socket.on('sync', function(data){
 		//Receive data from clients
 		if(data.tank != undefined){
-			gameServer.syncTank(data.tank);
+			gameRoom.syncTank(data.tank);
 		}
 		//update ball positions
-		gameServer.syncBalls();
+		gameRoom.syncBalls();
 		//Broadcast data to clients
-		socket.emit('sync', gameServer.getData());
-		socket.broadcast.emit('sync', gameServer.getData());
+		socket.emit('sync', gameRoom.getData());
+		socket.broadcast.emit('sync', gameRoom.getData());
 
 		//I do the cleanup after sending data, so the clients know
 		//when the tank dies and when the balls explode
-		gameServer.cleanDeadTanks();
-		gameServer.cleanDeadBalls();
+		gameRoom.cleanDeadTanks();
+		gameRoom.cleanDeadBalls();
 	});
 
 	socket.on('shoot', function(ball){
 		var ball = new Ball(ball.ownerId, ball.alpha, ball.x, ball.y );
-		gameServer.addBall(ball);
+		gameRoom.addBall(ball);
 	});
 
 	socket.on('leaveGame', function(tankId){
 		console.log(tankId + ' has left the game');
-		gameServer.removeTank(tankId);
+		gameRoom.removeTank(tankId);
 		socket.broadcast.emit('removeTank', tankId);
 	});
 };

@@ -89,6 +89,6 @@ GameRoom.prototype = {
 			return !ball.out;
 		});
 	}
-}
+};
 
 module.exports = GameRoom;
