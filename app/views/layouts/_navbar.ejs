@@ -15,7 +15,7 @@
 				<li><a href="/users">Users</a></li>
 				<% if (loggedIn) { %>
 					<li><a href="/chat">Chatting Room</a></li>
-					<li><a href="/profile/friend-requests">Friend Requests</a></li>
+					<li><a href="/profile/friend-requests">Friend Requests<span id="length" class="badge"></span></a></li>
 					<li><a href="/profile/friends">Friends</a></li>
 				<% } %>	
 			</ul>
@@ -59,3 +59,11 @@
 		</div>
 	</div>
 </nav>
+
+<script>
+    $.get("/profile/friend-requests-num", function(data, status){
+        var curr_val = $('#length').text();
+        var new_val = data;
+        $('#length').text(new_val);  
+    });
+</script>
