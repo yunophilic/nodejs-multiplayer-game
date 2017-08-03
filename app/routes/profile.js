@@ -129,53 +129,146 @@ router.post('/edit', middlewares.isLoggedIn, function(req, res) {
 /*
 Update username
 */
-router.post('/editusername', function(req, res) {
-		var username = req.body.username;
-		username = encodeURI(username);
-		var userid = req.user._id;
-		if (username == "") {
-			res.send('All fields are required');
-		}else{
-			//res.send(username);
+router.post('/update-username',middlewares.isLoggedIn, function(req, res, next) {
+	var username = req.body.username;
+	if (username == '') {
+		req.flash('error', 'Username cannot be empty.');
+		return res.redirect('/profile');
+	}
 
-			// find a user whose email is the same as the forms email
-			// we are checking to see if the user trying to login already exists
-			User.findOne({ $or: [
-				{'local.username': username}
-			] }, function(err, user) {
-				// if there are any errors, return the error
-				if (err) {
-					res.status(500).send();
-				}
-
-				// check to see if theres already a user with that email
-				if (user) {
-					res.send('That username is already taken.');
-				} else {
-
-						User.findOne({_id: userid}, function (err, foundObject){
-							if (err){
-								res.send('Error while finding current user');
-							} else {
-								if (!foundObject){
-									res.send('Cannot find current user');
-								}else{
-									foundObject.local.username = username;
-								}
-								foundObject.save(function (err,updatedObejct){
-									if (err){
-										res.send('Error while updating current user');
-									}else{
-										res.redirect('/profile/');
-									}
-								});
-							}
-						});
-
-				}
-
-			});
+	// find a user whose username is the same as the form username
+	// we are checking to see if the user trying to login already exists
+	User.findOne({ $and: [
+		{ 'local.username': username },
+		{ 'local.username': { $not: { $eq: req.user.local.username } } }
+	] }, function(err, existingUser) {
+		// if there are any errors, return the error
+		if (err) {
+			return next(err);
 		}
+
+		// check to see if theres already a user with that email
+		if (existingUser) {
+			req.flash('error', 'Username is already taken.');
+			return res.redirect('/profile');
+		}
+
+		User.findById(
+			req.user._id, 
+			function (err, user) {
+				if (err) {
+					return next(err);
+				}
+
+				if (!user) {
+					var err = new Error('Cannot find current user.');
+					err.status = 404;
+					return next(err);
+				}
+
+				user.local.username = username;
+				user.save(function (err, updatedUser){
+					if (err){
+						return next(err);
+					}
+					req.flash('success', 'Username updated.');
+					res.redirect('/profile');
+				});
+			}
+		);
+	});
 });
 
+/*
+Update email
+*/
+router.post('/update-email', middlewares.isLoggedIn, function(req, res, next) {
+	var email = req.body.email;
+	if (email == '') {
+		req.flash('error', 'Email cannot be empty.');
+		return res.redirect('/profile');
+	}
+
+	// find a user whose email is the same as the forms email
+	// we are checking to see if the user trying to login already exists
+	User.findOne({ $and: [
+		{ 'local.email': email },
+		{ 'local.email': { $not: { $eq: req.user.local.email } } }
+	] }, function(err, existingUser) {
+		// if there are any errors, return the error
+		if (err) {
+			return next(err);
+		}
+
+		// check to see if theres another a user with that email
+		if (existingUser) {
+			req.flash('error', 'Email is already taken.');
+			return res.redirect('/profile');
+		}
+
+		User.findById(
+			req.user._id,
+			function (err, user){
+				if (err){
+					return next(err);
+				}
+
+				if (!user){
+					var err = new Error('Cannot find current user.');
+					err.status = 404;
+					return next(err);
+				}
+
+				user.local.email = email;
+				user.save(function (err, updatedUser){
+					if (err){
+						return next(err);
+					}
+					req.flash('success', 'Email updated.');
+					res.redirect('/profile');
+				});
+			}
+		);
+	});
+});
+
+
+router.post('/update-password',middlewares.isLoggedIn, function(req, res, next) {
+	var password = req.body.password;
+	var confirmPassword = req.body.confirmPassword;
+
+	if (password == '') {
+		req.flash('error', 'New password cannot be empty.');
+		return res.redirect('/profile');
+	}
+
+	if (password != confirmPassword) {
+		req.flash('error', 'New password and confirm password do not match.');
+		return res.redirect('/profile');
+	}
+
+	User.findById(
+		req.user._id,
+		function (err, user){
+			if (err){
+				return next(err);
+			}
+
+			if (!user){
+				var err = new Error('Cannot find current user.');
+				err.status = 404;
+				return next(err);
+			}
+
+			user.local.password = user.generateHash(password);
+			user.save(function (err, updatedUser){
+				if (err){
+					return next(err);
+				}
+				req.flash('success', 'Password updated.');
+				res.redirect('/profile');
+			});
+		}
+	);
+});
 module.exports = router;

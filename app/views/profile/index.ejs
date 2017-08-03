@@ -2,24 +2,65 @@
 	<h1><span class="fa fa-anchor"></span> Profile Page</h1>
 </div>
 
+<% if (messages.error) { %>
+	<div class="alert alert-danger"><%= messages.error %></div>
+<% } else if (messages.success) { %>
+	<div class="alert alert-success"><%= messages.success %></div>
+<% } %>
+
 <div class="row">
 	<div class="col-sm-6">
 		<div class="well">
-			<h3>Local Login</h3>
-			<p>
-				<strong>username</strong>: <%= user.local.username %><br>
-				<strong>email</strong>: <%= user.local.email %><br>
+			<h3>Details</h3>
+			<br>
+			<p><strong>username</strong>: <%= user.local.username %></p>
+			<p><strong>email</strong>: <%= user.local.email %><br></p>
+			<p><strong>profile picture</strong></p>
+			<img src= "/img/<%= user.local.imgPath %>">
+			<p><a href="/profile/edit">Edit My Profile Picture</a></p>
+		</div>
+	</div>
 
-				<strong>profile picture</strong> <br>
-				<img src= "/img/<%= user.local.imgPath %>">
-				<br>
-				<a href="/profile/edit">Edit My Profile Picture</a>
-			</p>
-			<form method="POST" action="/profile/editusername/">
+	<div class="col-sm-6">
+		<div class="well">
+			<h3>Update</h3>
+			<br>
+
+			<form method="POST" action="/profile/update-username">
 				<input type="hidden" name="_csrf" value="<%= csrfToken %>" />
-					<label>Username or Email</label>
-					<input type="text" class="form-control" name="username" required>
-					<button type="submit" class="btn btn-warning btn-lg">Update</button>
+				<div class="form-group">
+					<label>Update Username</label>
+
+					<div class="form-inline">
+						<input type="text" class="form-control" name="username" required>
+						<button type="submit" class="btn btn-warning">Update</button>
+					</div>
+				</div>
+			</form>
+
+			<form method="POST" action="/profile/update-email">
+				<input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+				<div class="form-group">
+					<label>Update Email</label>
+
+					<div class="form-inline">
+						<input type="text" class="form-control" name="email" required>
+						<button type="submit" class="btn btn-warning">Update</button>
+					</div>
+				</div>
+			</form>
+
+			<form method="POST" action="/profile/update-password">
+				<input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+				<div class="form-group">
+					<label>Reset Password</label>
+
+					<div class="form-inline">
+						<input type="password" class="form-control" name="password" placeholder="New Password" required>
+						<input type="password" class="form-control" name="confirmPassword" placeholder="Confirm New Password" required>
+						<button type="submit" class="btn btn-warning">Update</button>
+					</div>
+				</div>
 			</form>
 		</div>
 	</div>
