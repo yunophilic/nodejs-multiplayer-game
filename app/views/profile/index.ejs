@@ -8,21 +8,32 @@
 			<h3>Local Login</h3>
 			<p>
 				<strong>username</strong>: <%= user.local.username %><br>
+				<form method="POST" action="/profile/editusername/">
+					<input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+						<label>Update UserName</label>
+						<input type="text" class="form-control" name="username" required>
+						<button type="submit" class="btn btn-warning btn-lg">Update</button>
+				</form>
 				<strong>email</strong>: <%= user.local.email %><br>
+				<form method="POST" action="/profile/editemail/">
+					<input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+						<label>Update Email</label>
+							<input type="text" class="form-control" name="email" required>
+						<button type="submit" class="btn btn-warning btn-lg">Update</button>
+				</form>
+				<form method="POST" action="/profile/editpassword/">
+					<input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+						<label>Reset Password</label>
+						<input type="text" class="form-control" name="password" required>
+						<button type="submit" class="btn btn-warning btn-lg">Update</button>
+				</form>
 
 				<strong>profile picture</strong> <br>
 				<img src= "/img/<%= user.local.imgPath %>">
 				<br>
 				<a href="/profile/edit">Edit My Profile Picture</a>
 			</p>
-			<form method="POST" action="/profile/editpassword/">
-				<input type="hidden" name="_csrf" value="<%= csrfToken %>" />
-					<label>Username or Email</label>
-					<!--<input type="text" class="form-control" name="username" required>-->
-					<!--<input type="text" class="form-control" name="email" required>-->
-					<input type="text" class="form-control" name="password" required>
-					<button type="submit" class="btn btn-warning btn-lg">Update</button>
-			</form>
+
 		</div>
 	</div>
 </div>
