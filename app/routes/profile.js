@@ -132,24 +132,25 @@ Update username
 router.post('/update-username',middlewares.isLoggedIn, function(req, res, next) {
 	var username = req.body.username;
 	if (username == '') {
-		var err = new Error('Username cannot be empty.');
-		err.status = 400;
-		return next(err);
+		req.flash('error', 'Username cannot be empty.');
+		return res.redirect('/profile');
 	}
 
 	// find a user whose username is the same as the form username
 	// we are checking to see if the user trying to login already exists
-	User.findOne({'local.username': username}, function(err, existingUser) {
+	User.findOne({ $and: [
+		{ 'local.username': username },
+		{ 'local.username': { $not: { $eq: req.user.local.username } } }
+	] }, function(err, existingUser) {
 		// if there are any errors, return the error
 		if (err) {
-			next(err);
+			return next(err);
 		}
 
 		// check to see if theres already a user with that email
 		if (existingUser) {
-			var err = new Error('That username is already taken.');
-			err.status = 400;
-			next(err);
+			req.flash('error', 'Username is already taken.');
+			return res.redirect('/profile');
 		}
 
 		User.findById(
@@ -170,11 +171,11 @@ router.post('/update-username',middlewares.isLoggedIn, function(req, res, next) 
 					if (err){
 						return next(err);
 					}
+					req.flash('success', 'Username updated.');
 					res.redirect('/profile');
 				});
 			}
 		);
-		
 	});
 });
 
@@ -184,24 +185,25 @@ Update email
 router.post('/update-email', middlewares.isLoggedIn, function(req, res, next) {
 	var email = req.body.email;
 	if (email == '') {
-		var err = new Error('Email cannot be empty.');
-		err.status = 400;
-		return next(err);
+		req.flash('error', 'Email cannot be empty.');
+		return res.redirect('/profile');
 	}
 
 	// find a user whose email is the same as the forms email
 	// we are checking to see if the user trying to login already exists
-	User.findOne({'local.email': email}, function(err, existingUser) {
+	User.findOne({ $and: [
+		{ 'local.email': email },
+		{ 'local.email': { $not: { $eq: req.user.local.email } } }
+	] }, function(err, existingUser) {
 		// if there are any errors, return the error
 		if (err) {
 			return next(err);
 		}
 
-		// check to see if theres already a user with that email
+		// check to see if theres another a user with that email
 		if (existingUser) {
-			var err = new Error('That email is already taken.');
-			err.status = 400;
-			return next(err);
+			req.flash('error', 'Email is already taken.');
+			return res.redirect('/profile');
 		}
 
 		User.findById(
@@ -222,6 +224,7 @@ router.post('/update-email', middlewares.isLoggedIn, function(req, res, next) {
 					if (err){
 						return next(err);
 					}
+					req.flash('success', 'Email updated.');
 					res.redirect('/profile');
 				});
 			}
@@ -235,15 +238,13 @@ router.post('/update-password',middlewares.isLoggedIn, function(req, res, next) 
 	var confirmPassword = req.body.confirmPassword;
 
 	if (password == '') {
-		var err = new Error('Password cannot be empty.');
-		err.status = 400;
-		return next(err);
+		req.flash('error', 'New password cannot be empty.');
+		return res.redirect('/profile');
 	}
 
 	if (password != confirmPassword) {
-		var err = new Error('Password and confirm password do not match.');
-		err.status = 400;
-		return next(err);
+		req.flash('error', 'New password and confirm password do not match.');
+		return res.redirect('/profile');
 	}
 
 	User.findById(
@@ -264,6 +265,7 @@ router.post('/update-password',middlewares.isLoggedIn, function(req, res, next) 
 				if (err){
 					return next(err);
 				}
+				req.flash('success', 'Password updated.');
 				res.redirect('/profile');
 			});
 		}
