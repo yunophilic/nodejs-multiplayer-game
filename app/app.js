@@ -47,24 +47,15 @@ app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
-app.use('/bootstrap', express.static(path.join(__dirname, 'node_modules/bootstrap/dist')));
-app.use('/jquery', express.static(path.join(__dirname, 'node_modules/jquery/dist')));
-app.use('/angular', express.static(path.join(__dirname, 'node_modules/angular/')));
-app.use('/angular-route', express.static(path.join(__dirname, 'node_modules/angular-route/')));
-//app.use(express.static('publicImg'));
+app.use(csrf({ cookie: true }));
 
 //authentation setup
-app.use(morgan('dev')); // log every request to the console
 app.use(session({ secret: 'secret' })); // session secret - need to modify it later
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
-/*require('./app/auth.js')(app, passport);*/ // load our routes and pass in our app and fully configured passport
 
-
-// csrf setup
-app.use(csrf({ cookie: true }));
+// global middleware
 app.use(function(req, res, next) {
 	res.locals.csrfToken = req.csrfToken();
 	res.locals.loggedIn = req.isAuthenticated();
@@ -77,7 +68,13 @@ app.use('/profile', profile);
 app.use('/users', users);
 app.use('/chat', chat);
 app.use('/game', game);
-//app.use('/static', express.static('publicImg'));
+
+//static
+app.use(express.static(path.join(__dirname, 'public')));
+app.use('/bootstrap', express.static(path.join(__dirname, 'node_modules/bootstrap/dist')));
+app.use('/jquery', express.static(path.join(__dirname, 'node_modules/jquery/dist')));
+app.use('/angular', express.static(path.join(__dirname, 'node_modules/angular/')));
+app.use('/angular-route', express.static(path.join(__dirname, 'node_modules/angular-route/')));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

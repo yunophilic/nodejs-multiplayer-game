@@ -1,10 +1,18 @@
 var express = require('express');
 var mongoose = require('mongoose');
+var formidable = require('formidable');
+var fs = require('fs');
+var path = require('path');
+var helpers = require('../utils/helpers');
 var middlewares = require('../utils/middlewares');
 var router = express.Router();
 
 //models
 var User = require('../models/user');
+
+//constants
+const AVATAR_DIR = './public/img/avatar';
+const ALLOWED_AVATAR_FORMAT = ['.jpg', '.png'];
 
 // =====================================
 // PROFILE SECTION =====================
@@ -13,8 +21,21 @@ var User = require('../models/user');
 // we will use route middleware to verify this (the isLoggedIn function)
 
 router.get('/', middlewares.isLoggedIn, function(req, res) {
+	var avatarName = null
+
+	fs.readdirSync(AVATAR_DIR).forEach(function(x) {
+		if (x.startsWith(req.user._id.toString())) {
+			avatarName = x;
+		}
+	});
+
+	var imgPath = avatarName != null ?
+		path.join('/img/avatar', avatarName) :
+		'/img/default-avatar.jpg';
+
 	res.render('profile/index', {
-		user : req.user // get the user out of session and pass to template
+		user : req.user,
+		imgPath: imgPath
 	});
 });
 
@@ -75,7 +96,7 @@ router.get('/friends', middlewares.isLoggedIn, function(req, res) {
 	});
 });
 
-router.get('/edit', middlewares.isLoggedIn, function(req, res) {
+/*router.get('/edit', middlewares.isLoggedIn, function(req, res) {
 	res.render('profile/edit', {
 		user : req.user // get the user out of session and pass to template
 	});
@@ -124,12 +145,50 @@ router.post('/edit', middlewares.isLoggedIn, function(req, res) {
 			});
 		}
 	});
+});*/
+
+router.post('/upload-photo', middlewares.isLoggedIn, function(req, res, next){
+	//only allow .jpg and .png
+
+	var form = new formidable.IncomingForm();
+	form.parse(req, function (err, fields, files) {
+		if(!fs.existsSync(AVATAR_DIR)) {
+			fs.mkdirSync(AVATAR_DIR);
+		}
+
+		var ext = path.extname(files.fileToUpload.name);
+		if(!ALLOWED_AVATAR_FORMAT.includes(ext)) {
+			req.flash('error', 'File formats allowed: ' + ALLOWED_AVATAR_FORMAT);
+			res.redirect('/profile');
+			return;
+		}
+
+		var fileToRemove = null;
+		fs.readdirSync(AVATAR_DIR).forEach(function(x) {
+			if (x.startsWith(req.user._id.toString())) {
+				fileToRemove = x;
+			}
+		});
+
+		fs.unlinkSync(path.join(AVATAR_DIR, fileToRemove));
+
+		var oldpath = files.fileToUpload.path;
+		var newpath = path.join(AVATAR_DIR, req.user._id.toString() + ext);
+
+		fs.rename(oldpath, newpath, function (err) {
+			if (err) {
+				next(err);
+			}
+			req.flash('success', 'Avatar updated.');
+			res.redirect('/profile');
+		});
+	});
 });
 
 /*
 Update username
 */
-router.post('/update-username',middlewares.isLoggedIn, function(req, res, next) {
+router.post('/update-username', middlewares.isLoggedIn, function(req, res, next) {
 	var username = req.body.username;
 	if (username == '') {
 		req.flash('error', 'Username cannot be empty.');
@@ -271,4 +330,5 @@ router.post('/update-password',middlewares.isLoggedIn, function(req, res, next) 
 		}
 	);
 });
+
 module.exports = router;
