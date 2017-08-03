@@ -62,8 +62,11 @@
 
 <script>
     $.get("/profile/friend-requests-num", function(data, status){
-        var curr_val = $('#length').text();
-        var new_val = data;
-        $('#length').text(new_val);  
+        if(data > 0){
+          var curr_val = $('#length').text();
+          var new_val = data;
+          $('#length').text(new_val);  
+        }
+        
     });
 </script>
