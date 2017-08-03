@@ -68,8 +68,14 @@
 
 			<!-- https://github.com/EthanRBrown/web-development-with-node-and-express/issues/53 -->
 			<form method="POST" action="/profile/upload-photo?_csrf=<%= csrfToken %>" enctype="multipart/form-data">
-				<input type="file" name="fileToUpload">
-				<input type="submit" class="btn btn-warning" value="Upload">
+				<div class="form-group">
+					<label>Update Avatar</label>
+
+					<div class="form-inline">
+						<input type="file" name="fileToUpload" class="form-control">
+						<input type="submit" class="btn btn-warning" value="Upload">
+					</div>
+				</div>
 			</form>
 		</div>
 	</div>
