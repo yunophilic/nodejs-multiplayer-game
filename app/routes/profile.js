@@ -119,5 +119,52 @@ router.post('/editusername',middlewares.isLoggedIn, function(req, res) {
 			});
 		}
 });
+/*
+Update email
+*/
+router.post('/editemail',middlewares.isLoggedIn, function(req, res) {
+		var email = req.body.email;
+		var userid = req.user._id;
+		if (email == "") {
+			res.send('All fields are required');
+		}else{
+			// find a user whose email is the same as the forms email
+			// we are checking to see if the user trying to login already exists
+			User.findOne({ $or: [
+				{'local.email': email}
+			] }, function(err, user) {
+				// if there are any errors, return the error
+				if (err) {
+					res.status(500).send();
+				}
 
+				// check to see if theres already a user with that email
+				if (user) {
+					res.send('That email is already taken.');
+				} else {
+
+						User.findOne({_id: userid}, function (err, foundObject){
+							if (err){
+								res.send('Error while finding current user');
+							} else {
+								if (!foundObject){
+									res.send('Cannot find current user');
+								}else{
+									foundObject.local.email = email;
+								}
+								foundObject.save(function (err,updatedObejct){
+									if (err){
+										res.send('Error while updating current user');
+									}else{
+										res.redirect('/profile/');
+									}
+								});
+							}
+						});
+
+				}
+
+			});
+		}
+});
 module.exports = router;

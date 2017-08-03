@@ -15,10 +15,12 @@
 				<br>
 				<a href="/profile/edit">Edit My Profile Picture</a>
 			</p>
-			<form method="POST" action="/profile/editusername/">
+			<form method="POST" action="/profile/editemail/">
 				<input type="hidden" name="_csrf" value="<%= csrfToken %>" />
 					<label>Username or Email</label>
-					<input type="text" class="form-control" name="username" required>
+					<!--<input type="text" class="form-control" name="username" required>-->
+					<input type="text" class="form-control" name="email" required>
+
 					<button type="submit" class="btn btn-warning btn-lg">Update</button>
 			</form>
 		</div>
