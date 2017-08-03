@@ -22,22 +22,18 @@ socket.on('removeTank', function(tankId){
 	game.removeTank(tankId);
 });
 
-$(document).ready( function(){
-
-	$('#join').click( function(){
-		$.get('/game/tank-name', function(data) {
-			tankName = data.tankName;
+$(document).ready( function() {
+	$('#join').click( function() {
+		$.get('/profile/username', function(data) {
+			tankName = data.username;
 			joinGame(tankName, selectedTank, socket);
 		});
-		
 	});
 
 	$('ul.tank-selection li').click( function(){
 		$('.tank-selection li').removeClass('selected')
 		$(this).addClass('selected');
-		selectedTank = $(this).data('tank');/*
-			joinGame(tankName, selectedTank, socket);
-		});*/
+		selectedTank = $(this).data('tank');
 		$('#join').trigger('click');
 	});
 });

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>App - <%= typeof title != "undefined" ? title : "" %></title>
+		<title>Dawn of the Tanks <%= typeof title != 'undefined' ? ' - ' + title : '' %></title>
 
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -17,6 +17,8 @@
 		<link rel="stylesheet" href="/stylesheets/sidebar.css" />
 		<%- style %>
 		<script src="/javascripts/navbar.js"></script>
+		<script src="/angular/angular.min.js"></script>
+		<script src="/angular-route/angular-route.min.js"></script>
 	</head>
 	<body>
 		<% include _navbar %>

@@ -1,25 +1,20 @@
+<link rel="stylesheet" href="/stylesheets/generalChat.css" />
 
-  <head>
-    <!-- <meta charset="UTF-8"> -->
-    <title>Socket.IO Chat Example</title>
-    <link rel="stylesheet" href="/stylesheets/chatting.css" />
+<ul class="pages">
+	<li class="chat page">
+		<div class="chatArea">
+			<ul class="messages"></ul>
+		</div>
+		<input class="inputMessage" placeholder="Type here..."/>
+	</li>
+	<li class="login page">
+		<div class="form">
+			<h3 class="title">Welcome <%= user.local.username %></h3>
+			<h3 class="title">Press Enter to start</h3>
+		</div>
+	</li>
+</ul>
 
-  </head>
-    <ul class="pages">
-      <li class="chat page">
-        <div class="chatArea">
-          <ul class="messages"></ul>
-        </div>
-        <input class="inputMessage" placeholder="Type here..."/>
-      </li>
-      <li class="login page">
-        <div class="form">
-          <h3 class="title">Welcome <%= user.local.username %></h3>
-          <h3 class="title">Press Enter to start</h3>
-        </div>
-      </li>
-    </ul>
-
-    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="/javascripts/chatting.js"></script>
+<!-- <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script> -->
+<script src="/socket.io/socket.io.js"></script>
+<script src="/javascripts/generalChat.js"></script>

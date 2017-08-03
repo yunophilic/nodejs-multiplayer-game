@@ -25,6 +25,8 @@ var home = require('./routes/home')(passport);
 var profile = require('./routes/profile');
 var chat = require('./routes/chat');
 var game = require('./routes/game');
+var users = require('./routes/users');
+//var friends = require('./routes/friends');
 
 //models
 var user = require('./models/user');
@@ -48,8 +50,9 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/bootstrap', express.static(path.join(__dirname, 'node_modules/bootstrap/dist')));
 app.use('/jquery', express.static(path.join(__dirname, 'node_modules/jquery/dist')));
+app.use('/angular', express.static(path.join(__dirname, 'node_modules/angular/')));
+app.use('/angular-route', express.static(path.join(__dirname, 'node_modules/angular-route/')));
 //app.use(express.static('publicImg'));
-
 
 //authentation setup
 app.use(morgan('dev')); // log every request to the console
@@ -65,12 +68,13 @@ app.use(csrf({ cookie: true }));
 app.use(function(req, res, next) {
 	res.locals.csrfToken = req.csrfToken();
 	res.locals.loggedIn = req.isAuthenticated();
+	
 	next();
 });
 
 app.use('/', home);
 app.use('/profile', profile);
-/*app.use('/users', users);*/
+app.use('/users', users);
 app.use('/chat', chat);
 app.use('/game', game);
 //app.use('/static', express.static('publicImg'));
@@ -84,12 +88,16 @@ app.use(function(req, res, next) {
 
 // error handler
 app.use(function(err, req, res, next) {
+	console.log('ERROR HAPPEN');
+	console.log(err.message);
+	console.log(err);
+
 	// set locals, only providing error in development
 	res.locals.message = err.message;
 	res.locals.error = req.app.get('env') === 'development' ? err : {};
 	//required to prevent "esc is not a function" error
 	res.locals.loggedIn = req.isAuthenticated();
-	
+
 	// render the error page
 	res.status(err.status || 500);
 	res.render('error');

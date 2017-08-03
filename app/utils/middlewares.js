@@ -5,6 +5,6 @@ module.exports = {
 			return next();
 
 		// if they aren't redirect them to the login page
-		res.redirect('/login');
+		res.redirect('/login?next=' + req.originalUrl);
 	}
 }

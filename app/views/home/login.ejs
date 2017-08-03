@@ -7,7 +7,7 @@
 	<% } %>
 
 	<!-- LOGIN FORM -->
-	<form action="/login" method="post">
+	<form action="/login?next=<%= next ? next : '/profile' %>" method="post">
 		<input type="hidden" name="_csrf" value="<%= csrfToken %>" />
 
 		<div class="form-group">
