@@ -1,36 +1,22 @@
 function ChatRoom(){
-	this.users = {}; //use hashtable to handle multiple tabs (username, tabs)
+	this.users = new Set();
 }
 
 ChatRoom.prototype = {
 	addUser: function(username) {
-		if (!this.users[username]) {
-			this.users[username] = 0;
-		}
-		this.users[username] ++;
+		this.users.add(username);
 	},
 
 	removeUser: function(username) {
-		if(!username || !this.userExists(username)) {
-			return false;
-		}
-
-		// decrement reference count for this user
-		// and remove user if reference count hits zero
-		this.users[username] --;
-		if (this.users[username] === 0) {
-			delete this.users[username];
-		}
-
-		return true;
+		this.users.delete(username);
 	},
 
 	userExists: function(username) {
-		return this.users.hasOwnProperty(username);
+		return this.users.has(username);
 	},
 
 	getNumUsers: function() {
-		return Object.keys(this.users).length;
+		return this.users.size;
 	}
 };
 

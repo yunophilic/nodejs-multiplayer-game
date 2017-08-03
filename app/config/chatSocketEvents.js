@@ -1,5 +1,8 @@
 module.exports = function(socket, chatRooms) {
-	var addedUser = false; //lock to prevent adding user on same socket connection (different tab == different connection)
+	// lock
+	// prevent adding user on same socket connection (different tab == different connection)
+	// prevent removing user from chatroom when not added to ChatRoom object
+	var addedUser = false; 
 	
 	// when the client emits 'new message', this listens and executes
 	socket.on('new message', function (data) {
@@ -12,25 +15,25 @@ module.exports = function(socket, chatRooms) {
 	});
 
 	// when the client emits 'join general chat', this listens and executes
-	socket.on('join general chat', function (username) {
+	socket.on('join chat', function (data) {
 		if (addedUser)
 			return;
 
 		// store stuffs in the socket session for this client
-		socket.username = username;
-		socket.room = 'general_chat';
+		socket.username = data.username;
+		socket.room = data.room;
 
 		// send client to current room
 		socket.join(socket.room);
 		
 		var chatRoom = chatRooms[socket.room];
-		if (chatRoom.userExists(username)) {
+		if (chatRoom.userExists(socket.username)) {
 			socket.emit('deny chat access');
 			socket.disconnect(true);
 			return;
 		}
 
-		chatRoom.addUser(username);
+		chatRoom.addUser(socket.username);
 		var numUsers = chatRoom.getNumUsers();
 
 		addedUser = true;
@@ -63,18 +66,14 @@ module.exports = function(socket, chatRooms) {
 
 	// when the user disconnects.. perform this
 	socket.on('disconnect', function () {
-		//console.log('DISCONNECT CALLED');
+		if (addedUser) {
+			//console.log('DISCONNECTING');
 
-		if (!addedUser)
-			return;
+			var username = socket.username;
+			var room = socket.room;
+			var chatRoom = chatRooms[room];
+			chatRoom.removeUser(username);
 
-		var username = socket.username;
-		var room = socket.room;
-		var chatRoom = chatRooms[room];
-		chatRoom.removeUser(username);
-
-		//user not in chat in any other tab
-		if(!chatRoom.userExists(username)) {
 			// echo other clients in current room that this client has left
 			socket.broadcast.to(room).emit('user left', {
 				username: username,
