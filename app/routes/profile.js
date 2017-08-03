@@ -38,6 +38,16 @@ router.get('/friend-requests', middlewares.isLoggedIn, function(req, res) {
 	});
 });
 
+
+router.get('/friend-requests-num', middlewares.isLoggedIn, function(req, res) {
+	res.format({
+		json: function() {
+			res.json(req.user.friendRequests.length);
+		}
+	});
+});
+
+
 router.get('/friends', middlewares.isLoggedIn, function(req, res) {
 	res.format({
 		html: function() {

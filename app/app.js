@@ -68,6 +68,7 @@ app.use(csrf({ cookie: true }));
 app.use(function(req, res, next) {
 	res.locals.csrfToken = req.csrfToken();
 	res.locals.loggedIn = req.isAuthenticated();
+	
 	next();
 });
 
