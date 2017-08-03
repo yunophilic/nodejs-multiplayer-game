@@ -18,6 +18,11 @@ router.get('/', middlewares.isLoggedIn, function(req, res) {
 	});
 });
 
+router.get('/username', middlewares.isLoggedIn, function(req, res) {
+	console.log('HEY');
+	res.json({username: req.user.local.username});
+});
+
 router.get('/friend-requests', middlewares.isLoggedIn, function(req, res) {
 	res.format({
 		html: function() {

@@ -10,8 +10,4 @@ router.get('/', middlewares.isLoggedIn, function(req, res) {
 	});
 });
 
-router.get('/chatname', middlewares.isLoggedIn, function(req, res, next) {
-	res.json({chatname: req.user.local.username});
-});
-
 module.exports = router;

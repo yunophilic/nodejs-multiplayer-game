@@ -7,8 +7,8 @@ module.exports = function(socket, chatRooms) {
 	// when the client emits 'new message', this listens and executes
 	socket.on('new message', function (data) {
 		console.log(data);
-		// we tell the client to execute 'new message'
-		socket.broadcast.emit('new message', {
+		// we tell the client subscribed in current room to execute 'new message'
+		socket.broadcast.to(socket.room).emit('new message', {
 			username: socket.username,
 			message: data
 		});

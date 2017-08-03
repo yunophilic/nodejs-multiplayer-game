@@ -1,18 +1,19 @@
 $(function() {
-	var FADE_TIME = 150; // ms
-	var TYPING_TIMER_LENGTH = 400; // ms
-	var COLORS = [
+	const FADE_TIME = 150; // ms
+	const TYPING_TIMER_LENGTH = 400; // ms
+	const COLORS = [
 		'#e21400', '#91580f', '#f8a700', '#f78b00',
 		'#58dc00', '#287b00', '#a8f07a', '#4ae8c4',
 		'#3b88eb', '#3824aa', '#a700ff', '#d300e7'
 	];
-
-	const CHAT_ROOM = 'game_chat';
+	
+	const CHAT_ROOM = 'general_chat';
 
 	var chatname;
-	$.get('/chat/chatname', function(data) {
-		chatname = data.chatname;
+	$.get('/profile/username', function(data) {
+		chatname = data.username;
 	});
+	
 	// Initialize variables
 
 	var $window = $(window);
@@ -46,8 +47,8 @@ $(function() {
 	// Sets the client's username
 	function setUsername () {
 		// username = cleanInput($usernameInput.val().trim());
-		username=chatname;
-
+		username = chatname;
+		console.log("need call back in here")
 		// If the username is valid
 		if (username) {
 			$loginPage.fadeOut();
@@ -67,7 +68,7 @@ $(function() {
 	// Sends a chat message
 	function sendMessage () {
 		var message = $inputMessage.val();
-		// console.log(message);
+		console.log(message);
 		// Prevent markup from being injected into the message
 		message = cleanInput(message);
 		// if there is a non-empty message and a socket connection
@@ -213,7 +214,6 @@ $(function() {
 		// }
 		// When the client hits ENTER on their keyboard
 		if (event.which === 13) {
-			$(".chatArea").css("height", "270");
 			if (username) {
 				sendMessage();
 				socket.emit('stop typing');
@@ -226,7 +226,6 @@ $(function() {
 	});
 
 	$inputMessage.on('input', function() {
-
 		updateTyping();
 	});
 
@@ -238,18 +237,17 @@ $(function() {
 	// });
 	//
 	// // Focus input when clicking on the message input's border
-	$(".inputMessage").click(function () {
-
+	$inputMessage.click(function () {
 		$inputMessage.focus();
 	});
 
 	// Socket events
 
-    // called when user already in chat in another tab/browser
-    socket.on('deny chat access', function (data) {
-        $chatPage.hide();
-        alert('You are connected to this chat room on another tab/browser. Please close this tab.');
-    });
+	// called when user already in chat in another tab/browser
+	socket.on('deny chat access', function (data) {
+		$chatPage.hide();
+		alert('You are connected to this chat room on another tab/browser. Please close this tab.');
+	});
 
 	// Whenever the server emits 'join', log the join message
 	socket.on('join', function (data) {
@@ -307,5 +305,4 @@ $(function() {
 	socket.on('reconnect_error', function () {
 		log('attempt to reconnect has failed');
 	});
-
 });
