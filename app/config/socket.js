@@ -1,75 +1,25 @@
 //imports
-var socketio = require('socket.io');
+var socket_io = require('socket.io');
+var bindChatSocketEvents = require('./chatSocketEvents');
 var bindGameSocketEvents = require('./gameSocketEvents');
-var GameServer = require('../models/gameRoom');
+
+//models
+var ChatRoom = require('../models/chatRoom');
+var GameRoom = require('../models/gameRoom');
 
 module.exports = function (server) {
-	var io = socketio(server);
+	var io = socket_io(server);
 
-	//chatroom objects
-	var numUsers = 0;
+	//global objects
 
-	//game objects
-	var game = new GameServer();
+	var chatRooms = {};
+	chatRooms['general_chat'] = new ChatRoom();
+	chatRooms['game_chat'] = new ChatRoom();
+
+	var gameRoom = new GameRoom();
 
 	io.on('connection', function (socket) {
-		var addedUser = false;
-		console.log("aaaaaaaa");
-		// when the client emits 'new message', this listens and executes
-		socket.on('new message', function (data) {
-			console.log(data);
-			// we tell the client to execute 'new message'
-			socket.broadcast.emit('new message', {
-				username: socket.username,
-				message: data
-			});
-		});
-
-		// when the client emits 'add user', this listens and executes
-		socket.on('add user', function (username) {
-			if (addedUser) return;
-
-			// we store the username in the socket session for this client
-			socket.username = username;
-			++numUsers;
-			addedUser = true;
-			socket.emit('login', {
-				numUsers: numUsers
-			});
-			// echo globally (all clients) that a person has connected
-			socket.broadcast.emit('user joined', {
-				username: socket.username,
-				numUsers: numUsers
-			});
-		});
-
-		// when the client emits 'typing', we broadcast it to others
-		socket.on('typing', function () {
-			socket.broadcast.emit('typing', {
-				username: socket.username
-			});
-		});
-
-		// when the client emits 'stop typing', we broadcast it to others
-		socket.on('stop typing', function () {
-			socket.broadcast.emit('stop typing', {
-				username: socket.username
-			});
-		});
-
-		// when the user disconnects.. perform this
-		socket.on('disconnect', function () {
-			if (addedUser) {
-				--numUsers;
-
-				// echo globally that this client has left
-				socket.broadcast.emit('user left', {
-					username: socket.username,
-					numUsers: numUsers
-				});
-			}
-		});
-
-		bindGameSocketEvents(socket, game);
+		bindChatSocketEvents(socket, chatRooms);
+		bindGameSocketEvents(socket, gameRoom);
 	});
 };
