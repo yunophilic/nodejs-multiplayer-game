@@ -167,4 +167,30 @@ router.post('/editemail',middlewares.isLoggedIn, function(req, res) {
 			});
 		}
 });
+router.post('/editpassword',middlewares.isLoggedIn, function(req, res) {
+		var password = req.body.password;
+		var userid = req.user._id;
+		if (password == "") {
+			res.send('All fields are required');
+		}else{
+						User.findOne({_id: userid}, function (err, foundObject){
+							if (err){
+								res.send('Error while finding current user');
+							} else {
+								if (!foundObject){
+									res.send('Cannot find current user');
+								}else{
+									foundObject.local.password = foundObject.generateHash(password);
+								}
+								foundObject.save(function (err,updatedObejct){
+									if (err){
+										res.send('Error while updating current user');
+									}else{
+										res.redirect('/profile/');
+									}
+								});
+							}
+						});
+				}
+});
 module.exports = router;
