@@ -23,11 +23,13 @@ const ALLOWED_AVATAR_FORMAT = ['.jpg', '.png'];
 router.get('/', middlewares.isLoggedIn, function(req, res) {
 	var avatarName = null
 
-	fs.readdirSync(AVATAR_DIR).forEach(function(x) {
-		if (x.startsWith(req.user._id.toString())) {
-			avatarName = x;
-		}
-	});
+	if (fs.existsSync(AVATAR_DIR)) {
+		fs.readdirSync(AVATAR_DIR).forEach(function(x) {
+			if (x.startsWith(req.user._id.toString())) {
+				avatarName = x;
+			}
+		});
+	}
 
 	var imgPath = avatarName != null ?
 		path.join('/img/avatar', avatarName) :
