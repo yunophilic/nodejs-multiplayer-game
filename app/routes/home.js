@@ -21,6 +21,13 @@ module.exports = function(passport) {
 	});
 
 	// =====================================
+	// LOCATION PAGE ===========================
+	// =====================================
+	router.get('/location', function(req, res) {
+		res.render('home/location'); // load the help.ejs file
+	});
+
+	// =====================================
 	// LOGIN ===============================
 	// =====================================
 	// show the login form
