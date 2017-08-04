@@ -7,7 +7,14 @@ var bcrypt   = require('bcrypt-nodejs');
 var userSchema = mongoose.Schema({
     local            : {
         username     : {
-            type: String, 
+            type: String,
+            validate: {
+                validator: function(v) {
+                    const VALID_USERNAME_REGEX = /\A(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])\z/;
+                    return VALID_USERNAME_REGEX.test(v);
+                },
+                message: '{VALUE} can only contain alphanumeric characters, dots, and underscores!'
+            } 
             unique: true,
             required: [true, 'Username Required']
         },
@@ -15,7 +22,8 @@ var userSchema = mongoose.Schema({
             type: String,
             validate: {
                 validator: function(v) {
-                    return /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/.test(v);
+                    const VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i;
+                    return VALID_EMAIL_REGEX.test(v);
                 },
                 message: '{VALUE} is not a email address!'
             },
