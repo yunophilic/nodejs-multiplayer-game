@@ -2,6 +2,7 @@ var express = require('express');
 var mongoose = require('mongoose');
 var formidable = require('formidable');
 var fs = require('fs');
+var mv = require('mv'); //used to move files since fs.rename() doesn't work cross devices
 var path = require('path');
 var helpers = require('../utils/helpers');
 var middlewares = require('../utils/middlewares');
@@ -98,60 +99,7 @@ router.get('/friends', middlewares.isLoggedIn, function(req, res) {
 	});
 });
 
-/*router.get('/edit', middlewares.isLoggedIn, function(req, res) {
-	res.render('profile/edit', {
-		user : req.user // get the user out of session and pass to template
-	});
-});
-
-router.post('/edit', middlewares.isLoggedIn, function(req, res) {
-	//var userid = req.body.userid;
-	var userid = req.user._id;
-	var img_req = req.body.profilePic;
-	var token = req.body._csrf;
-	var img;
-
-	switch(img_req) {
-		case '1':
-			img = "profile1.png";
-			break;
-		case '2':
-			img = "profile2.png";
-			break;
-		case '3':
-			img = "profile3.png";
-			break;
-		case '4':
-			img = "profile4.png";
-			break;
-		default:
-			img = "profile4.png";
-	}
-
-	User.findOne({_id: userid}, function (err, foundObject){
-		if (err){
-			res.status(500).send();
-		} else {
-			if (!foundObject){
-				res.status(404).send();
-			}else{
-				foundObject.local.imgPath = img;
-			}
-			foundObject.save(function (err,updatedObejct){
-				if (err){
-					res.status(500).send();
-				}else{
-					//res.send(updatedObejct);
-					res.redirect('/profile/');
-				}
-			});
-		}
-	});
-});*/
-
-router.post('/upload-photo', middlewares.isLoggedIn, function(req, res, next){
-	//only allow .jpg and .png
-
+router.post('/upload-photo', middlewares.isLoggedIn, function(req, res, next) {
 	var form = new formidable.IncomingForm();
 	form.parse(req, function (err, fields, files) {
 		if(!fs.existsSync(AVATAR_DIR)) {
@@ -171,15 +119,16 @@ router.post('/upload-photo', middlewares.isLoggedIn, function(req, res, next){
 				fileToRemove = x;
 			}
 		});
-
-		fs.unlinkSync(path.join(AVATAR_DIR, fileToRemove));
+		if (fileToRemove) {
+			fs.unlinkSync(path.join(AVATAR_DIR, fileToRemove));
+		}
 
 		var oldpath = files.fileToUpload.path;
 		var newpath = path.join(AVATAR_DIR, req.user._id.toString() + ext);
 
-		fs.rename(oldpath, newpath, function (err) {
+		mv(oldpath, newpath, {mkdirp: true},function (err) {
 			if (err) {
-				next(err);
+				return next(err);
 			}
 			req.flash('success', 'Avatar updated.');
 			res.redirect('/profile');
