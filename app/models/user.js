@@ -10,12 +10,13 @@ var userSchema = mongoose.Schema({
             type: String,
             validate: {
                 validator: function(v) {
-                    const VALID_USERNAME_REGEX = /\A(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])\z/;
+                    const VALID_USERNAME_REGEX = /^[\w.]+$/;
                     return VALID_USERNAME_REGEX.test(v);
                 },
-                message: '{VALUE} can only contain alphanumeric characters, dots, and underscores!'
+                message: 'Username can only contain alphanumeric characters, dots, and underscores.'
             },
-            maxlength: 50,
+            minlength: [5, '{VALUE} is shorter than the minimum length restriction ({MINLENGTH} characters).'],
+            maxlength: [50, 'Username exceeds maximum length restriction ({MAXLENGTH} characters).'],
             trim: true,
             unique: true,
             required: [true, 'Username Required']
@@ -24,12 +25,12 @@ var userSchema = mongoose.Schema({
             type: String,
             validate: {
                 validator: function(v) {
-                    const VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i;
+                    const VALID_EMAIL_REGEX = /^[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+$/;
                     return VALID_EMAIL_REGEX.test(v);
                 },
-                message: '{VALUE} is not a email address!'
+                message: '{VALUE} is not a valid email address.'
             },
-            maxlength: 200,
+            maxlength: [200, 'Email exceeds maximum length restriction ({MAXLENGTH} characters).'],
             lowercase: true, 
             trim: true,
             unique: true,
