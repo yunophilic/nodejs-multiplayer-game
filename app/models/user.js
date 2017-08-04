@@ -14,7 +14,9 @@ var userSchema = mongoose.Schema({
                     return VALID_USERNAME_REGEX.test(v);
                 },
                 message: '{VALUE} can only contain alphanumeric characters, dots, and underscores!'
-            } 
+            },
+            maxlength: 50,
+            trim: true,
             unique: true,
             required: [true, 'Username Required']
         },
@@ -27,6 +29,9 @@ var userSchema = mongoose.Schema({
                 },
                 message: '{VALUE} is not a email address!'
             },
+            maxlength: 200,
+            lowercase: true, 
+            trim: true,
             unique: true,
             required: [true, 'Email Required']
         },
