@@ -242,16 +242,22 @@ router.post('/update-email', middlewares.isLoggedIn, function(req, res, next) {
 });
 
 
-router.post('/update-password',middlewares.isLoggedIn, function(req, res, next) {
-	var password = req.body.password;
+router.post('/update-password', middlewares.isLoggedIn, function(req, res, next) {
+	var currentPassword = req.body.currentPassword;
+	var newPassword = req.body.newPassword;
 	var confirmPassword = req.body.confirmPassword;
 
-	if (password == '') {
+	if (!req.user.validPassword(currentPassword)) {
+		req.flash('error', 'Current password is wrong.');
+		return res.redirect('/profile');
+	}
+
+	if (newPassword == '') {
 		req.flash('error', 'New password cannot be empty.');
 		return res.redirect('/profile');
 	}
 
-	if (password != confirmPassword) {
+	if (newPassword != confirmPassword) {
 		req.flash('error', 'New password and confirm password do not match.');
 		return res.redirect('/profile');
 	}
@@ -269,7 +275,7 @@ router.post('/update-password',middlewares.isLoggedIn, function(req, res, next) 
 				return next(err);
 			}
 
-			user.local.password = password;
+			user.local.password = newPassword;
 			user.save(function (err, updatedUser){
 				if (err){
 					return next(err);

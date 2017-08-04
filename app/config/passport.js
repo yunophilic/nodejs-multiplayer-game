@@ -35,8 +35,6 @@ module.exports = function(passport) {
 		passReqToCallback : true // allows us to pass back the entire request to the callback
 	},
 	function(req, username, password, done) {
-		console.log("username and password ok");
-
 		// asynchronous
 		// User.findOne wont fire unless data is sent back
 		process.nextTick(function() {
@@ -51,7 +49,7 @@ module.exports = function(passport) {
 				return done(null, false, req.flash('signupMessage', 'Password and Confirm Password fields do not match.'));
 			}
 
-			// find a user whose email is the same as the forms email
+			// find a user whose username/email is the same as the forms username/email
 			// we are checking to see if the user trying to login already exists
 			User.findOne({ $or: [
 				{'local.username': username},
@@ -64,7 +62,19 @@ module.exports = function(passport) {
 
 				// check to see if theres already a user with that email
 				if (user) {
-					return done(null, false, req.flash('signupMessage', 'That username or email is already taken.'));
+					var usernameTaken = (user.local.username == username);
+					var emailTaken = (user.local.email == email);
+
+					if (usernameTaken && emailTaken)
+						return done(null, false, req.flash('signupMessage', 'That username and that email is already taken.'));
+
+					if (usernameTaken)
+						return done(null, false, req.flash('signupMessage', 'That username is already taken.'));
+
+					if (emailTaken)
+						return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
+
+					return done(null, false, req.flash('signupMessage', 'Something wrong (should not go here).'));
 				} else {
 
 					// if there is no user with that email
