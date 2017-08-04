@@ -41,9 +41,14 @@ module.exports = function(passport) {
 		// User.findOne wont fire unless data is sent back
 		process.nextTick(function() {
 			var email = req.body.email;
+			var confirmPassword = req.body.confirmPassword;
 
-			if (username == "" || email == "" || password == "") {
-				return done(null, false, req.flash('signupMessage', 'All fields are required'));
+			if (username == "" || email == "" || password == "" || confirmPassword == "") {
+				return done(null, false, req.flash('signupMessage', 'All fields are required.'));
+			}
+
+			if (password != confirmPassword) {
+				return done(null, false, req.flash('signupMessage', 'Password and Confirm Password fields do not match.'));
 			}
 
 			// find a user whose email is the same as the forms email
@@ -69,8 +74,7 @@ module.exports = function(passport) {
 					// set the user's local credentials
 					newUser.local.username = username;
 					newUser.local.email	= email;
-					newUser.local.password = newUser.generateHash(password);
-					newUser.local.imgPath = 'profile4.png';
+					newUser.local.password = password;
 
 					// save the user
 					newUser.save(function(err) {

@@ -43,7 +43,6 @@ router.get('/', middlewares.isLoggedIn, function(req, res) {
 });
 
 router.get('/username', middlewares.isLoggedIn, function(req, res) {
-	console.log('HEY');
 	res.json({username: req.user.local.username});
 });
 
@@ -270,7 +269,7 @@ router.post('/update-password',middlewares.isLoggedIn, function(req, res, next) 
 				return next(err);
 			}
 
-			user.local.password = user.generateHash(password);
+			user.local.password = password;
 			user.save(function (err, updatedUser){
 				if (err){
 					return next(err);
