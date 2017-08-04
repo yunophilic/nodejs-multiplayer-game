@@ -4,3 +4,5 @@ node_modules/*
 public/img/avatar/*
 
 upload_*
+
+package-lock.json
