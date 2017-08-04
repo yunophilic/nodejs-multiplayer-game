@@ -45,6 +45,8 @@ end
 
 # Install and configure node.js
 package "npm"
+package "nodejs"
+package "nodejs-legacy"
 execute 'add node 6.x apt source' do
 	command 'curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -'
 end
