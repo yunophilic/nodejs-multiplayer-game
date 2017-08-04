@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="/stylesheets/profile.css">
+
 <div class="page-header text-center">
 	<h1><span class="fa fa-anchor"></span> Profile Page</h1>
 </div>
@@ -16,8 +18,9 @@
 			<p><strong>username</strong>: <%= user.local.username %></p>
 			<p><strong>email</strong>: <%= user.local.email %><br></p>
 			<p><strong>profile picture</strong></p>
-			<img src= "/img/<%= user.local.imgPath %>">
-			<p><a href="/profile/edit">Edit My Profile Picture</a></p>
+
+			<img src="<%= imgPath %>" class="avatar">
+			<!-- <p><a href="/profile/edit">Edit My Profile Picture</a></p> -->
 		</div>
 	</div>
 
@@ -62,15 +65,18 @@
 					</div>
 				</div>
 			</form>
+
+			<!-- https://github.com/EthanRBrown/web-development-with-node-and-express/issues/53 -->
+			<form method="POST" action="/profile/upload-photo?_csrf=<%= csrfToken %>" enctype="multipart/form-data">
+				<div class="form-group">
+					<label>Update Avatar</label>
+
+					<div class="form-inline">
+						<input type="file" name="fileToUpload" class="form-control">
+						<input type="submit" class="btn btn-warning" value="Upload">
+					</div>
+				</div>
+			</form>
 		</div>
 	</div>
 </div>
-
-<!--
-<form action="/profile/upload/" method="post" enctype="multipart/form-data">
-        <div class="form-group">
-          <label="name">Add a picture for your article</label>
-          <input id="upload-input" type="file" class="form-control" name="image"/>
-        </div>
-</form>
--->

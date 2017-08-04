@@ -47,13 +47,15 @@ end
 package "npm"
 package "nodejs"
 package "nodejs-legacy"
+execute 'add node 6.x apt source' do
+	command 'curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -'
+end
+execute 'install node 6.x' do
+	command 'sudo apt-get install -y nodejs'
+end
 execute 'install app dependencies' do
 	cwd '/home/ubuntu/project/app'
 	command 'sudo npm install'
-end
-execute 'install socket.io' do
-	cwd '/home/ubuntu/project/app'
-	command 'npm install --save socket.io'
 end
 execute 'install forever' do
 	command 'sudo npm install forever --global'

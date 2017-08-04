@@ -1,5 +1,7 @@
 const TANK_INIT_HP = 100;
 
+var helpers = require('../utils/helpers');
+
 var Ball = require('../models/ball.js');
 
 module.exports = function(socket, gameRoom) {
@@ -7,8 +9,8 @@ module.exports = function(socket, gameRoom) {
 
 	socket.on('joinGame', function(tank){
 		console.log(tank.id + ' joined the game');
-		var initX = getRandomInt(40, 900);
-		var initY = getRandomInt(40, 500);
+		var initX = helpers.getRandomInt(40, 900);
+		var initY = helpers.getRandomInt(40, 500);
 		socket.emit('addTank', { id: tank.id, type: tank.type, isLocal: true, x: initX, y: initY, hp: TANK_INIT_HP });
 		socket.broadcast.emit('addTank', { id: tank.id, type: tank.type, isLocal: false, x: initX, y: initY, hp: TANK_INIT_HP} );
 
@@ -43,7 +45,3 @@ module.exports = function(socket, gameRoom) {
 		socket.broadcast.emit('removeTank', tankId);
 	});
 };
-
-function getRandomInt(min, max) {
-	return Math.floor(Math.random() * (max - min)) + min;
-}

@@ -38,8 +38,7 @@ var userSchema = mongoose.Schema({
         password     : {
             type: String,
             required: [true, 'Password Required']
-        },
-        imgPath      : String
+        }
     },
 
     facebook         : {
@@ -66,13 +65,11 @@ var userSchema = mongoose.Schema({
 	friends: [String],
     friendRequests: [String],
 
-    img: {
+    /*img: {
         data: Buffer,
         contentType: String
-    }
-
+    }*/
 });
-//https://stackoverflow.com/questions/29780733/store-an-image-in-mongodb-using-node-js-express-and-mongoose
 
 // methods ======================
 // generating a hash
