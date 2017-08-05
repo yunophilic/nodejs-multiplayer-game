@@ -49,13 +49,13 @@ function address() {
         var latlng = new google.maps.LatLng(loc.lat, loc.lng);
         geocoder.geocode({'latLng': latlng}, function(results, status) {
             if(status == google.maps.GeocoderStatus.OK) {
-                return (results[0]['formatted_address']);
+                 alert(results[0]['formatted_address']);
             };
         });
     }
 }
 
-google.load("maps", "3.x", {other_params: "sensor=false", callback:initialize});</script>
+google.load("maps", "3.x", {other_params: "sensor=false", callback:address});</script>
 <script src="/socket.io/socket.io.js"></script>
 <script src="/javascripts/gameObjects.js"></script>
 <script src="/javascripts/gameClient.js"></script>
