@@ -2,42 +2,68 @@
 <link rel="stylesheet" href="/stylesheets/gameChat.css">
 
 <div id="prompt" class="name-prompt">
-	<input id="join" type="hidden" class="btn btn-primary" type="submit" value="Join the battle">
-	<div class="tank-select col-md-12">
-		<label>Choose tank skin:</label>
-		<ul class="tank-selection">
-			<li class="selected" data-tank="1">
-				<img src="/img/preview-tank-1.png">
-			</li>
-			<li data-tank="2">
-				<img src="/img/preview-tank-2.png">
-			</li>
-			<li data-tank="3">
-				<img src="/img/preview-tank-3.png">
-			</li>
-		</ul>
-	</div>
+<input id="join" type="hidden" class="btn btn-primary" type="submit" value="Join the battle">
+<div class="tank-select col-md-12">
+<label>Choose tank skin:</label>
+<ul class="tank-selection">
+<li class="selected" data-tank="1">
+<img src="/img/preview-tank-1.png">
+</li>
+<li data-tank="2">
+<img src="/img/preview-tank-2.png">
+</li>
+<li data-tank="3">
+<img src="/img/preview-tank-3.png">
+</li>
+</ul>
+</div>
 </div>
 
 <div id="arena" class="arena">
 </div>
 <!-- <div id="chatting" class="chatting"> -->
-	<ul class="pages">
-		<li class="chat page">
-			<div class="chatArea">
-				<ul class="messages"></ul>
-			</div>
-			<input class="inputMessage" placeholder="Type here..."/>
-		</li>
-		<li class="login page">
-			<div class="form">
-				<h3 class="title">Press Enter to start Chatting Room</h3>
-			</div>
-		</li>
-	</ul>
+<ul class="pages">
+<li class="chat page">
+<div class="chatArea">
+<ul class="messages"></ul>
+</div>
+<input class="inputMessage" placeholder="Type here..."/>
+</li>
+<li class="login page">
+<div class="form">
+<h3 class="title">Press Enter to start Chatting Room</h3>
+</div>
+</li>
+</ul>
 <!-- </div> -->
+
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.2.3.js"></script>
+<script type="text/javascript">
+//Reference: https://stackoverflow.com/questions/6797569/get-city-name-using-geolocation
+navigator.geolocation.getCurrentPosition(success, error);
+
+function success(position) {
+
+var GEOCODING = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' + position.coords.latitude + '%2C' + position.coords.longitude + '&language=en';
+
+$.getJSON(GEOCODING).done(function(location) {
+var country = location.results[0].address_components[5].long_name;
+var city = location.results[0].address_components[2].long_name;
+
+alert(city + ", " + country);
+})
+//return (city + ", " + country);
+}
+
+function error(err) {
+alert("You blocked the location");
+//return null;
+}
+</script>
 
 <script src="/socket.io/socket.io.js"></script>
 <script src="/javascripts/gameObjects.js"></script>
 <script src="/javascripts/gameClient.js"></script>
 <script src="/javascripts/gameChat.js"></script>
+
