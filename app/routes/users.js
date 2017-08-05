@@ -97,7 +97,7 @@ router.get('/:id', function(req, res) {
 	});
 });
 
-router.put('/:id/add', function(req, res) {
+router.put('/:id/add', middlewares.isLoggedIn, function(req, res) {
 	User.findById(req.id, function(err, user) {
 		if (err) {
 			console.log("error retrieving user");
@@ -122,7 +122,7 @@ router.put('/:id/add', function(req, res) {
 	});
 });
 
-router.put('/:id/cancel', function(req, res) {
+router.put('/:id/cancel', middlewares.isLoggedIn, function(req, res) {
 	User.findById(req.id, function(err, user) {
 		if (err) {
 			console.log("error retrieving user");
@@ -147,7 +147,7 @@ router.put('/:id/cancel', function(req, res) {
 	});
 });
 
-router.put('/:id/accept', function(req, res) {
+router.put('/:id/accept', middlewares.isLoggedIn, function(req, res) {
 	User.findById(req.id, function(err, user) {
 		if (err) {
 			console.log("error retrieving user");
@@ -190,7 +190,7 @@ router.put('/:id/accept', function(req, res) {
 	});
 });
 
-router.put('/:id/reject', function(req, res) {
+router.put('/:id/reject', middlewares.isLoggedIn, function(req, res) {
 	var currentUser = req.user;
 	if (currentUser.friendRequests.includes(req.id)) {
 		currentUser.friendRequests.remove(req.id);
@@ -207,7 +207,7 @@ router.put('/:id/reject', function(req, res) {
 	}
 });
 
-router.put('/:id/remove', function(req, res) {
+router.put('/:id/remove', middlewares.isLoggedIn, function(req, res) {
 	User.findById(req.id, function(err, user) {
 		if (err) {
 			console.log("error retrieving user");

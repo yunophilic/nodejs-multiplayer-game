@@ -1,6 +1,3 @@
-var User = require('../models/user');
-var ChatLog = require('../models/chatLog');
-
 module.exports = function(socket, chatRooms) {
 	// lock
 	// prevent adding user on same socket connection (different tab == different connection)
@@ -8,20 +5,15 @@ module.exports = function(socket, chatRooms) {
 	var addedUser = false; 
 	
 	// when the client emits 'new message', this listens and executes
-	socket.on('new message', function (data) {
-		console.log(data);
+	socket.on('new message', function (message) {
+		console.log(message);
 
-		User.findOne({ username: socket.username }, function(err, user){
-			if(err || !user) {
-				console.log('username invalid or changed');
-				return;
-			}
-		}); 
+		chatRooms[socket.room].newMessage(socket.username, message);
 
 		// we tell the client subscribed in current room to execute 'new message'
 		socket.broadcast.to(socket.room).emit('new message', {
 			username: socket.username,
-			message: data
+			message: message
 		});
 	});
 
@@ -93,6 +85,6 @@ module.exports = function(socket, chatRooms) {
 		}
 
 		// leave the current room
-		socket.leave(room);
+		socket.leave(socket.room);
 	});
 }

@@ -4,7 +4,18 @@ module.exports = {
 		if (req.isAuthenticated())
 			return next();
 
-		// if they aren't redirect them to the login page
-		res.redirect('/login?next=' + req.originalUrl);
+		res.format({
+			html: function() {
+				// if they aren't redirect them to the login page
+				res.redirect('/login?next=' + req.originalUrl);
+			},
+			json: function() {
+				res.status = 403;
+				res.json({
+					status: 403,
+					message: 'Must be logged in.'
+				});
+			}
+		});
 	}
 }

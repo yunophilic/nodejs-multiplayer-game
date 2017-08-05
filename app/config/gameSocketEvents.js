@@ -5,7 +5,7 @@ var helpers = require('../utils/helpers');
 var Ball = require('../models/ball.js');
 
 module.exports = function(socket, gameRoom) {
-	console.log('User connected');
+	//console.log('User connected');
 
 	socket.on('joinGame', function(tank){
 		console.log(tank.id + ' joined the game');

@@ -1,3 +1,6 @@
+var User = require('../models/user');
+var ChatLog = require('../models/chatLog');
+
 function ChatRoom(){
 	this.users = new Set();
 }
@@ -17,6 +20,13 @@ ChatRoom.prototype = {
 
 	getNumUsers: function() {
 		return this.users.size;
+	},
+
+	newMessage: function(username, message) {
+		var chatLog = new ChatLog();
+		chatLog.senderUsername = username;
+		chatLog.content = message;
+		chatLog.save();
 	}
 };
 
