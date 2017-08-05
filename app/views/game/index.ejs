@@ -37,7 +37,26 @@
 	</ul>
 <!-- </div> -->
 
+<script type="text/javascript">
+function address() {
+    var loc = {};
+    var geocoder = new google.maps.Geocoder();
+    if(google.loader.ClientLocation) {
+        loc.lat = google.loader.ClientLocation.latitude;
+        loc.lng = google.loader.ClientLocation.longitude;
+
+        var latlng = new google.maps.LatLng(loc.lat, loc.lng);
+        geocoder.geocode({'latLng': latlng}, function(results, status) {
+            if(status == google.maps.GeocoderStatus.OK) {
+                return (results[0]['formatted_address']);
+            };
+        });
+    }
+}
+
+google.load("maps", "3.x", {other_params: "sensor=false", callback:initialize});</script>
 <script src="/socket.io/socket.io.js"></script>
 <script src="/javascripts/gameObjects.js"></script>
 <script src="/javascripts/gameClient.js"></script>
 <script src="/javascripts/gameChat.js"></script>
+<script type="text/javascript" src="http://www.google.com/jsapi"></script>
