@@ -17,13 +17,20 @@
 		<link rel="stylesheet" href="/stylesheets/sidebar.css" />
 		<%- style %>
 		<script src="/javascripts/navbar.js"></script>
+		<script src="/angular/angular.min.js"></script>
+		<script src="/angular-route/angular-route.min.js"></script>
 	</head>
 	<body>
 		<% include _navbar %>
-		<% include _sidebar %>
+		<% if(loggedIn) { %>
+			<% include _sidebar %>
+		<% } %>
 
 		<div class="container">
 			<%- body %>
+
+			<script src="/socket.io/socket.io.js"></script>
+			<script src="/javascripts/usersOnlineClient.js"></script>
 			<%- script %>
 		</div>
 	</body>

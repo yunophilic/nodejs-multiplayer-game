@@ -46,6 +46,9 @@ module.exports = function(passport) {
 		badRequestMessage: 'All fields are required.',
 		failureFlash : { type: 'loginMessage' } // allow flash messages
 	}), function(req, res) {
+		/*var io = req.app.get('io');
+		io.emit('login', req.user.local.username);*/
+
 		var next = req.query.next;
 		res.redirect(next ? next : '/profile');
 	});
