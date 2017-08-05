@@ -2,60 +2,62 @@
 <link rel="stylesheet" href="/stylesheets/gameChat.css">
 
 <div id="prompt" class="name-prompt">
-	<input id="join" type="hidden" class="btn btn-primary" type="submit" value="Join the battle">
-	<div class="tank-select col-md-12">
-		<label>Choose tank skin:</label>
-		<ul class="tank-selection">
-			<li class="selected" data-tank="1">
-				<img src="/img/preview-tank-1.png">
-			</li>
-			<li data-tank="2">
-				<img src="/img/preview-tank-2.png">
-			</li>
-			<li data-tank="3">
-				<img src="/img/preview-tank-3.png">
-			</li>
-		</ul>
-	</div>
+<input id="join" type="hidden" class="btn btn-primary" type="submit" value="Join the battle">
+<div class="tank-select col-md-12">
+<label>Choose tank skin:</label>
+<ul class="tank-selection">
+<li class="selected" data-tank="1">
+<img src="/img/preview-tank-1.png">
+</li>
+<li data-tank="2">
+<img src="/img/preview-tank-2.png">
+</li>
+<li data-tank="3">
+<img src="/img/preview-tank-3.png">
+</li>
+</ul>
+</div>
 </div>
 
 <div id="arena" class="arena">
 </div>
 <!-- <div id="chatting" class="chatting"> -->
-	<ul class="pages">
-		<li class="chat page">
-			<div class="chatArea">
-				<ul class="messages"></ul>
-			</div>
-			<input class="inputMessage" placeholder="Type here..."/>
-		</li>
-		<li class="login page">
-			<div class="form">
-				<h3 class="title">Press Enter to start Chatting Room</h3>
-			</div>
-		</li>
-	</ul>
+<ul class="pages">
+<li class="chat page">
+<div class="chatArea">
+<ul class="messages"></ul>
+</div>
+<input class="inputMessage" placeholder="Type here..."/>
+</li>
+<li class="login page">
+<div class="form">
+<h3 class="title">Press Enter to start Chatting Room</h3>
+</div>
+</li>
+</ul>
 <!-- </div> -->
 
-<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+//Reference: https://stackoverflow.com/questions/6797569/get-city-name-using-geolocation
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.2.3.js"></script>
 <script type="text/javascript">
-function address() {
-    var loc = {};
-    var geocoder = new google.maps.Geocoder();
-    if(google.loader.ClientLocation) {
-        loc.lat = google.loader.ClientLocation.latitude;
-        loc.lng = google.loader.ClientLocation.longitude;
+navigator.geolocation.getCurrentPosition(success, error);
 
-        var latlng = new google.maps.LatLng(loc.lat, loc.lng);
-        geocoder.geocode({'latLng': latlng}, function(results, status) {
-            if(status == google.maps.GeocoderStatus.OK) {
-                 alert(results[0]['formatted_address']);
-            };
-        });
-    }
+function success(position) {
+
+var GEOCODING = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' + position.coords.latitude + '%2C' + position.coords.longitude + '&language=en';
+
+$.getJSON(GEOCODING).done(function(location) {
+
+alert(location.results[0].formatted_address)
+})
+
 }
 
-google.load("maps", "3.x", {other_params: "sensor=false", callback:address});</script>
+function error(err) {
+console.log(err)
+}
+</script>
+
 <script src="/socket.io/socket.io.js"></script>
 <script src="/javascripts/gameObjects.js"></script>
 <script src="/javascripts/gameClient.js"></script>
