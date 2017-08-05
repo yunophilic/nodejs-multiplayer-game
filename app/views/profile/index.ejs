@@ -1,83 +1,89 @@
 <link rel="stylesheet" href="/stylesheets/profile.css">
-
 <div class="page-header text-center">
 	<h1><span class="fa fa-anchor"></span> Profile Page</h1>
 </div>
-
 <% if (messages.error) { %>
-	<div class="alert alert-danger"><%= messages.error %></div>
+  <div class="alert alert-danger"><%= messages.error %></div>
 <% } else if (messages.success) { %>
-	<div class="alert alert-success"><%= messages.success %></div>
+  <div class="alert alert-success"><%= messages.success %></div>
 <% } %>
+<div class="well">
+    <ul class="nav nav-tabs">
+      <li class="active"><a href="#info" data-toggle="tab">Profile</a></li>
+      <li><a href="#editinfo" data-toggle="tab">Edit Account</a></li>
+      <li><a href="#passwordchange" data-toggle="tab">Password</a></li>
+    </ul>
+    <div id="myTabContent" class="tab-content">
+      <div class="tab-pane active in" id="info">
+        <div id="tab">
+          <div class="row">
+            <div class="col-sm-6">
 
-<div class="row">
-	<div class="col-sm-6">
-		<div class="well">
-			<h3>Details</h3>
-			<br>
-			<p><strong>username</strong>: <%= user.local.username %></p>
-			<p><strong>email</strong>: <%= user.local.email %><br></p>
-			<p><strong>profile picture</strong></p>
+        			<img src="<%= imgPath %>" class="avatar">
 
-			<img src="<%= imgPath %>" class="avatar">
-			<!-- <p><a href="/profile/edit">Edit My Profile Picture</a></p> -->
-		</div>
-	</div>
+              	<div class="changePic">
+                  <form method="POST" action="/profile/upload-photo?_csrf=<%= csrfToken %>" enctype="multipart/form-data">
+            				<div class="form-group">
+            					<div class="form-inline">
+            						<input type="file" name="fileToUpload" class="form-control">
+            						<input type="submit" class="btn btn-warning" value="Upload">
+            					</div>
+            				</div>
+            			</form>
 
-	<div class="col-sm-6">
-		<div class="well">
-			<h3>Update</h3>
-			<br>
+            	</div>
+            </div>
+            <div class="col-sm-6">
+              <p><strong>username</strong>: <%= user.local.username %></p>
+              <p><strong>email</strong>: <%= user.local.email %><br></p>
 
-			<form method="POST" action="/profile/update-username">
-				<input type="hidden" name="_csrf" value="<%= csrfToken %>" />
-				<div class="form-group">
-					<label>Update Username</label>
+            </div>
+          </div>
 
-					<div class="form-inline">
-						<input type="text" class="form-control" name="username" required>
-						<button type="submit" class="btn btn-warning">Update</button>
-					</div>
-				</div>
-			</form>
+        </div>
+      </div>
+      <div class="tab-pane fade" id="editinfo">
+    	<div id="tab2">
+        <form method="POST" action="/profile/update-username">
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+          <div class="form-group">
+            <label>Update Username</label>
 
-			<form method="POST" action="/profile/update-email">
-				<input type="hidden" name="_csrf" value="<%= csrfToken %>" />
-				<div class="form-group">
-					<label>Update Email</label>
+            <div class="form-inline">
+              <input type="text" class="form-control" name="username" required>
+              <button type="submit" class="btn btn-info btn-lg custom-btn"><span class="glyphicon glyphicon-save"></span> Save</button>
+            </div>
+          </div>
+        </form>
 
-					<div class="form-inline">
-						<input type="email" class="form-control" name="email" required>
-						<button type="submit" class="btn btn-warning">Update</button>
-					</div>
-				</div>
-			</form>
+        <form method="POST" action="/profile/update-email">
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+          <div class="form-group">
+            <label>Update Email</label>
 
-			<form method="POST" action="/profile/update-password">
-				<input type="hidden" name="_csrf" value="<%= csrfToken %>" />
-				<div class="form-group">
-					<label>Reset Password</label>
+            <div class="form-inline">
+              <input type="email" class="form-control" name="email" required>
+              <button type="submit" class="btn btn-warning">Update</button>
+            </div>
+          </div>
+        </form>
+    	</div>
+      </div>
+      <div class="tab-pane fade" id="passwordchange">
+    	<div id="tab3">
+        <form method="POST" action="/profile/update-password">
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+          <div class="form-group">
+            <label>Reset Password</label>
 
-					<div class="">
-						<input type="password" class="form-control" name="currentPassword" placeholder="Current Password" required>
-						<input type="password" class="form-control" name="newPassword" placeholder="New Password" required>
-						<input type="password" class="form-control" name="confirmPassword" placeholder="Confirm New Password" required>
-						<button type="submit" class="btn btn-warning">Update</button>
-					</div>
-				</div>
-			</form>
-
-			<!-- https://github.com/EthanRBrown/web-development-with-node-and-express/issues/53 -->
-			<form method="POST" action="/profile/upload-photo?_csrf=<%= csrfToken %>" enctype="multipart/form-data">
-				<div class="form-group">
-					<label>Update Avatar</label>
-
-					<div class="form-inline">
-						<input type="file" name="fileToUpload" class="form-control">
-						<input type="submit" class="btn btn-warning" value="Upload">
-					</div>
-				</div>
-			</form>
-		</div>
-	</div>
-</div>
+            <div class="">
+              <input type="password" class="form-control" name="currentPassword" placeholder="Current Password" required>
+              <input type="password" class="form-control" name="newPassword" placeholder="New Password" required>
+              <input type="password" class="form-control" name="confirmPassword" placeholder="Confirm New Password" required>
+              <button type="submit" class="btn btn-warning">Update</button>
+            </div>
+          </div>
+        </form>
+    	</div>
+      </div>
+  </div>
