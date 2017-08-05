@@ -249,7 +249,7 @@ $(function() {
     // called when user already in chat in another tab/browser
     socket.on('deny chat access', function (data) {
         $chatPage.hide();
-        alert('You are connected to this chat room on another tab/browser. Please close this tab.');
+        //alert('You are connected to this chat room on another tab/browser. Please close this tab.');
     });
 
 	// Whenever the server emits 'join', log the join message

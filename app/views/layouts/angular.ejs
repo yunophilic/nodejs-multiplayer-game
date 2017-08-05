@@ -22,11 +22,22 @@
 	</head>
 	<body>
 		<% include _navbar %>
-		<% include _sidebar %>
+		<% if(loggedIn) { %>
+			<% include _sidebar %>
+		<% } %>
 
-		<div class="container" ng-app="app">
+		<div class="container" id="app-root">
 			<%- body %>
+
+			<script src="/socket.io/socket.io.js"></script>
+			<script src="/javascripts/usersOnlineClient.js"></script>
 			<%- script %>
+			<!-- need to manually bootstrap cannot have multiple ng-app (because sidebar) -->
+			<script type="text/javascript">
+				angular.element(document).ready(function() {
+					angular.bootstrap(document.getElementById("app-root"), ['app']);
+				});
+			</script>
 		</div>
 	</body>
 </html>

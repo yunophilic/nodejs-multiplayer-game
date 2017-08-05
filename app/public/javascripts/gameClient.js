@@ -1,5 +1,5 @@
-var WIDTH = 1100;
-var HEIGHT = 580;
+const WIDTH = 1100;
+const HEIGHT = 580;
 
 var socket = io();
 var game = new Game('#arena', WIDTH, HEIGHT, socket);

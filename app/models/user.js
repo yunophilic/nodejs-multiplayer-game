@@ -63,19 +63,7 @@ var userSchema = mongoose.Schema({
         name         : String
     },
 
-    twitter          : {
-        id           : String,
-        token        : String,
-        displayName  : String,
-        username     : String
-    },
-
-    google           : {
-        id           : String,
-        token        : String,
-        email        : String,
-        name         : String
-    },
+    online: Boolean,
 
 	friends: [String],
     friendRequests: [String],
