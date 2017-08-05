@@ -1,3 +1,5 @@
+var ChatLog = require('../models/chatLog');
+
 module.exports = function(socket, chatRooms) {
 	// lock
 	// prevent adding user on same socket connection (different tab == different connection)
@@ -7,6 +9,9 @@ module.exports = function(socket, chatRooms) {
 	// when the client emits 'new message', this listens and executes
 	socket.on('new message', function (data) {
 		console.log(data);
+
+		
+
 		// we tell the client subscribed in current room to execute 'new message'
 		socket.broadcast.to(socket.room).emit('new message', {
 			username: socket.username,
