@@ -211,6 +211,8 @@ Tank.prototype = {
 		this.$arena.append('<div id="info-' + this.id + '" class="info"></div>');
 		this.$info = $('#info-' + this.id);
 		this.$info.append('<div class="label">' + this.id + '</div>');
+		var location = $("#clientLocation").val() ? ' (' + $("#clientLocation").val() + ')' : '';
+		this.$info.append('<div class="label">' + location + '</div>');
 		this.$info.append('<div class="hp-bar"></div>');
 
 		this.refresh();
