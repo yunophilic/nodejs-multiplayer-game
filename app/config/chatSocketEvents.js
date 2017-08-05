@@ -1,3 +1,4 @@
+var User = require('../models/user');
 var ChatLog = require('../models/chatLog');
 
 module.exports = function(socket, chatRooms) {
@@ -10,7 +11,12 @@ module.exports = function(socket, chatRooms) {
 	socket.on('new message', function (data) {
 		console.log(data);
 
-		
+		User.findOne({ username: socket.username }, function(err, user){
+			if(err || !user) {
+				console.log('username invalid or changed');
+				return;
+			}
+		}); 
 
 		// we tell the client subscribed in current room to execute 'new message'
 		socket.broadcast.to(socket.room).emit('new message', {
