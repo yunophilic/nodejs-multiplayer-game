@@ -12,20 +12,21 @@ socket.on('user offline', function(data){
 
 $(document).ready(function() {
 	$.get('/profile/username', function(data) {
+		console.log(data);
 		if(data.status == 403) {
-			socket.emit('go offline');
 			return;
 		}
 		var username = data.username;
 		socket.emit('go online', username);
 	}, 'json');
-}, 3000);
+});
 
-$(window).on('beforeunload', function() {
+/*$(window).on('beforeunload', function() {
+	console.log('trigger');
 	$.get('/profile/username', function(data) {
 		if(data.status == 403)
 			return;
 		var username = data.username;
 		socket.emit('go offline', username);
 	}, 'json');
-});
+});*/
