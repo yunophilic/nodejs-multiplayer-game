@@ -138,7 +138,7 @@ router.post('/upload-photo', middlewares.isLoggedIn, function(req, res, next) {
 /*
 Update username
 */
-router.post('/update-username', middlewares.isLoggedIn, function(req, res, next) {
+/*router.post('/update-username', middlewares.isLoggedIn, function(req, res, next) {
 	var username = req.body.username;
 	if (username == '') {
 		req.flash('error', 'Username cannot be empty.');
@@ -186,7 +186,7 @@ router.post('/update-username', middlewares.isLoggedIn, function(req, res, next)
 			}
 		);
 	});
-});
+});*/
 
 /*
 Update email

@@ -103,6 +103,13 @@ userSchema.pre('save', function(next) {
     /*console.log(user.isModified('local.password'));
     console.log(user.isNew);*/
 
+    // disable modifying username
+    if (user.isModified('local.username')) {
+        var err = new Error('Username cannot be modified.');
+        err.status = 500;
+        next(err);
+    }
+
     // only hash the password if it has been modified or user is newly created
     if (user.isModified('local.password') || user.isNew) {
         console.log('hashing password');
