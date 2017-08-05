@@ -22,8 +22,10 @@ ChatRoom.prototype = {
 		return this.users.size;
 	},
 
-	newMessage: function(username, message) {
+	newMessage: function(room, username, message) {
+		console.log('saving new message');
 		var chatLog = new ChatLog();
+		chatLog.room = room;
 		chatLog.senderUsername = username;
 		chatLog.content = message;
 		chatLog.save();

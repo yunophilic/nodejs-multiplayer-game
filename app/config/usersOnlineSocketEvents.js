@@ -3,7 +3,6 @@ module.exports = function(socket, usersOnline) {
 		console.log(username + ' go online');
 		
 		socket.username = username;
-		socket.type = "user_online_activity";
 
 		if(!usersOnline.addUser(socket.username)) {
 			return; //exit if fail
@@ -16,8 +15,6 @@ module.exports = function(socket, usersOnline) {
 	});
 
 	socket.on('disconnect', function() {
-		if(!socket.type == "user_online_activity")
-			return;
 		var username = socket.username;
 		console.log(username + ' go offline');
 

@@ -15,7 +15,7 @@
 				<a href="#">
 					<img src="/img/default-avatar.jpg" class="avatar-small">
 					&nbsp;{{user.local.username}}&nbsp;
-					<div id="online-status-{{user.local.username}}"></div>
+					<div id="online-status-{{user.local.username}}" ng-class="{'online-indicator': user.online }"></div>
 				</a>
 			</li>
 		</ul>

@@ -18,14 +18,19 @@ var chatLogSchema = mongoose.Schema({
 });
 
 chatLogSchema.pre('save', function(next) {
-	User.findOne({ 'local.username': socket.username }, function(err, user){
+	console.log('saving chat log');
+
+	var chatLog = this;
+	User.findOne({ 'local.username': chatLog.senderUsername }, function(err, user){
+		console.log(chatLog.senderUsername);
 		if(err || !user) {
 			//this generally shouldn't happen if username cannot be changed
 			console.log('error retrieving user');
 			var err = new Error('Not Found');
 			err.status = 404;
-			next(err);
+			return next(err);
 		}
+		next();
 	});
 });
 

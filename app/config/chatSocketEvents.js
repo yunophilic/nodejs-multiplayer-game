@@ -8,7 +8,7 @@ module.exports = function(socket, chatRooms) {
 	socket.on('new message', function (message) {
 		console.log(message);
 
-		chatRooms[socket.room].newMessage(socket.username, message);
+		chatRooms[socket.room].newMessage(socket.room, socket.username, message);
 
 		// we tell the client subscribed in current room to execute 'new message'
 		socket.broadcast.to(socket.room).emit('new message', {
@@ -70,7 +70,7 @@ module.exports = function(socket, chatRooms) {
 	// when the user disconnects.. perform this
 	socket.on('disconnect', function () {
 		if (addedUser) {
-			//console.log('DISCONNECTING');
+			console.log('disconnecting from chat');
 
 			var username = socket.username;
 			var room = socket.room;
