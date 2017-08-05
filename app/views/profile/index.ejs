@@ -68,8 +68,8 @@
           <div class="form-group">
             <label>Update Email</label>
             <div class="form-inline">
-              <input type="email" class="form-control" name="email" required>
-              <button type="submit" class="btn btn-info btn-md custom-btn"><span class="glyphicon glyphicon-save"></span> Save</button>
+              <input type="email" id="inputform" class="form-control" name="email" required><br>
+              <button type="submit" class="btn btn-info btn-md custom-btn"><span class="glyphicon glyphicon-save"></span>Update Email</button>
             </div>
           </div>
         </form>
@@ -78,11 +78,11 @@
           <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
           <div class="form-group">
             <label>Reset Password</label>
-            <div class="">
-              <input type="password" class="form-control" name="currentPassword" placeholder="Current Password" required>
-              <input type="password" class="form-control" name="newPassword" placeholder="New Password" required>
-              <input type="password" class="form-control" name="confirmPassword" placeholder="Confirm New Password" required>
-              <button type="submit" class="btn btn-warning">Update</button>
+            <div class="form-inline">
+              <input type="password" id="inputform" class="form-control" name="currentPassword" placeholder="Current Password" required><br>
+              <input type="password" id="inputform" class="form-control" name="newPassword" placeholder="New Password" required><br>
+              <input type="password" id="inputform" class="form-control" name="confirmPassword" placeholder="Confirm New Password" required><br>
+              <button type="submit" class="btn btn-info btn-md custom-btn"><span class="glyphicon glyphicon-save"></span> Update Password</button>
             </div>
           </div>
         </form>
