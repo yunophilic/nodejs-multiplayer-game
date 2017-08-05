@@ -1,6 +1,13 @@
 <div class="col-sm-6 col-sm-offset-3">
 
-	<h1><span class="fa fa-sign-in"></span> Signup</h1>
+	<h1>
+		<span>S</span>
+	  <span>i</span>
+	  <span>g</span>
+	  <span>n</span>
+	  <span>u</span>
+	  <span>p</span>
+</h1>
 
 	<!-- show any messages that come back with authentication -->
 	<% if (message.length > 0) { %>
@@ -10,7 +17,7 @@
 	<!-- LOGIN FORM -->
 	<form action="/signup" method="post">
 		<input type="hidden" name="_csrf" value="<%= csrfToken %>" />
-		
+
 		<div class="form-group">
 			<label>Username</label>
 			<input type="text" class="form-control" name="username" required>
