@@ -22,9 +22,14 @@
 	</head>
 	<body>
 		<% include _navbar %>
-		<% include _sidebar %>
-
+		<% if(loggedIn) { %>
+			<% include _sidebar %>
+		<% } %>
+		
 		<%- body %>
+		
+		<script src="/socket.io/socket.io.js"></script>
+		<script src="/javascripts/usersOnlineClient.js"></script>
 		<%- script %>
 	</body>
 </html>
