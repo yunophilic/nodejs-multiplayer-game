@@ -117,7 +117,7 @@ module.exports = function(passport) {
 		// we are checking to see if the user trying to login already exists
 		User.findOne({ $or: [
 			{'local.username': usernameOrEmail},
-			{'local.email' :  usernameOrEmail}
+			{'local.email' :  usernameOrEmail.toLowerCase() }
 		] }, function(err, user) {
 			// if there are any errors, return the error before anything else
 			if (err)
