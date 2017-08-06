@@ -103,12 +103,32 @@ router.post('/upload-photo', middlewares.isLoggedIn, function(req, res, next) {
 		// Check if it is a valid image file	
 		var oldpath = files.fileToUpload.path;	
 		fs.readFile(oldpath, function (err, data) {
-		if (err) {
-			req.flash('error', 'This is not a valid ' + ext + "file");
-			res.redirect('/profile');
-			return; 
-		  }
-					
+			
+			var magic = {
+				jpg: 'ffd8ffe0',
+				png: '89504e47'
+			};
+			var magigNumberInBody = data.toString('hex',0,4);
+			res.send(magigNumberInBody);
+			/*
+			try{
+				if (!(magigNumberInBody == magic.jpg || magigNumberInBody == magic.png )) {
+					req.flash('error', 'This is not a valid ' + ext + "file");
+					res.redirect('/profile');
+					return; 
+				}
+			}catch(err) {
+				req.flash('error', 'This is not a valid ' + ext + "file - catch");
+				res.redirect('/profile');
+				return; 
+			}
+			if (err) {
+				req.flash('error', 'Unable to open ' + ext + "file");
+				res.redirect('/profile');
+				return; 
+				
+			}		
+				*/			
 		});
 		
 		var fileToRemove = null;
