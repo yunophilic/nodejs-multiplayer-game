@@ -8,7 +8,10 @@ module.exports = function(socket, chatRooms) {
 	socket.on('new message', function (message) {
 		console.log(message);
 
-		chatRooms[socket.room].newMessage(socket.room, socket.username, message);
+		// don't save in game messages
+		if(socket.room != 'game_chat') {
+			chatRooms[socket.room].saveMessage(socket.room, socket.username, message);
+		}
 
 		// we tell the client subscribed in current room to execute 'new message'
 		socket.broadcast.to(socket.room).emit('new message', {
@@ -17,7 +20,7 @@ module.exports = function(socket, chatRooms) {
 		});
 	});
 
-	// when the client emits 'join general chat', this listens and executes
+	// when the client emits 'join chat', this listens and executes
 	socket.on('join chat', function (data) {
 		if (addedUser)
 			return;
@@ -30,7 +33,8 @@ module.exports = function(socket, chatRooms) {
 		socket.join(socket.room);
 		
 		var chatRoom = chatRooms[socket.room];
-		if (chatRoom.userExists(socket.username)) {
+		var isGroupChat = (socket.room == 'general_chat' || socket.room == 'game_chat');
+		if (isGroupChat && chatRoom.userExists(socket.username)) {
 			socket.emit('deny chat access');
 			socket.disconnect(true);
 			return;

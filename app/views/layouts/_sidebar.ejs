@@ -1,23 +1,30 @@
 <div id="wrapper" ng-app="friends-sidebar">
 	<div id="sidebar-wrapper">
-		<ng-view></ng-view>
-	</div>
-
-	<!-- Template -->
-	<script type="text/ng-template" id="/users.html">
-		<!-- Sidebar -->
 		<ul class="sidebar-nav">
 			<li class="sidebar-brand">
 				Friends
 			</li>
-			<li ng-repeat="user in users | filter: search">
-				<a href="/users/{{user._id}}">
-					<img ng-src="/users/{{user._id}}/img" src="" class="avatar-small">
-					&nbsp;{{user.local.username}}&nbsp;
-					<div id="online-status-{{user.local.username}}" ng-class="{ 'online-indicator': user.online }"></div>
-				</a>
+			<ng-view></ng-view>
+
+			<li>
+				Chat
 			</li>
+			<li>test: Hey</li>
+			<input class="form-control" placeholder="Type here..."/>
 		</ul>
+	</div>
+
+	<!-- Template -->
+	<script type="text/ng-template" id="/users.html">
+		
+		<li ng-repeat="user in users | filter: search">
+			<a href="/users/{{user._id}}">
+				<img ng-src="/users/{{user._id}}/img" src="" class="avatar-small">
+				&nbsp;{{user.local.username}}&nbsp;
+				<div id="online-status-{{user.local.username}}" ng-class="{ 'online-indicator': user.online }"></div>
+			</a>
+		</li>
+		
 	</script>
 
 	<script>

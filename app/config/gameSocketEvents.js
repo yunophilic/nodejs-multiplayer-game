@@ -5,9 +5,15 @@ var helpers = require('../utils/helpers');
 var Ball = require('../models/ball.js');
 
 module.exports = function(socket, gameRoom) {
-	//console.log('User connected');
+	var joinedGame = false;
 
 	socket.on('joinGame', function(tank){
+		if(gameRoom.tankExists(tank.id)) {
+			socket.emit('deny game access');
+			socket.disconnect(true);
+			return;
+		}
+
 		console.log(tank.id + ' joined the game');
 		var initX = helpers.getRandomInt(40, 900);
 		var initY = helpers.getRandomInt(40, 500);
@@ -15,6 +21,8 @@ module.exports = function(socket, gameRoom) {
 		socket.broadcast.emit('addTank', { id: tank.id, type: tank.type, isLocal: false, x: initX, y: initY, hp: TANK_INIT_HP} );
 
 		gameRoom.addTank({ id: tank.id, type: tank.type, hp: TANK_INIT_HP});
+
+		joinedGame = true;
 	});
 
 	socket.on('sync', function(data){
@@ -40,8 +48,10 @@ module.exports = function(socket, gameRoom) {
 	});
 
 	socket.on('leaveGame', function(tankId){
-		console.log(tankId + ' has left the game');
-		gameRoom.removeTank(tankId);
-		socket.broadcast.emit('removeTank', tankId);
+		if(joinedGame) {
+			console.log(tankId + ' has left the game');
+			gameRoom.removeTank(tankId);
+			socket.broadcast.emit('removeTank', tankId);
+		}
 	});
 };
