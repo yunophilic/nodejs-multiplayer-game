@@ -33,8 +33,8 @@
             
         </label>
         <label class="pull-right">
-            <a  class="btn btn-success btn-xs glyphicon glyphicon-ok" href="#" title="Yes"></a>
-            <a  class="btn btn-danger  btn-xs glyphicon glyphicon-remove" href="#" title="No"></a>
+            <a  class="btn btn-success btn-xs glyphicon glyphicon-ok" ng-click="accept(user._id)" title="Yes"></a>
+            <a  class="btn btn-danger  btn-xs glyphicon glyphicon-remove" ng-click="reject(user._id)" title="No"></a>
         </label>
         <div class="break"></div>
 		</li>
@@ -55,6 +55,31 @@
 				var users = response.data;
 				$scope.users = users;
 			});
+
+            $scope.accept = function (data) {
+                $http.put('/users/'+ data +'/accept', {_csrf: '<%= csrfToken %>'})
+                .then(function (data, status, headers) {
+                   location.reload();
+                      
+            })
+                .error(function (data, status, header, config) {
+                    alert("fail to accept")
+            });
+                
+            };
+
+            $scope.reject = function (data) {
+                $http.put('/users/'+ data +'/reject', {_csrf: '<%= csrfToken %>'})
+                .then(function (data, status, headers) {
+                   location.reload();
+                      
+            })
+                .error(function (data, status, header, config) {
+                    alert("fail to reject")
+            });
+                
+            };
+
 		})
 
 		//---------------
