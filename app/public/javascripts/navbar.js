@@ -20,6 +20,21 @@ $(document).ready(function() {
 		var thissound=document.getElementById("bg-music");
 		thissound.pause();
 		thissound.currentTime = 0;
+	});
+});
 
+$(document).ready(function() {
+	$.get("/profile/friend-requests-num", function(data, status){
+		if(data > 0){
+			var curr_val = $('#length').text();
+			var new_val = data;
+			$('#length').text(new_val);  
+		}
+	});
+});
+
+$(document).ready(function() {
+	$.get("/profile/username", function(data){
+		$("#username-text").text(data.username);
 	});
 });

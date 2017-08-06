@@ -6,16 +6,19 @@ $(function() {
 		'#58dc00', '#287b00', '#a8f07a', '#4ae8c4',
 		'#3b88eb', '#3824aa', '#a700ff', '#d300e7'
 	];
+	
+	// Initialize variables
 
-	const CHAT_ROOM = 'game_chat';
+	var CHAT_ROOM;
+	$.get(window.location.href, function(data) {
+		CHAT_ROOM = data.roomId;
+	}, 'json')
 
 	var chatname;
 	$.get('/profile/username', function(data) {
 		chatname = data.username;
 	});
-
-	// Initialize variables
-
+	
 	var $window = $(window);
 	// var $usernameInput = $('.usernameInput'); // Input for username
 
@@ -34,7 +37,7 @@ $(function() {
 	var $currentInput;
 	var socket = io();
 
-	function addParticipantsMessage (data) {
+	/*function addParticipantsMessage (data) {
 		var message = '';
 		if (data.numUsers === 1) {
 			message += "there's 1 participant";
@@ -42,11 +45,10 @@ $(function() {
 			message += "there are " + data.numUsers + " participants";
 		}
 		log(message);
-	}
+	}*/
 
 	// Sets the client's username
 	function setUsername () {
-		// username = cleanInput($usernameInput.val().trim());
 		username = chatname;
 
 		// If the username is valid
@@ -55,7 +57,6 @@ $(function() {
 			$chatPage.show();
 			$loginPage.off('click');
 			$currentInput = $inputMessage.focus();
-
 
 			// Tell the server your username
 			socket.emit('join chat', {
@@ -68,7 +69,7 @@ $(function() {
 	// Sends a chat message
 	function sendMessage () {
 		var message = $inputMessage.val();
-		// console.log(message);
+		console.log(message);
 		// Prevent markup from being injected into the message
 		message = cleanInput(message);
 		// if there is a non-empty message and a socket connection
@@ -214,7 +215,6 @@ $(function() {
 		// }
 		// When the client hits ENTER on their keyboard
 		if (event.which === 13) {
-			$(".chatArea").css("height", "270");
 			if (username) {
 				sendMessage();
 				socket.emit('stop typing');
@@ -227,7 +227,6 @@ $(function() {
 	});
 
 	$inputMessage.on('input', function() {
-
 		updateTyping();
 	});
 
@@ -239,8 +238,7 @@ $(function() {
 	// });
 	//
 	// // Focus input when clicking on the message input's border
-	$(".inputMessage").click(function () {
-
+	$inputMessage.click(function () {
 		$inputMessage.focus();
 	});
 
@@ -248,18 +246,17 @@ $(function() {
 
 	// called when user already in chat in another tab/browser
 	socket.on('deny chat access', function (data) {
-		window.location.replace("/game/error");
+		window.location.replace("/chat/error");
 	});
 
 	// Whenever the server emits 'join', log the join message
 	socket.on('join', function (data) {
 		connected = true;
 		// Display the welcome message
-		var message = "Welcome to chatting room";
+		var message = "Chatting with " + $("#friend-username").text();
 		log(message, {
 			prepend: true
 		});
-		addParticipantsMessage(data);
 	});
 
 	// Whenever the server emits 'new message', update the chat body
@@ -270,13 +267,11 @@ $(function() {
 	// Whenever the server emits 'user joined', log it in the chat body
 	socket.on('user joined', function (data) {
 		log(data.username + ' joined');
-		addParticipantsMessage(data);
 	});
 
 	// Whenever the server emits 'user left', log it in the chat body
 	socket.on('user left', function (data) {
 		log(data.username + ' left');
-		addParticipantsMessage(data);
 		removeChatTyping(data);
 	});
 

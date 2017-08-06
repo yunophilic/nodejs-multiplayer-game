@@ -4,10 +4,14 @@ var HEIGHT = 580;
 function GameRoom(){
 	this.tanks = [];
 	this.balls = [];
-	/*this.lastBallId = 0;*/
 }
 
 GameRoom.prototype = {
+	tankExists: function(tankId) {
+		return this.tanks.find(function(t) {
+			return t.id === tankId;
+		}) !== undefined;
+	},
 
 	addTank: function(tank){
 		this.tanks.push(tank);

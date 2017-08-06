@@ -48,7 +48,7 @@ $(function() {
 	function setUsername () {
 		// username = cleanInput($usernameInput.val().trim());
 		username = chatname;
-		console.log("need call back in here")
+		//console.log("need call back in here");
 		// If the username is valid
 		if (username) {
 			$loginPage.fadeOut();
@@ -245,8 +245,7 @@ $(function() {
 
 	// called when user already in chat in another tab/browser
 	socket.on('deny chat access', function (data) {
-		$chatPage.hide();
-		alert('You are connected to this chat room on another tab/browser. Please close this tab.');
+		window.location.replace("/chat/error");
 	});
 
 	// Whenever the server emits 'join', log the join message

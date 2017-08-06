@@ -6,6 +6,10 @@ var game = new Game('#arena', WIDTH, HEIGHT, socket);
 var selectedTank = 1;
 var tankName = '';
 
+socket.on('deny game access', function() {
+	window.location.replace("/game/error");
+})
+
 socket.on('addTank', function(tank){
 	game.addTank(tank.id, tank.type, tank.isLocal, tank.x, tank.y);
 });
