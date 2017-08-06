@@ -22,6 +22,12 @@ const ALLOWED_AVATAR_FORMAT = ['.jpg', '.png'];
 // we will use route middleware to verify this (the isLoggedIn function)
 
 router.get('/', middlewares.isLoggedIn, function(req, res) {
+	res.render('profile/index', {
+		user : req.user
+	});
+});
+
+router.get('/img', middlewares.isLoggedIn, function(req, res) {
 	var avatarName = null
 
 	if (fs.existsSync(AVATAR_DIR)) {
@@ -33,13 +39,10 @@ router.get('/', middlewares.isLoggedIn, function(req, res) {
 	}
 
 	var imgPath = avatarName != null ?
-		path.join('/img/avatar', avatarName) :
-		'/img/default-avatar.jpg';
+		path.resolve(AVATAR_DIR, avatarName) :
+		path.resolve('./public/img/default-avatar.jpg');
 
-	res.render('profile/index', {
-		user : req.user,
-		imgPath: imgPath
-	});
+	res.sendFile(imgPath);
 });
 
 router.get('/username', middlewares.isLoggedIn, function(req, res) {
