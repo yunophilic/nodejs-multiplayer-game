@@ -3,7 +3,7 @@ var path = require('path');
 
 //constants
 const AVATAR_DIR = './public/img/avatar';
-const DEFAULT_AVATAR_PATH = './public/img/default-avatar.jpg';
+const DEFAULT_AVATAR_PATH = './public/img/default-avatar.png';
 
 module.exports = {
 	getRandomInt: function (min, max) {

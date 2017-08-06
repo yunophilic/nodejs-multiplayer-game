@@ -6,16 +6,19 @@ $(function() {
 		'#58dc00', '#287b00', '#a8f07a', '#4ae8c4',
 		'#3b88eb', '#3824aa', '#a700ff', '#d300e7'
 	];
+	
+	// Initialize variables
 
-	const CHAT_ROOM = 'game_chat';
+	var CHAT_ROOM;
+	$.get(window.location.href, function(data) {
+		CHAT_ROOM = data.roomId;
+	}, 'json')
 
 	var chatname;
 	$.get('/profile/username', function(data) {
 		chatname = data.username;
 	});
-
-	// Initialize variables
-
+	
 	var $window = $(window);
 	// var $usernameInput = $('.usernameInput'); // Input for username
 
@@ -48,7 +51,7 @@ $(function() {
 	function setUsername () {
 		// username = cleanInput($usernameInput.val().trim());
 		username = chatname;
-
+		console.log("need call back in here")
 		// If the username is valid
 		if (username) {
 			$loginPage.fadeOut();
@@ -68,7 +71,7 @@ $(function() {
 	// Sends a chat message
 	function sendMessage () {
 		var message = $inputMessage.val();
-		// console.log(message);
+		console.log(message);
 		// Prevent markup from being injected into the message
 		message = cleanInput(message);
 		// if there is a non-empty message and a socket connection
@@ -214,7 +217,6 @@ $(function() {
 		// }
 		// When the client hits ENTER on their keyboard
 		if (event.which === 13) {
-			$(".chatArea").css("height", "270");
 			if (username) {
 				sendMessage();
 				socket.emit('stop typing');
@@ -227,7 +229,6 @@ $(function() {
 	});
 
 	$inputMessage.on('input', function() {
-
 		updateTyping();
 	});
 
@@ -239,8 +240,7 @@ $(function() {
 	// });
 	//
 	// // Focus input when clicking on the message input's border
-	$(".inputMessage").click(function () {
-
+	$inputMessage.click(function () {
 		$inputMessage.focus();
 	});
 
@@ -248,14 +248,14 @@ $(function() {
 
 	// called when user already in chat in another tab/browser
 	socket.on('deny chat access', function (data) {
-		window.location.replace("/game/error");
+		window.location.replace("/chat/error");
 	});
 
 	// Whenever the server emits 'join', log the join message
 	socket.on('join', function (data) {
 		connected = true;
 		// Display the welcome message
-		var message = "Welcome to chatting room";
+		var message = "Chatting with";
 		log(message, {
 			prepend: true
 		});

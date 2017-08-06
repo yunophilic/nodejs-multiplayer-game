@@ -1,3 +1,5 @@
+var ChatRoom = require('../models/chatRoom');
+
 module.exports = function(socket, chatRooms) {
 	// lock
 	// prevent adding user on same socket connection (different tab == different connection)
@@ -7,6 +9,9 @@ module.exports = function(socket, chatRooms) {
 	// when the client emits 'new message', this listens and executes
 	socket.on('new message', function (message) {
 		console.log(message);
+
+		if (!socket.room)
+			return;
 
 		// don't save in game messages
 		if(socket.room != 'game_chat') {
@@ -25,6 +30,8 @@ module.exports = function(socket, chatRooms) {
 		if (addedUser)
 			return;
 
+		console.log('HEY' + data.username + ', ' + data.room);
+
 		// store stuffs in the socket session for this client
 		socket.username = data.username;
 		socket.room = data.room;
@@ -33,6 +40,11 @@ module.exports = function(socket, chatRooms) {
 		socket.join(socket.room);
 		
 		var chatRoom = chatRooms[socket.room];
+		if (!chatRoom) {
+			chatRooms[socket.room] = new ChatRoom();
+			chatRoom = chatRooms[socket.room];
+		}
+
 		var isGroupChat = (socket.room == 'general_chat' || socket.room == 'game_chat');
 		if (isGroupChat && chatRoom.userExists(socket.username)) {
 			socket.emit('deny chat access');
