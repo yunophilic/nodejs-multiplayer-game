@@ -146,6 +146,12 @@ router.post('/upload-photo', middlewares.isLoggedIn, function(req, res, next) {
 			req.flash('success', 'Avatar updated.');
 			res.redirect('/profile');
 		});
+		if (err) {
+				req.flash('error', 'Outer');
+				res.redirect('/profile');
+				return; 
+				
+		}		
 	});
 });
 
