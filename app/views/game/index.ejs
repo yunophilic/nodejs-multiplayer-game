@@ -18,7 +18,11 @@
 		</ul>
 	</div>
 </div>
-
+<div id="bgm" class="bgm">
+  <video id="bg-music" class="bg-music" controls loop>
+     <source src="/music/bgm.mp3" type="audio/mpeg">
+    </video>
+</div>
 <div id="arena" class="arena">
 </div>
 <!-- <div id="chatting" class="chatting"> -->
@@ -36,6 +40,7 @@
 	</li>
 </ul>
 <!-- </div> -->
+<!-- music bar -->
 
 
 <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.3.js"></script>
@@ -49,7 +54,7 @@
 
 		$.getJSON(GEOCODING).done(function(location) {
 			//console.log(location.results[0].address_components);
-			
+
 			var city = location.results[0].address_components[3].long_name;
 			var country = location.results[0].address_components[6].long_name;
 

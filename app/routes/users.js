@@ -263,4 +263,61 @@ router.put('/:id/remove', middlewares.isLoggedIn, function(req, res) {
 	});
 });
 
+router.get('/:id/chat', middlewares.isLoggedIn, function(req, res) {
+	User.findById(req.id, function(err, user) {
+		if (err) {
+			console.log("error retrieving user");
+			return next(err);
+		}
+
+		var currentUser = req.user;
+
+		var isConnected = user.friends.includes(currentUser._id.toString()) &&
+			currentUser.friends.includes(user._id.toString());
+
+		res.format({
+			html: function() {
+				if (!isConnected) {
+					return res.render('users/not-connected');
+				}
+				res.render('users/chat', {
+					currentUser: currentUser,
+					user: user,
+					layout: 'layouts/no-container'
+				});
+			},
+			json: function() {
+				if (!isConnected) {
+					res.status = 403;
+					res.json({
+						status: 403,
+						message: 'Not Connected'
+					});
+				}
+
+				var username1 = currentUser.local.username1;
+				var username2 = user.local.username2;
+				
+				if (!username1 || !username2){
+					res.status = 400;
+					res.json({
+						status: 400, 
+						message: 'Bad Input'
+					});
+					return;
+				}
+
+				//sort to disregard order
+				var x = [username1, username2];
+				x.sort();
+				
+				var roomId = 'room_' + x[0] + '_' + x[1];
+				res.json({
+					roomId: roomId
+				});
+			}
+		});
+	});
+});
+
 module.exports = router;

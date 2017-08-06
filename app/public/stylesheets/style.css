@@ -91,3 +91,12 @@ img {
   margin-bottom: 100px;
   text-align: center;
 }
+
+.avatar-small {
+  height: 40px;
+  width: 40px;
+  border-top-left-radius: 50% 50%;
+  border-top-right-radius: 50% 50%;
+  border-bottom-right-radius: 50% 50%;
+  border-bottom-left-radius: 50% 50%;
+}

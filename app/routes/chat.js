@@ -10,4 +10,8 @@ router.get('/', middlewares.isLoggedIn, function(req, res) {
 	});
 });
 
+router.get('/error', middlewares.isLoggedIn, function(req, res) {
+	res.render('chat/error');
+});
+
 module.exports = router;

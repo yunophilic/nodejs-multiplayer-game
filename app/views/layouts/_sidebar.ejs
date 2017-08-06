@@ -1,27 +1,44 @@
 <div id="wrapper" ng-app="friends-sidebar">
 	<div id="sidebar-wrapper">
-		<ng-view></ng-view>
-	</div>
-
-	<!-- Template -->
-	<script type="text/ng-template" id="/users.html">
-		<!-- Sidebar -->
 		<ul class="sidebar-nav">
 			<li class="sidebar-brand">
 				Friends
 			</li>
-			<li ng-repeat="user in users | filter: search">
-				<a href="/users/{{user._id}}">
-					<img ng-src="/users/{{user._id}}/img" src="" class="avatar-small">
-					&nbsp;{{user.local.username}}&nbsp;
-					<div id="online-status-{{user.local.username}}" ng-class="{ 'online-indicator': user.online }"></div>
-				</a>
-			</li>
+			<ng-view></ng-view>
 		</ul>
+	</div>
+
+	<!-- Template -->
+	<script type="text/ng-template" id="/sidebar.html">
+		<input class="form-control" placeholder="Search..." type="text" ng-model="search.local.username" />
+		<li ng-repeat="user in users | filter: search">
+			<a href="/users/{{user._id}}/chat">
+				<img ng-src="/users/{{user._id}}/img" src="" class="avatar-small">
+				&nbsp;{{user.local.username}}&nbsp;
+				<div id="online-status-{{user.local.username}}" ng-class="{ 'online-indicator': user.online }"></div>
+			</a>
+		</li>
 	</script>
 
 	<script>
 		angular.module('friends-sidebar', ['ngRoute'])
+			//---------------
+			// custom directives
+			//---------------
+			.directive('ngEnter', function() {
+				return function(scope, element, attrs) {
+					element.bind("keydown", function(event) {
+						if(event.which === 13) {
+							scope.$apply(function(){
+								scope.$eval(attrs.ngEnter, {'event': event});
+							});
+
+							event.preventDefault();
+						}
+					});
+				};
+			})
+
 			//---------------
 			// Controllers
 			//---------------
@@ -34,6 +51,36 @@
 					var users = response.data;
 					$scope.users = users;
 				});
+				
+				/*$scope.sendMessage = function() {
+					var socket = io();
+					socket.emit('new message', $('#chat-message').val());
+				};
+
+				$scope.enterChat = function(friendUsername) {
+					$.get('/profile/username', function(data) {
+						if (data.status == 403)
+							return
+
+						var username = data.username;
+
+						$.get('/chat/gen-room-id', {
+							username1: username, 
+							username2: friendUsername
+						}, function(d) {
+							console.log(d.roomId);
+
+							var socket = io();
+							socket.emit('join chat', {
+								username: username,
+								room: d.roomId
+							});
+
+							$('#chat-label').show();
+							$('#chat-message').show();
+						});
+					}, 'json');
+				}*/
 			})
 
 			//---------------
@@ -42,10 +89,14 @@
 			.config(['$routeProvider', function ($routeProvider) {
 				$routeProvider
 					.when('/', {
-						templateUrl: '/users.html',
+						templateUrl: '/sidebar.html',
 						controller: 'UsersController'
 					});
 			}]);
-	</script>
 
+		/*$(document).ready(function() {
+			$('#chat-label').hide();
+			$('#chat-message').hide();
+		})*/
+	</script>
 </div>

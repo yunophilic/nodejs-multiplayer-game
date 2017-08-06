@@ -8,7 +8,11 @@ $(document).ready(function() {
 
 	socket.on('user offline', function(data){
 		//update sidebar
-		$('#online-status-' + data.username).removeClass("online-indicator");
+		//set timeout to prevent toggling online indicator
+		//when user only have one tab and move over different pages
+		setTimeout(function() {
+			$('#online-status-' + data.username).removeClass("online-indicator");
+		}, 3000);
 	});
 	
 	$.get('/profile/username', function(data) {

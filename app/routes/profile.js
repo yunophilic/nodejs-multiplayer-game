@@ -93,34 +93,61 @@ router.post('/upload-photo', middlewares.isLoggedIn, function(req, res, next) {
 		if(!fs.existsSync(AVATAR_DIR)) {
 			fs.mkdirSync(AVATAR_DIR);
 		}
-
+		
 		var ext = path.extname(files.fileToUpload.name);
 		if(!ALLOWED_AVATAR_FORMAT.includes(ext)) {
 			req.flash('error', 'File formats allowed: ' + ALLOWED_AVATAR_FORMAT);
 			res.redirect('/profile');
 			return;
 		}
-
-		var fileToRemove = null;
-		fs.readdirSync(AVATAR_DIR).forEach(function(x) {
-			if (x.startsWith(req.user._id.toString())) {
-				fileToRemove = x;
+		// Check if it is a valid image file	
+		var oldpath = files.fileToUpload.path;	
+		fs.readFile(oldpath, function (err, data) {
+			var magic = {
+				jpg: 'ffd8ffe0',
+				png: '89504e47'
+			};
+			var magicNumberInBody = data.toString('hex', 0, 4);
+			
+			if (!(magicNumberInBody == magic.jpg || magicNumberInBody == magic.png )) {				
+				req.flash('error', 'Invalid type');
+				res.redirect('/profile');
+				return;
 			}
-		});
-		if (fileToRemove) {
-			fs.unlinkSync(path.join(AVATAR_DIR, fileToRemove));
-		}
-
-		var oldpath = files.fileToUpload.path;
-		var newpath = path.join(AVATAR_DIR, req.user._id.toString() + ext);
-
-		mv(oldpath, newpath, {mkdirp: true},function (err) {
+			
 			if (err) {
-				return next(err);
+				req.flash('error', 'Unable to open ' + ext + "file");
+				res.redirect('/profile');
+				return;
 			}
-			req.flash('success', 'Avatar updated.');
-			res.redirect('/profile');
-		});
+
+			var fileToRemove = null;
+			fs.readdirSync(AVATAR_DIR).forEach(function(x) {
+				if (x.startsWith(req.user._id.toString())) {
+					fileToRemove = x;
+				}
+			});
+			if (fileToRemove) {
+				fs.unlinkSync(path.join(AVATAR_DIR, fileToRemove));
+			}
+
+			var newpath = path.join(AVATAR_DIR, req.user._id.toString() + ext);
+
+			mv(oldpath, newpath, {mkdirp: true},function (err) {
+				if (err) {
+					return next(err);
+				}
+				req.flash('success', 'Avatar updated.');
+				res.redirect('/profile');
+				return;
+			});
+
+			if (err) {
+				req.flash('error', 'Outer');
+				res.redirect('/profile');
+				return; 
+			}	
+		});		
 	});
 });
 
