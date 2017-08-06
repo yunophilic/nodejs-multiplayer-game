@@ -32,7 +32,7 @@ server.on('listening', onListening);
 /**
  * Configure socket.
  */
-socketConfig(server);
+socketConfig(app, server);
 
 /**
  * Normalize a port into a number, string, or false.

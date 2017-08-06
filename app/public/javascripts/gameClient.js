@@ -1,6 +1,6 @@
-var WIDTH = 1100;
-var HEIGHT = 580;
-// This IP is hardcoded to my server, replace with your own
+const WIDTH = 1100;
+const HEIGHT = 580;
+
 var socket = io();
 var game = new Game('#arena', WIDTH, HEIGHT, socket);
 var selectedTank = 1;
