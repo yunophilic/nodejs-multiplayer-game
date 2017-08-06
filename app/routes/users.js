@@ -2,6 +2,7 @@ var express = require('express');
 var bodyParser = require('body-parser'); //parses information from POST
 var methodOverride = require('method-override'); //used to manipulate POST
 var middlewares = require('../utils/middlewares');
+var helpers = require('../utils/helpers');
 var router = express.Router();
 
 var User = require('../models/user');
@@ -93,6 +94,19 @@ router.get('/:id', function(req, res) {
 					res.json(user);
 				}
 			});
+		}
+	});
+});
+
+router.get('/:id/img', function(req, res) {
+	User.findById(req.id, function (err, user) {
+		if (err) {
+			next(err);
+		} else if (req.isAuthenticated() && req.user._id.equals(user._id)) {
+			//user selects himself
+			res.redirect("/profile/img");
+		} else {
+			res.sendFile(helpers.getUserAvatarPath(user._id.toString()));
 		}
 	});
 });

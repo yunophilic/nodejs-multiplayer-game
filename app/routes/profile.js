@@ -28,21 +28,7 @@ router.get('/', middlewares.isLoggedIn, function(req, res) {
 });
 
 router.get('/img', middlewares.isLoggedIn, function(req, res) {
-	var avatarName = null
-
-	if (fs.existsSync(AVATAR_DIR)) {
-		fs.readdirSync(AVATAR_DIR).forEach(function(x) {
-			if (x.startsWith(req.user._id.toString())) {
-				avatarName = x;
-			}
-		});
-	}
-
-	var imgPath = avatarName != null ?
-		path.resolve(AVATAR_DIR, avatarName) :
-		path.resolve('./public/img/default-avatar.jpg');
-
-	res.sendFile(imgPath);
+	res.sendFile(helpers.getUserAvatarPath(req.user._id.toString()));
 });
 
 router.get('/username', middlewares.isLoggedIn, function(req, res) {
