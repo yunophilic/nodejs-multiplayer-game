@@ -109,26 +109,21 @@ router.post('/upload-photo', middlewares.isLoggedIn, function(req, res, next) {
 				png: '89504e47'
 			};
 			var magigNumberInBody = data.toString('hex',0,4);
-			res.send(magigNumberInBody);
-			/*
-			try{
-				if (!(magigNumberInBody == magic.jpg || magigNumberInBody == magic.png )) {
-					req.flash('error', 'This is not a valid ' + ext + "file");
-					res.redirect('/profile');
-					return; 
-				}
-			}catch(err) {
-				req.flash('error', 'This is not a valid ' + ext + "file - catch");
+			
+			if (!(magigNumberInBody == magic.jpg || magigNumberInBody == magic.png )) {				
+				//res.redirect('/magigErrorPage');
+				req.flash('error', 'Invalid type');
 				res.redirect('/profile');
-				return; 
+				return;
 			}
+			
 			if (err) {
 				req.flash('error', 'Unable to open ' + ext + "file");
-				res.redirect('/profile');
+				res.redirect('/readFile');
 				return; 
 				
 			}		
-				*/			
+							
 		});
 		
 		var fileToRemove = null;
