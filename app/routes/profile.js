@@ -103,15 +103,13 @@ router.post('/upload-photo', middlewares.isLoggedIn, function(req, res, next) {
 		// Check if it is a valid image file	
 		var oldpath = files.fileToUpload.path;	
 		fs.readFile(oldpath, function (err, data) {
-			
 			var magic = {
 				jpg: 'ffd8ffe0',
 				png: '89504e47'
 			};
-			var magigNumberInBody = data.toString('hex',0,4);
+			var magicNumberInBody = data.toString('hex', 0, 4);
 			
-			if (!(magigNumberInBody == magic.jpg || magigNumberInBody == magic.png )) {				
-				//res.redirect('/magigErrorPage');
+			if (!(magicNumberInBody == magic.jpg || magicNumberInBody == magic.png )) {				
 				req.flash('error', 'Invalid type');
 				res.redirect('/profile');
 				return;
@@ -119,39 +117,37 @@ router.post('/upload-photo', middlewares.isLoggedIn, function(req, res, next) {
 			
 			if (err) {
 				req.flash('error', 'Unable to open ' + ext + "file");
-				res.redirect('/readFile');
-				return; 
-				
-			}		
-							
-		});
-		
-		var fileToRemove = null;
-		fs.readdirSync(AVATAR_DIR).forEach(function(x) {
-			if (x.startsWith(req.user._id.toString())) {
-				fileToRemove = x;
+				res.redirect('/profile');
+				return;
 			}
-		});
-		if (fileToRemove) {
-			fs.unlinkSync(path.join(AVATAR_DIR, fileToRemove));
-		}
 
-		
-		var newpath = path.join(AVATAR_DIR, req.user._id.toString() + ext);
+			var fileToRemove = null;
+			fs.readdirSync(AVATAR_DIR).forEach(function(x) {
+				if (x.startsWith(req.user._id.toString())) {
+					fileToRemove = x;
+				}
+			});
+			if (fileToRemove) {
+				fs.unlinkSync(path.join(AVATAR_DIR, fileToRemove));
+			}
 
-		mv(oldpath, newpath, {mkdirp: true},function (err) {
+			var newpath = path.join(AVATAR_DIR, req.user._id.toString() + ext);
+
+			mv(oldpath, newpath, {mkdirp: true},function (err) {
+				if (err) {
+					return next(err);
+				}
+				req.flash('success', 'Avatar updated.');
+				res.redirect('/profile');
+				return;
+			});
+
 			if (err) {
-				return next(err);
-			}
-			req.flash('success', 'Avatar updated.');
-			res.redirect('/profile');
-		});
-		if (err) {
 				req.flash('error', 'Outer');
 				res.redirect('/profile');
 				return; 
-				
-		}		
+			}	
+		});		
 	});
 });
 
