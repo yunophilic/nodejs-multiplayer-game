@@ -1,16 +1,16 @@
-var socket = io();
-
-socket.on('user online', function(data) {
-	//update sidebar
-	$('#online-status-' + data.username).addClass("online-indicator");
-});
-
-socket.on('user offline', function(data){
-	//update sidebar
-	$('#online-status-' + data.username).removeClass("online-indicator");
-});
-
 $(document).ready(function() {
+	var socket = io();
+
+	socket.on('user online', function(data) {
+		//update sidebar
+		$('#online-status-' + data.username).addClass("online-indicator");
+	});
+
+	socket.on('user offline', function(data){
+		//update sidebar
+		$('#online-status-' + data.username).removeClass("online-indicator");
+	});
+	
 	$.get('/profile/username', function(data) {
 		console.log(data);
 		if(data.status == 403) {
