@@ -48,7 +48,7 @@ $(function() {
 	function setUsername () {
 		// username = cleanInput($usernameInput.val().trim());
 		username = chatname;
-		console.log("need call back in here")
+		//console.log("need call back in here");
 		// If the username is valid
 		if (username) {
 			$loginPage.fadeOut();

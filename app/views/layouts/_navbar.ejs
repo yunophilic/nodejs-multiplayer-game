@@ -16,13 +16,19 @@
 				<% if (loggedIn) { %>
 					<li><a href="/game">Play</a></li>
 					<li><a href="/chat">Public Chat Room</a></li>
-					<li><a href="/profile/friend-requests">Friend Requests<span id="length" class="badge"></span></a></li>
-					<li><a href="/profile/friends">Friends</a></li>
-					<li><a href="/location">Find Your Location</a></li>
 				<% } %>	
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
 				<% if (loggedIn) { %>
+					<li class="dropdown">
+						<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+							<span class="glyphicon glyphicon-user"></span> <span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="/profile/friend-requests">Friend Requests <span id="length" class="badge"></span></a></li>
+							<li><a href="/profile/friends">Friends</a></li>
+						</ul>
+					</li>
 					<li class="dropdown">
 						<a class="dropdown-toggle" data-toggle="dropdown" href="#">
 							<span class="glyphicon glyphicon-cog"></span> <span class="caret"></span>
@@ -42,12 +48,12 @@
 					</li>
 					<li class="dropdown">
 						<a class="dropdown-toggle" data-toggle="dropdown" href="#">
-							<span class="glyphicon glyphicon-user"></span> Account<span class="caret"></span>
+							<span id="username-text"></span><span class="caret"></span>
 						</a>
 						<ul class="dropdown-menu">
 							<li><a href="/profile">Profile</a></li>
-							<!-- <li><a href="#">Settings</a></li>
-							<li class="divider"></li> -->
+							<li><a href="#">Settings</a></li>
+							<li class="divider"></li>
 							<li>
 								<a href="/logout">Logout</a>
 							</li>
@@ -61,14 +67,3 @@
 		</div>
 	</div>
 </nav>
-
-<script>
-    $.get("/profile/friend-requests-num", function(data, status){
-        if(data > 0){
-          var curr_val = $('#length').text();
-          var new_val = data;
-          $('#length').text(new_val);  
-        }
-        
-    });
-</script>

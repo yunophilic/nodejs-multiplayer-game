@@ -138,19 +138,8 @@
 	vertical-align: middle;
 }
 
-.avatar-small {
-	height: 40px;
-	width: 40px;
-	border-top-left-radius: 50% 50%;
-	border-top-right-radius: 50% 50%;
-	border-bottom-right-radius: 50% 50%;
-	border-bottom-left-radius: 50% 50%;
-	/*margin-top: 25px;*/
-	/*margin-bottom: 25px;*/
-}
-
-#chat-label {
+/*#chat-label {
 	height: 65px;
 	font-size: 18px;
 	line-height: 60px;
-}
+}*/
