@@ -56,7 +56,6 @@ end
 execute 'install app dependencies' do
 	cwd '/home/ubuntu/project/app'
 	command 'sudo npm install'
-	command 'sudo npm install pm2 -g'
 end
 execute 'install forever' do
 	command 'sudo npm install forever --global'
