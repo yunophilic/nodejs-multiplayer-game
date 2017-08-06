@@ -64,3 +64,11 @@ execute 'run server' do
 	cwd '/home/ubuntu/project/app'
 	command 'npm start'
 end
+
+package "nginx"
+cookbook_file "nginx-default" do
+  path "/etc/nginx/sites-available/default"
+end
+service "nginx" do
+	action :restart
+end
