@@ -92,7 +92,7 @@ userSchema.pre('save', function(next) {
     console.log(user.isNew);*/
 
     // disable modifying username
-    if (user.isModified('local.username')) {
+    if (user.isModified('local.username') && !user.isNew) {
         var err = new Error('Username cannot be modified.');
         err.status = 500;
         next(err);
