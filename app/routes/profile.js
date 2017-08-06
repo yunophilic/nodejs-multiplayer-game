@@ -93,14 +93,24 @@ router.post('/upload-photo', middlewares.isLoggedIn, function(req, res, next) {
 		if(!fs.existsSync(AVATAR_DIR)) {
 			fs.mkdirSync(AVATAR_DIR);
 		}
-
+		
 		var ext = path.extname(files.fileToUpload.name);
 		if(!ALLOWED_AVATAR_FORMAT.includes(ext)) {
 			req.flash('error', 'File formats allowed: ' + ALLOWED_AVATAR_FORMAT);
 			res.redirect('/profile');
 			return;
 		}
-
+		// Check if it is a valid image file	
+		var oldpath = files.fileToUpload.path;	
+		fs.readFile(oldpath, function (err, data) {
+		if (err) {
+			req.flash('error', 'This is not a valid ' + ext + "file");
+			res.redirect('/profile');
+			return; 
+		  }
+					
+		});
+		
 		var fileToRemove = null;
 		fs.readdirSync(AVATAR_DIR).forEach(function(x) {
 			if (x.startsWith(req.user._id.toString())) {
@@ -111,7 +121,7 @@ router.post('/upload-photo', middlewares.isLoggedIn, function(req, res, next) {
 			fs.unlinkSync(path.join(AVATAR_DIR, fileToRemove));
 		}
 
-		var oldpath = files.fileToUpload.path;
+		
 		var newpath = path.join(AVATAR_DIR, req.user._id.toString() + ext);
 
 		mv(oldpath, newpath, {mkdirp: true},function (err) {
