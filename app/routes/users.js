@@ -278,7 +278,9 @@ router.get('/:id/chat', middlewares.isLoggedIn, function(req, res) {
 		res.format({
 			html: function() {
 				if (!isConnected) {
-					return res.render('users/not-connected');
+					return res.render('users/not-connected', {
+						user: user
+					});
 				}
 				res.render('users/chat', {
 					currentUser: currentUser,
@@ -295,17 +297,17 @@ router.get('/:id/chat', middlewares.isLoggedIn, function(req, res) {
 					});
 				}
 
-				var username1 = currentUser.local.username1;
-				var username2 = user.local.username2;
+				var username1 = currentUser.local.username;
+				var username2 = user.local.username;
 				
-				if (!username1 || !username2){
+				/*if (!username1 || !username2){
 					res.status = 400;
 					res.json({
 						status: 400, 
 						message: 'Bad Input'
 					});
 					return;
-				}
+				}*/
 
 				//sort to disregard order
 				var x = [username1, username2];
