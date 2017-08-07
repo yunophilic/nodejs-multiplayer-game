@@ -2,18 +2,21 @@ var mongoose = require('mongoose');
 var User = require('./user');
 
 var chatLogSchema = mongoose.Schema({
-	room:{
+	room: {
 		type: String,
 		required: true
 	},
-	senderUsername: {
+	username: {
 		type: String,
-		unique: true,
 		required: true
 	},
-	content: {
+	message: {
 		type: String,
 		trim: true
+	},
+	timestamp: {
+		type: Date, 
+		default: Date.now
 	}
 });
 
@@ -21,8 +24,8 @@ chatLogSchema.pre('save', function(next) {
 	console.log('saving chat log');
 
 	var chatLog = this;
-	User.findOne({ 'local.username': chatLog.senderUsername }, function(err, user){
-		console.log(chatLog.senderUsername);
+	User.findOne({ 'local.username': chatLog.username }, function(err, user){
+		console.log(chatLog.username);
 		if(err || !user) {
 			//this generally shouldn't happen if username cannot be changed
 			console.log('error retrieving user');

@@ -35,7 +35,7 @@ router.get('/username', middlewares.isLoggedIn, function(req, res) {
 	res.json({username: req.user.local.username});
 });
 
-router.get('/friend-requests', middlewares.isLoggedIn, function(req, res) {
+router.get('/friend-requests', middlewares.isLoggedIn, function(req, res, next) {
 	res.format({
 		html: function() {
 			res.render('profile/friend-requests', {
@@ -46,7 +46,7 @@ router.get('/friend-requests', middlewares.isLoggedIn, function(req, res) {
 		json: function() {
 			User.find({ _id: { $in: req.user.friendRequests } }, function(err, users) {
 				if (err) {
-					return console.error(err);
+					return next(err);
 				} else {
 					res.json(users);
 				}
@@ -65,7 +65,7 @@ router.get('/friend-requests-num', middlewares.isLoggedIn, function(req, res) {
 });
 
 
-router.get('/friends', middlewares.isLoggedIn, function(req, res) {
+router.get('/friends', middlewares.isLoggedIn, function(req, res, next) {
 	res.format({
 		html: function() {
 			res.render('profile/friends', {
@@ -77,7 +77,7 @@ router.get('/friends', middlewares.isLoggedIn, function(req, res) {
 			console.log(req.user.friends);
 			User.find({ _id: { $in: req.user.friends } }, function(err, users) {
 				if (err) {
-					return console.error(err);
+					return next(err);
 				} else {
 					console.log(users);
 					res.json(users);
