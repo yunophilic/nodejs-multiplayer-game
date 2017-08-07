@@ -29,6 +29,10 @@ $(document).ready(function() {
 			var curr_val = $('#length').text();
 			var new_val = data;
 			$('#length').text(new_val);  
+                         
+                        var curr_val = $('#num').text();
+			var new_val = data;
+			$('#num').text(new_val); 
 		}
 	});
 });
