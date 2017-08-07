@@ -26,9 +26,9 @@ server {
 	#server_tokens off;
 	# config to don't allow the browser to render the page inside an frame or iframe
 	# and avoid clickjacking 
-	#add_header X-Frame-Options SAMEORIGIN;
+	add_header X-Frame-Options SAMEORIGIN;
 	#add_header X-XSS-Protection "1; mode=block";
-	add_header Content-Security-Policy "default-src 'self'; script-src https://www.google.com https://www.gstatic.com 'self'; style-src 'self' 'unsafe-inline'; img-src 'self'; connect-src ws://localhost:8080/ 'self'; frame-src https://www.google.com 'self'";
+	add_header Content-Security-Policy "default-src 'self'; script-src https://www.google.com https://www.gstatic.com https://code.jquery.com 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self'; connect-src ws://localhost:8080/ 'self'; frame-src https://www.google.com 'self'; child-src https://www.google.com 'self'";
 
 	
 }
