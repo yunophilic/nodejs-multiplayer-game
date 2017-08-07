@@ -27,8 +27,8 @@
 				<a href="/users/{{user._id}}">{{user.local.username}}</a>
 			</label>
 			<label class="pull-right" ng-controller="UsersController">
-				<a  class="btn btn-success btn-xs glyphicon glyphicon-ok" href="/users/{{user._id}}" title="View"></a>
-				<a  class="btn btn-danger  btn-xs glyphicon glyphicon-trash" ng-click="removeFriend(user._id)" title="Delete"></a>
+				<!-- <a  class="btn btn-success btn-xs glyphicon glyphicon-ok" href="/users/{{user._id}}" title="View"></a> -->
+				<a  class="btn btn-danger  btn-xs glyphicon glyphicon-trash" ng-click="removeFriend(user._id)" title="Unfriend"></a>
 				<a  class="btn btn-info  btn-xs glyphicon glyphicon glyphicon-comment" href="/users/{{user._id}}/chat" title="Send message"></a>
 			</label>
 			<div class="break"></div>
