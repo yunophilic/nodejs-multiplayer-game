@@ -59,7 +59,7 @@ app.use(flash()); // use connect-flash for flash messages stored in session
 app.use(function(req, res, next) {
 	res.locals.csrfToken = req.csrfToken();
 	res.locals.loggedIn = req.isAuthenticated();
-	
+
 	next();
 });
 
