@@ -7,6 +7,8 @@ $(function() {
 		'#3b88eb', '#3824aa', '#a700ff', '#d300e7'
 	];
 	
+	// Initialize variables
+
 	const CHAT_ROOM = 'general_chat';
 
 	var chatname;
@@ -14,8 +16,6 @@ $(function() {
 		chatname = data.username;
 	});
 	
-	// Initialize variables
-
 	var $window = $(window);
 	// var $usernameInput = $('.usernameInput'); // Input for username
 
@@ -33,6 +33,18 @@ $(function() {
 	// var $currentInput = $usernameInput.focus();
 	var $currentInput;
 	var socket = io();
+
+	function displayPreviousMessages(data) {
+		var previousMessages = data.previousMessages;
+		if(previousMessages.length > 0) {
+			log('displaying previous messages (up to 50)');
+		} else {
+			log('no previous messages');
+		}
+		for(var i = 0; i < previousMessages.length; i++) {
+			addChatMessage(previousMessages[i]);
+		}
+	}
 
 	function addParticipantsMessage (data) {
 		var message = '';
@@ -251,12 +263,15 @@ $(function() {
 	// Whenever the server emits 'join', log the join message
 	socket.on('join', function (data) {
 		connected = true;
+
 		// Display the welcome message
 		var message = "Welcome to chatting room";
 		log(message, {
 			prepend: true
 		});
-		addParticipantsMessage(data);
+
+		displayPreviousMessages(data);
+		addParticipantsMessage(data);	
 	});
 
 	// Whenever the server emits 'new message', update the chat body
