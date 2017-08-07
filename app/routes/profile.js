@@ -110,7 +110,7 @@ router.post('/upload-photo', middlewares.isLoggedIn, function(req, res, next) {
 			var magicNumberInBody = data.toString('hex', 0, 4);
 			
 			if (!(magicNumberInBody == magic.jpg || magicNumberInBody == magic.png )) {				
-				req.flash('error', 'Invalid type');
+				req.flash('error', 'Invalid profile pictures');
 				res.redirect('/profile');
 				return;
 			}
