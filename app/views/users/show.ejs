@@ -1,20 +1,39 @@
-<h1>Users Profile</h1>
-
+<link rel="stylesheet" href="/stylesheets/userShow.css">
+<div class="page-header text-center">
+	<h1>
+	<span>U</span>
+	<span>s</span>
+	<span>e</span>
+	<span>r</span>
+	<span>s</span>
+	<span></span>
+	<span>P</span>
+  <span>r</span>
+  <span>o</span>
+  <span>f</span>
+  <span>i</span>
+  <span>l</span>
+  <span>e</span>
+  </h1>
+</div>
+<div class="well">
 <div class="row">
 	<div class="col-sm-6">
-		<div class="well">
 			<p>
-				<strong>username</strong>: <%= user.local.username %><br>
-				<strong>email</strong>: <%= user.local.email %><br>
+				<img src="/users/<%= user._id %>/img" class="avatar">
 			</p>
-		</div>
 	</div>
+	<div class="col-sm-6">
+		<p id="displayUsername"><strong>username</strong>: <%= user.local.username %></p>
+		<p id="displayEmail"><strong>email</strong>: <%= user.local.email %><br></p>
+	</div>
+</div>
 </div>
 
 <% if (currentUser == undefined) { %>
 	<p><strong><%= user.local.username %></strong> is on Dawn Of The Tanks.</p>
 	<p>
-		To connect with <strong><%= user.local.username %></strong>, 
+		To connect with <strong><%= user.local.username %></strong>,
 		<a href="/login?next=/users/<% user._id %>">login</a> or <a href="/signup">signup</a>
 	</p>
 <% } else if (user.friendRequests.includes(currentUser._id.toString())) { %>
@@ -25,8 +44,10 @@
 <% } else if (currentUser.friends.includes(user._id.toString()) &&
 			user.friends.includes(currentUser.id.toString())) { %>
 	<span id="remove-friend-btn" class="btn btn-danger">Unfriend</span>
+	<a href="/users/<%= user._id %>/chat"><span id="chat-req-btn" class="btn btn-info">Send Message</span></a>
 <% } else { %>
 	<span id="send-req-btn" class="btn btn-info">Send Friend Request</span>
+	<a href="/users/<%= user._id %>/chat"><span id="chat-req-btn" class="btn btn-info">Send Message</span></a>
 <% } %>
 
 <script type="text/javascript">
@@ -42,6 +63,15 @@
 			}
 		});
 	});
+	// $("#chat-req-btn").click(function() {
+	// 	$.ajax({
+	// 		url: "/users/<%= user._id %>/chat",
+	// 		type: 'GET',
+	// 		success: function() {
+	// 			location.reload();
+	// 		}
+	// 	});
+	// });
 
 	$("#cancel-req-btn").click(function() {
 		$.ajax({
