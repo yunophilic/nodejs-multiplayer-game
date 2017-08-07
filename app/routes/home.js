@@ -66,23 +66,23 @@ module.exports = function(passport) {
 	});
 
 	// process the signup form
-	router.post('/signup', function(req, res){
-    recaptcha.verify(req, function(error){
-        if(!error){
-            //success code
-						console.log('Pass Captcha');
-						passport.authenticate('local-signup', {
-						successRedirect : '/profile', // redirect to the secure profile section
-						failureRedirect : '/signup', // redirect back to the signup page if there is an error
-						badRequestMessage: 'All fields are required.',
-						failureFlash : { type: 'signupMessage' } // allow flash messages
-					});
-        }else{
-            //error code
-						console.log('Invalid Captcha');
-						res.redirect('/signup');
-    }})
-	});
+	router.post('/signup',
+		function(req, res, next){
+			recaptcha.verify(req, function(error){
+				if(error){
+					//error code
+								console.log('Invalid Captcha');
+								res.redirect('/signup');
+								return;
+					}
+								return next();
+			});},
+		passport.authenticate('local-signup', {
+				successRedirect : '/profile', // redirect to the secure profile section
+				failureRedirect : '/signup', // redirect back to the signup page if there is an error
+				badRequestMessage: 'All fields are required.',
+				failureFlash : { type: 'signupMessage' } // allow flash messages
+		}));
 
 
 	// =====================================
