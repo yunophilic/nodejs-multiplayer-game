@@ -16,7 +16,7 @@ p {
    line-height: 32px;
    text-shadow: 1px 0 0 #fff;
 }
-ul {
+#list {
   color: #605833;
   font-family: Enriqueta;
   font-size: 16px;
@@ -26,8 +26,8 @@ h3 {
   line-height: 22px;
   color: #666;
 }
-ol {
+#list2 {
   color: #605833;
   font-family: Enriqueta;
-  font-size: 16px;  
+  font-size: 16px;
 }
