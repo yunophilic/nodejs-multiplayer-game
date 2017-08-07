@@ -1,3 +1,5 @@
+<link rel="stylesheet" type="text/css" href="/stylesheets/search.css">
+
 <div class="page-header text-center">
 <h1>
 	<span>U</span>
@@ -7,14 +9,27 @@
 	<span>s</span>
 </h1>
 </div>
+
 <ng-view></ng-view>
 
 <!-- Template -->
 <script type="text/ng-template" id="/users.html">
-	Search: <input type="text" ng-model="search.local.username">
-	<ul>
-		<li ng-repeat="user in users | filter: search">
-			<a href="/users/{{user._id}}">{{user.local.username}}</a>
+	<div class="form-inline">
+		<label>Search: </label>
+		<input type="text" class="form-control" ng-model="search.local.username">
+	</div>
+	<ul class="users-list">
+		<li ng-repeat="user in users | filter: search" >
+		<br>
+			<img class="user-image" ng-src="/users/{{user._id}}/img"  >
+        <label class="name" >
+           <a href="/users/{{user._id}}">{{user.local.username}}</a>
+            
+        </label>
+        <label class="pull-right">
+           
+        </label>
+        <div class="break"></div>
 		</li>
 	</ul>
 </script>

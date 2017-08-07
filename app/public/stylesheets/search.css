@@ -1,0 +1,59 @@
+.list-content{
+ min-height:300px;
+}
+.list-content .list-group .title{
+  background:#5bc0de;
+  border:2px solid #DDDDDD;
+  font-weight:bold;
+  color:#FFFFFF;
+}
+
+/*.jumbotron .btn {
+	padding: 5px 5px !important;
+	font-size: 12px !important;
+}*/
+
+.prj-name {
+	color:#5bc0de;	
+}
+
+.break{
+	width:100%;
+	margin:20px;
+}
+
+.name {
+	color:#5bc0de;	
+}
+
+/*override bootstrap defaults to keep container small*/
+
+@media (min-width: 1200px) {
+	.container{
+		max-width: 750px;
+	}
+}
+
+@media (min-width: 992px) {
+	.container {
+		max-width: 970px;
+	}
+}
+@media (min-width: 768px) {
+	.container {
+		max-width: 750px;
+	}
+}
+
+.users-list {
+	list-style-type: none;
+}
+
+.user-image {
+	height:80px; 
+	width:80px;
+	border-top-left-radius: 50% 50%;
+	border-top-right-radius: 50% 50%;
+	border-bottom-right-radius: 50% 50%;
+	border-bottom-left-radius: 50% 50%;
+}

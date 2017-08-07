@@ -8,7 +8,7 @@ var helpers = require('../utils/helpers');
 var middlewares = require('../utils/middlewares');
 var router = express.Router();
 
-//models
+//mcsrfTokenodels
 var User = require('../models/user');
 
 //constants
