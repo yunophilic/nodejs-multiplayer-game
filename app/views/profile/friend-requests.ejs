@@ -31,15 +31,15 @@
 		<li ng-repeat="user in users | filter: search">
 			<br>
 			<img class="user-image" ng-src="/users/{{user._id}}/img"  >
-        <label class="name" >
-           <a href="/users/{{user._id}}">{{user.local.username}}</a>
-            
-        </label>
-        <label class="pull-right">
-            <a  class="btn btn-success btn-xs glyphicon glyphicon-ok" ng-click="accept(user._id)" title="Accept"></a>
-            <a  class="btn btn-danger  btn-xs glyphicon glyphicon-remove" ng-click="reject(user._id)" title="Reject"></a>
-        </label>
-        <div class="break"></div>
+		<label class="name" >
+		   <a href="/users/{{user._id}}">{{user.local.username}}</a>
+			
+		</label>
+		<label class="pull-right">
+			<a  class="btn btn-success btn-xs glyphicon glyphicon-ok" ng-click="accept(user._id)" title="Accept"></a>
+			<a  class="btn btn-danger  btn-xs glyphicon glyphicon-remove" ng-click="reject(user._id)" title="Reject"></a>
+		</label>
+		<div class="break"></div>
 		</li>
 	</ul>
 </script>
@@ -59,29 +59,25 @@
 				$scope.users = users;
 			});
 
-            $scope.accept = function (data) {
-                $http.put('/users/'+ data +'/accept', {_csrf: '<%= csrfToken %>'})
-                .then(function (data, status, headers) {
-                   location.reload();
-                      
-            })
-                .error(function (data, status, header, config) {
-                    alert("fail to accept")
-            });
-                
-            };
+			$scope.accept = function (data) {
+				$http.put('/users/'+ data +'/accept', {_csrf: '<%= csrfToken %>'})
+				.then(function (data, status, headers) {
+				   location.reload();
+				})
+				.error(function (data, status, header, config) {
+					alert("fail to accept");
+				});
+			};
 
-            $scope.reject = function (data) {
-                $http.put('/users/'+ data +'/reject', {_csrf: '<%= csrfToken %>'})
-                .then(function (data, status, headers) {
-                   location.reload();
-                      
-            })
-                .error(function (data, status, header, config) {
-                    alert("fail to reject")
-            });
-                
-            };
+			$scope.reject = function (data) {
+				$http.put('/users/'+ data +'/reject', {_csrf: '<%= csrfToken %>'})
+				.then(function (data, status, headers) {
+					location.reload();
+				})
+				.error(function (data, status, header, config) {
+					alert("fail to reject");
+				});
+			};
 
 		})
 
