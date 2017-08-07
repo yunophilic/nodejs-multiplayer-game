@@ -1,0 +1,31 @@
+.avatar {
+	height: 200px;
+    width: 200px;
+		border-top-left-radius: 50% 50%;
+  border-top-right-radius: 50% 50%;
+  border-bottom-right-radius: 50% 50%;
+  border-bottom-left-radius: 50% 50%;
+	margin-top: 25px;
+	margin-bottom: 25px;
+}
+#displayUsername{
+	margin-top: 100px;
+	color: #d54d7b;
+	font-family: "Great Vibes",
+	cursive; font-size: 35px;
+	line-height: 40px;
+	font-weight: normal;
+ 	text-align: center;
+	text-shadow: 0 1px 1px #fff;
+}
+#displayEmail{
+	margin-top: 20px;
+	color: #d54d7b;
+	font-family: "Great Vibes",
+	cursive; font-size: 35px;
+	line-height: 40px;
+	font-weight: normal;
+ 	text-align: center;
+	text-shadow: 0 1px 1px #fff;
+
+}
