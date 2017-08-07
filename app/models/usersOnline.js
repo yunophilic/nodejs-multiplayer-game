@@ -61,9 +61,10 @@ function updateUserDb(username, online) {
 			console.log('error retrieving user');
 			var err = new Error('Not Found');
 			err.status = 404;
-			return next(err);
+			return false;
 		}
 		user.online = online;
 		user.save();
+		return true;
 	});
 }

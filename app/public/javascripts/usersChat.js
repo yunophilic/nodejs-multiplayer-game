@@ -11,6 +11,8 @@ $(function() {
 
 	var CHAT_ROOM;
 	$.get(window.location.href, function(data) {
+		console.log('this');
+		console.log(data);
 		CHAT_ROOM = data.roomId;
 	}, 'json')
 
@@ -36,6 +38,18 @@ $(function() {
 	// var $currentInput = $usernameInput.focus();
 	var $currentInput;
 	var socket = io();
+
+	function displayPreviousMessages(data) {
+		var previousMessages = data.previousMessages;
+		if(previousMessages.length > 0) {
+			log('displaying previous messages (up to 50)');
+		} else {
+			log('no previous messages');
+		}
+		for(var i = 0; i < previousMessages.length; i++) {
+			addChatMessage(previousMessages[i]);
+		}
+	}
 
 	/*function addParticipantsMessage (data) {
 		var message = '';
@@ -252,11 +266,14 @@ $(function() {
 	// Whenever the server emits 'join', log the join message
 	socket.on('join', function (data) {
 		connected = true;
+
 		// Display the welcome message
 		var message = "Chatting with " + $("#friend-username").text();
 		log(message, {
 			prepend: true
 		});
+
+		displayPreviousMessages(data);
 	});
 
 	// Whenever the server emits 'new message', update the chat body
