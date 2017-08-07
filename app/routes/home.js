@@ -2,6 +2,7 @@ var express = require('express');
 var middlewares = require('../utils/middlewares');
 var mongoose = require('mongoose'); //mongo connection
 var router = express.Router();
+
 //var bodyParser = require('body-parser'); //parses information from POST
 //var methodOverride = require('method-override'); //used to manipulate POST
 
@@ -33,9 +34,9 @@ module.exports = function(passport) {
 	// show the login form
 	router.get('/login', function(req, res) {
 		// render the page and pass in any flash data if it exists
-		res.render('home/login', { 
+		res.render('home/login', {
 			next: req.query.next,
-			message: req.flash('loginMessage') 
+			message: req.flash('loginMessage')
 		});
 	});
 
