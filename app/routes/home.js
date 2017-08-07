@@ -71,7 +71,8 @@ module.exports = function(passport) {
 			recaptcha.verify(req, function(error){
 				if(error){
 					//error code
-								console.log('Invalid Captcha');
+								//res.render('home/signup', { message: req.flash('signupMessage','Invalid Captcha'), captcha:recaptcha.render() });
+								req.flash('signupMessage', 'Invalid reCaptcha');
 								res.redirect('/signup');
 								return;
 					}
