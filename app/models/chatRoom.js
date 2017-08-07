@@ -44,10 +44,10 @@ ChatRoom.prototype = {
 	},
 
 	saveMessage: function(username, message) {
-		console.log('saving new message');
+		/*console.log('saving new message');
 		console.log('room: ' + this.room);
 		console.log('username: ' + username);
-		console.log('message: ' + message);
+		console.log('message: ' + message);*/
 
 		//fails if username not found
 		if(!this.users[username]) {

@@ -41,13 +41,15 @@ $(function() {
 
 	function displayPreviousMessages(data) {
 		var previousMessages = data.previousMessages;
-		if(previousMessages.length > 0) {
-			log('displaying previous messages (up to 50)');
-		} else {
-			log('no previous messages');
-		}
 		for(var i = 0; i < previousMessages.length; i++) {
-			addChatMessage(previousMessages[i]);
+			addChatMessage(previousMessages[i], {
+				prepend: true
+			});
+		}
+		if(previousMessages.length > 0) {
+			log('displaying previous messages (up to 50)', {prepend: true});
+		} else {
+			log('no previous messages', {prepend: true});
 		}
 	}
 
@@ -266,14 +268,13 @@ $(function() {
 	// Whenever the server emits 'join', log the join message
 	socket.on('join', function (data) {
 		connected = true;
+		displayPreviousMessages(data);
 
 		// Display the welcome message
 		var message = "Chatting with " + $("#friend-username").text();
 		log(message, {
 			prepend: true
 		});
-
-		displayPreviousMessages(data);
 	});
 
 	// Whenever the server emits 'new message', update the chat body
