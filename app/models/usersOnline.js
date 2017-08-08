@@ -58,7 +58,7 @@ function updateUserDb(username, online) {
 	User.findOne({ 'local.username': username }, function(err, user) {
 		if(err || !user) {
 			//this generally shouldn't happen if username cannot be changed
-			console.log('error retrieving user');
+			/*console.log('error retrieving user');*/
 			var err = new Error('Not Found');
 			err.status = 404;
 			return false;

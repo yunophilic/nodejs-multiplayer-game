@@ -8,15 +8,15 @@ module.exports = function(socket, chatRooms) {
 	
 	// when the client emits 'new message', this listens and executes
 	socket.on('new message', function (message) {
-		console.log(message);
-		console.log(socket.room);
+		/*console.log(message);
+		console.log(socket.room);*/
 
 		if (!socket.room)
 			return;
 
 		// don't save in game messages
 		if(socket.room != 'game_chat') {
-			console.log('try saving');
+			/*console.log('try saving');*/
 			chatRooms[socket.room].saveMessage(socket.username, message);
 		}
 
@@ -32,7 +32,7 @@ module.exports = function(socket, chatRooms) {
 		if (addedUser)
 			return;
 
-		console.log('(' + data.username + ', ' + data.room + ')');
+		/*console.log('(' + data.username + ', ' + data.room + ')');*/
 
 		// store stuffs in the socket session for this client
 		socket.username = data.username;
@@ -43,7 +43,7 @@ module.exports = function(socket, chatRooms) {
 		
 		var chatRoom = chatRooms[socket.room];
 		if (!chatRoom) {
-			console.log('new room');
+			/*console.log('new room');*/
 			chatRooms[socket.room] = new ChatRoom(socket.room);
 			chatRoom = chatRooms[socket.room];
 		}
@@ -63,8 +63,8 @@ module.exports = function(socket, chatRooms) {
 		chatRoom.getMessages(function(err, chatLogs) {
 			var previousMessages = [];
 			if (!err) {
-				console.log('chat logs:')
-				console.log(chatLogs);
+				/*console.log('chat logs:')
+				console.log(chatLogs);*/
 				previousMessages = chatLogs;
 			}
 			
@@ -100,7 +100,7 @@ module.exports = function(socket, chatRooms) {
 	// when the user disconnects.. perform this
 	socket.on('disconnect', function () {
 		if (addedUser) {
-			console.log('disconnecting from chat');
+			/*console.log('disconnecting from chat');*/
 
 			var username = socket.username;
 			var room = socket.room;

@@ -156,7 +156,7 @@ module.exports = function(passport) {
 						return errorResponse(err);
 					}
 
-					console.log(updatedUser);
+					/*console.log(updatedUser);*/
 
 					var link = 'http://'+ req.get('host') + '/reset-password?token=' + encodeURIComponent(token);
 					mailer.sendMail({
@@ -178,7 +178,7 @@ module.exports = function(passport) {
 
 	router.get('/reset-password', function(req, res) {
 		var token = req.query.token;
-		console.log('token: ' + token);
+		/*console.log('token: ' + token);*/
 		User.findOne({
 			'resetPassword.token': token,
 			'resetPassword.expiry': { $gt: Date.now() }

@@ -1,5 +1,5 @@
-var DEBUG = true;
-var INTERVAL = 50;
+var DEBUG = false;
+var INTERVAL = 50; //speed of animation
 var ROTATION_SPEED = 5;
 var ARENA_MARGIN = 30;
 

@@ -14,11 +14,8 @@ module.exports = function (app, server) {
 	app.set('io', io);
 
 	//global objects
-
 	var usersOnline = new UsersOnline();
-
 	var chatRooms = {};
-	
 	var gameRoom = new GameRoom();
 
 	io.on('connection', function (socket) {
