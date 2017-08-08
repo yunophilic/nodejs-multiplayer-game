@@ -113,8 +113,9 @@ module.exports = function(passport) {
 		passwordField : 'password',
 		passReqToCallback : true // allows us to pass back the entire request to the callback
 	},
-	function(req, usernameOrEmail, password, done) { // callback with email and password from our form
-		// find a user whose email is the same as the forms email
+	function(req, usernameOrEmail, password, done) { 
+		// callback with usernameOrEmail and password from our form
+		// find a user whose username or email is the same as the forms data
 		// we are checking to see if the user trying to login already exists
 		User.findOne({ $or: [
 			{'local.username': usernameOrEmail},

@@ -19,7 +19,7 @@ module.exports = function(socket, usersOnline) {
 		console.log(username + ' go offline');
 
 		if (!usersOnline.removeUser(username)) {
-			console.log('fail');
+			/*console.log('fail');*/
 			return; //exit if fail
 		}
 

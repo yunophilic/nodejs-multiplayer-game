@@ -50,7 +50,8 @@ app.use(cookieParser());
 app.use(csrf({ cookie: true }));
 
 //authentation setup
-app.use(session({ secret: 'secret' })); // session secret - need to modify it later
+var sessionConfig = require('./config/session');
+app.use(session(sessionConfig)); // session secret - need to modify it later
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
