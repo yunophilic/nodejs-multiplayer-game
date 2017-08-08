@@ -82,7 +82,7 @@ $(function() {
 	// Sends a chat message
 	function sendMessage () {
 		var message = $inputMessage.val();
-		console.log(message);
+		/*console.log(message);*/
 		// Prevent markup from being injected into the message
 		message = cleanInput(message);
 		// if there is a non-empty message and a socket connection

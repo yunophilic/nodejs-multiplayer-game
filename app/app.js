@@ -42,7 +42,7 @@ app.set('layout', 'layouts/layout');
 app.use(expressLayouts);
 
 // uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -51,7 +51,7 @@ app.use(csrf({ cookie: true }));
 
 //authentation setup
 var sessionConfig = require('./config/session');
-app.use(session(sessionConfig)); // session secret - need to modify it later
+app.use(session(sessionConfig)); // session secret - modified
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
@@ -86,13 +86,15 @@ app.use(function(req, res, next) {
 
 // error handler
 app.use(function(err, req, res, next) {
-	console.log('ERROR HAPPEN');
+	/*console.log('ERROR HAPPEN');
 	console.log(err.message);
-	console.log(err);
+	console.log(err);*/
 
 	// set locals, only providing error in development
 	res.locals.message = err.message;
-	res.locals.error = req.app.get('env') === 'development' ? err : {};
+	res.locals.error = req.app.get('env') === 'development' ? err : {
+		status: err.status //only display status code if not dev env
+	};
 	//required to prevent "esc is not a function" error
 	res.locals.loggedIn = req.isAuthenticated();
 

@@ -73,12 +73,12 @@ router.get('/friends', middlewares.isLoggedIn, function(req, res, next) {
 			});
 		},
 		json: function() {
-			console.log(req.user.friends);
+			/*console.log(req.user.friends);*/
 			User.find({ _id: { $in: req.user.friends } }, function(err, users) {
 				if (err) {
 					return next(err);
 				} else {
-					console.log(users);
+					/*console.log(users);*/
 					res.json(users);
 				}
 			});
@@ -91,7 +91,7 @@ router.get('/settings', middlewares.isLoggedIn, function(req, res, next) {
 });
 
 router.put('/settings', middlewares.isLoggedIn, function(req, res, next) {
-	console.log('saving settings');
+	/*console.log('saving settings');*/
 
 	var sidePanelFlag = req.body.sidePanelFlag;
 	var bgmFlag = req.body.bgmFlag;

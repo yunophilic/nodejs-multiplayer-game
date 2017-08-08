@@ -11,8 +11,8 @@ $(function() {
 
 	var CHAT_ROOM;
 	$.get(window.location.href, function(data) {
-		console.log('this');
-		console.log(data);
+		/*console.log('this');
+		console.log(data);*/
 		CHAT_ROOM = data.roomId;
 	}, 'json')
 
@@ -85,7 +85,7 @@ $(function() {
 	// Sends a chat message
 	function sendMessage () {
 		var message = $inputMessage.val();
-		console.log(message);
+		/*console.log(message);*/
 		// Prevent markup from being injected into the message
 		message = cleanInput(message);
 		// if there is a non-empty message and a socket connection

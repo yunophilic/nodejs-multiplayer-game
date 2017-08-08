@@ -156,7 +156,7 @@ module.exports = function(passport) {
 						return errorResponse(err);
 					}
 
-					console.log(updatedUser);
+					/*console.log(updatedUser);*/
 
 					var link = 'http://'+ req.get('host') + '/reset-password?token=' + encodeURIComponent(token);
 					mailer.sendMail({
@@ -178,7 +178,7 @@ module.exports = function(passport) {
 
 	router.get('/reset-password', function(req, res) {
 		var token = req.query.token;
-		console.log('token: ' + token);
+		/*console.log('token: ' + token);*/
 		User.findOne({
 			'resetPassword.token': token,
 			'resetPassword.expiry': { $gt: Date.now() }
@@ -204,7 +204,7 @@ module.exports = function(passport) {
 		var tokenEncr = req.session['token'];
 		if(!tokenEncr) {
 			req.flash('error', 'Session expired. Please retry.');
-			res.redirect('/login');
+			res.redirect('back');
 			return;
 		}
 
@@ -238,7 +238,7 @@ module.exports = function(passport) {
 			user.save(function(err) {
 				if(err) {
 					req.flash('error', err.message);
-					res.redirect('/login');
+					res.redirect('back');
 					return;
 				}
 

@@ -131,7 +131,7 @@
 /* Custom Styles */
 
 .online-indicator {	
-	content: url(/img/online-indicator.png); /*https://www.iconfinder.com/icons/34211/green_icon#size=128*/
+	content: url(/img/online-indicator.png);
 	height: 12px;
 	width: 12px;
 	display: inline;
