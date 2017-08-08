@@ -204,7 +204,7 @@ module.exports = function(passport) {
 		var tokenEncr = req.session['token'];
 		if(!tokenEncr) {
 			req.flash('error', 'Session expired. Please retry.');
-			res.redirect('/login');
+			res.redirect('back');
 			return;
 		}
 
@@ -238,7 +238,7 @@ module.exports = function(passport) {
 			user.save(function(err) {
 				if(err) {
 					req.flash('error', err.message);
-					res.redirect('/login');
+					res.redirect('back');
 					return;
 				}
 
