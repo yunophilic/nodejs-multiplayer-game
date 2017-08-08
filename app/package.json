@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "forever start ./bin/www"
+    "start": "cross-env NODE_ENV=production forever start ./bin/www"
   },
   "dependencies": {
     "angular": "^1.6.5",
@@ -37,5 +37,8 @@
     "serve-favicon": "~2.4.2",
     "socket.io": "^2.0.3",
     "xoauth2": "^1.2.0"
+  },
+  "devDependencies": {
+    "cross-env": "^5.0.4"
   }
 }
