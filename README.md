@@ -18,3 +18,4 @@ References:
 - https://github.com/socketio/socket.io/blob/master/examples/chat/index.js
 - https://startbootstrap.com/template-overviews/simple-sidebar/
 - https://www.flaticon.com/free-icon/user_149071#term=avatar&page=1&position=3 (default user avatar)
+- http://www.bensound.com/royalty-free-music/track/epic (BGM)
