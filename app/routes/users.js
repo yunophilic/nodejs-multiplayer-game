@@ -320,4 +320,32 @@ router.get('/:id/chat', middlewares.isLoggedIn, function(req, res) {
 	});
 });
 
+
+
+router.get('/:id/mutual', function(req, res) {
+	User.findById(req.id, function (err, user) {
+		if (err) {
+			next(err);
+		} 
+		else {
+			var currentUser = req.user;
+			var mutual_friend = [];
+
+           for (var i = 0; i < user.friends.length; i++) {
+                  if (req.user.friends.indexOf(user.friends[i]) !== -1) {
+                  mutual_friend.push(user.friends[i]);
+              }
+
+        }
+        console.log(mutual_friend.length);
+			res.format({
+				json: function(){
+					res.json(mutual_friend);
+				}
+			});
+		}
+	});
+});
+
+
 module.exports = router;

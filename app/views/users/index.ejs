@@ -24,11 +24,11 @@
 			<img class="user-image" ng-src="/users/{{user._id}}/img"  >
         <label class="name" >
            <a href="/users/{{user._id}}">{{user.local.username}}</a>
-            
+           <label style="margin-left: 400px;" ng-init="getMutual(user._id)">Mutual Friend(s): {{mutual}}</label>  
+
+          
         </label>
-        <label class="pull-right">
            
-        </label>
         <div class="break"></div>
 		</li>
 	</ul>
@@ -48,6 +48,19 @@
 				var users = response.data;
 				$scope.users = users;
 			});
+
+			$scope.getMutual = function (data) {
+				$http.get('/users/'+ data +'/mutual', {_csrf: '<%= csrfToken %>'})
+				.then(function (result) {
+				 
+                        $scope.mutual = result["data"].length;
+
+				})
+				.error(function (data, status, header, config) {
+					alert("fail to load");
+				});
+			};
+
 		})
 
 		//---------------
