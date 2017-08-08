@@ -290,7 +290,6 @@ router.get('/:id/chat', middlewares.isLoggedIn, function(req, res) {
 			},
 			json: function() {
 				if (!isConnected) {
-					res.status = 403;
 					res.json({
 						status: 403,
 						message: 'Not Connected'
@@ -299,15 +298,6 @@ router.get('/:id/chat', middlewares.isLoggedIn, function(req, res) {
 
 				var username1 = currentUser.local.username;
 				var username2 = user.local.username;
-				
-				/*if (!username1 || !username2){
-					res.status = 400;
-					res.json({
-						status: 400, 
-						message: 'Bad Input'
-					});
-					return;
-				}*/
 
 				//sort to disregard order
 				var x = [username1, username2];

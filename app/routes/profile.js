@@ -64,7 +64,6 @@ router.get('/friend-requests-num', middlewares.isLoggedIn, function(req, res) {
 	});
 });
 
-
 router.get('/friends', middlewares.isLoggedIn, function(req, res, next) {
 	res.format({
 		html: function() {
@@ -84,6 +83,33 @@ router.get('/friends', middlewares.isLoggedIn, function(req, res, next) {
 				}
 			});
 		}
+	});
+});
+
+router.get('/settings', middlewares.isLoggedIn, function(req, res, next) {
+	res.json(req.user.settings);
+});
+
+router.put('/settings', middlewares.isLoggedIn, function(req, res, next) {
+	console.log('saving settings');
+
+	var sidePanelFlag = req.body.sidePanelFlag;
+	var bgmFlag = req.body.bgmFlag;
+	var user = req.user;
+	
+	if (sidePanelFlag !== undefined) {
+		user.settings.sidePanelFlag = sidePanelFlag;
+	}
+
+	if (bgmFlag !== undefined) {
+		user.settings.bgmFlag = bgmFlag;
+	}
+
+	user.save(function(err, user) {
+		if(err) {
+			next(err);
+		}
+		res.json(user.settings);
 	});
 });
 

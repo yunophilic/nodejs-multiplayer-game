@@ -68,6 +68,11 @@ var userSchema = mongoose.Schema({
 	friends: [String],
     friendRequests: [String],
 
+    settings: {
+        sidePanelFlag: Boolean,
+        bgmFlag: Boolean
+    }
+
     /*img: {
         data: Buffer,
         contentType: String
