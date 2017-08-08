@@ -8,9 +8,9 @@ To start the server, just pull the repo and type vagrant up.
 - User registration (with recaptcha to prevent bots from registering)
 - User avatar upload (with validation preventing upload of 'virus.exe' renamed to 'cat.png')
 - Forgot password
-- Main game (Free Roam game mode)
+- Main game with chat (Free Roam game mode)
 - User's location displayed on tank with google maps API
-- General chat
+- General chat room
 - Friendship system
 - See online friends (on side panel, online friends marked with green circle icon)
 - Chat with friends
