@@ -122,13 +122,13 @@ module.exports = function(passport) {
 			{'local.email' :  usernameOrEmail.toLowerCase() }
 		] }, function(err, user) {
 			var successResponse = function (req, res) {
-				var msg = 'If that email address exists in our database, we have emailed that address with the reset password link.';
+				var msg = 'If the specified user exists in our database and the associated email address is valid, we have sent the reset password link to that address.';
 				req.flash('success', msg);
 				res.redirect('/login');
 			}
 
 			var errorResponse = function (err) {
-				req.flash('success', err.message);
+				req.flash('error', err.message);
 				res.redirect('/login');
 			}
 
@@ -142,7 +142,17 @@ module.exports = function(passport) {
 			}
 
 			//reset password token
-			crypto.randomBytes(32, function(ex, buf) {
+			crypto.randomBytes(32, function(err, buf) {
+				if (err) {
+					//for security reasons don't show why random token generation fails
+					//instead just create a generic error message saying that it fails
+					var error = new Error();
+					error.status = 500;
+					error.message = 'Fail to generate reset password token';
+					return errorResponse(error);
+				}
+
+				//user id used to ensure token uniqeness
 				//it's fine to make user id public since
 				//it has been public in /users
 				var token = buf.toString('base64') + 
