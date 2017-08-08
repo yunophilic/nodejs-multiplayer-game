@@ -27,6 +27,7 @@
     "mongoose": "^4.11.3",
     "morgan": "~1.8.1",
     "mv": "^2.1.1",
+    "nodemailer": "^4.0.1",
     "passport": "~0.1.17",
     "passport-facebook": "~1.0.2",
     "passport-google-oauth": "~0.1.5",
@@ -34,6 +35,7 @@
     "passport-twitter": "~1.0.2",
     "path": "^0.12.7",
     "serve-favicon": "~2.4.2",
-    "socket.io": "^2.0.3"
+    "socket.io": "^2.0.3",
+    "xoauth2": "^1.2.0"
   }
 }

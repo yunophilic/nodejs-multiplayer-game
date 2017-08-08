@@ -1,12 +1,20 @@
 var express = require('express');
 var middlewares = require('../utils/middlewares');
-var mongoose = require('mongoose'); //mongo connection
 var router = express.Router();
-var recaptcha = require('express-recaptcha');
 
-recaptcha.init('6LcI_isUAAAAACY6t0i1eOmDRv0M9cX_LTYohj8-', '6LcI_isUAAAAAA7kPI3vNH3IsvjHNTVPR1wDRei6');
-//var bodyParser = require('body-parser'); //parses information from POST
-//var methodOverride = require('method-override'); //used to manipulate POST
+//models
+var User = require('../models/user');
+
+//recaptcha setup
+var recaptcha = require('express-recaptcha');
+var recaptchaConfig = require('../config/recaptcha');
+recaptcha.init(recaptchaConfig.siteKey, recaptchaConfig.secretKey);
+
+//mailer setup
+var nodemailer = require('nodemailer');
+var mailerConfig = require('../config/mailer');
+var mailer = nodemailer.createTransport(mailerConfig);
+/*console.log(mailer);*/
 
 module.exports = function(passport) {
 	// =====================================
@@ -66,24 +74,27 @@ module.exports = function(passport) {
 	});
 
 	// process the signup form
-	router.post('/signup',
+	router.post(
+		'/signup',
 		function(req, res, next){
 			recaptcha.verify(req, function(error){
 				if(error){
 					//error code
-								//res.render('home/signup', { message: req.flash('signupMessage','Invalid Captcha'), captcha:recaptcha.render() });
-								req.flash('signupMessage', 'Invalid reCaptcha');
-								res.redirect('/signup');
-								return;
-					}
-								return next();
-			});},
+					//res.render('home/signup', { message: req.flash('signupMessage','Invalid Captcha'), captcha:recaptcha.render() });
+					req.flash('signupMessage', 'Invalid reCaptcha');
+					res.redirect('/signup');
+					return;
+				}
+				return next();
+			});
+		},
 		passport.authenticate('local-signup', {
-				successRedirect : '/profile', // redirect to the secure profile section
-				failureRedirect : '/signup', // redirect back to the signup page if there is an error
-				badRequestMessage: 'All fields are required.',
-				failureFlash : { type: 'signupMessage' } // allow flash messages
-		}));
+			successRedirect : '/profile', // redirect to the secure profile section
+			failureRedirect : '/signup', // redirect back to the signup page if there is an error
+			badRequestMessage: 'All fields are required.',
+			failureFlash : { type: 'signupMessage' } // allow flash messages
+		})
+	);
 
 
 	// =====================================
@@ -94,5 +105,59 @@ module.exports = function(passport) {
 		res.redirect('/login');
 	});
 
+	// =====================================
+	// FORGOT PASSWORD =====================
+	// =====================================
+	router.get('/forgot-password', function(req, res) {
+		res.render('home/forgot-password');
+	});
+
+	//send reset password link
+	router.post('/forgot-password', function(req, res, next) {
+		var usernameOrEmail = req.body.usernameOrEmail;
+		User.findOne({ $or: [
+			{'local.username': usernameOrEmail},
+			{'local.email' :  usernameOrEmail.toLowerCase() }
+		] }, function(err, user) {
+			var successResponse = function (req, res) {
+				var msg = 'If that email address exists in our database, we have emailed that address with the reset password link.';
+				req.flash('success', msg);
+				res.redirect('/login');
+			}
+
+			var errorResponse = function (err) {
+				req.flash('success', err.message);
+				res.redirect('/login');
+			}
+
+			if (err) {
+				return errorResponse(err);
+			}
+
+			if (!user) {
+				return successResponse(req, res);
+			}
+
+			var token = 'dummy';
+			mailer.sendMail({
+				from: 'Dawn of the Tanks <dott@gmail.com>',
+				to: user.local.email,
+				subject: 'Reset Password Link',
+				text: 'test'
+			}, function (err) {
+				if (err) {
+					// handle error 
+					console.log(err);
+					res.send('There was an error sending the email');
+					return;
+				}
+				
+				//either user found or not display success message
+				successResponse(req, res);
+			});
+		});
+	});
+
 	return router;
 };
+
