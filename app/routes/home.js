@@ -170,7 +170,7 @@ module.exports = function(passport) {
 
 					var link = 'http://'+ req.get('host') + '/reset-password?token=' + encodeURIComponent(token);
 					mailer.sendMail({
-						from: 'Dawn of the Tanks',
+						from: 'Dawn of the Tanks <cmpt470.summer2017@gmail.com>',
 						to: user.local.email,
 						subject: 'Reset Password Link',
 						text: 'Reset password link: ' + link
@@ -244,7 +244,11 @@ module.exports = function(passport) {
 				return;
 			}
 
+			//change pwd and clear reset password token and expiry on db
 			user.local.password = newPassword;
+			user.resetPassword.token = null;
+			user.resetPassword.expiry = null;
+
 			user.save(function(err) {
 				if(err) {
 					req.flash('error', err.message);
