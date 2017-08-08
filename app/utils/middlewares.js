@@ -10,7 +10,6 @@ module.exports = {
 				res.redirect('/login?next=' + req.originalUrl);
 			},
 			json: function() {
-				res.status = 403;
 				res.json({
 					status: 403,
 					message: 'Must be logged in.'
