@@ -122,7 +122,7 @@ module.exports = function(passport) {
 			{'local.email' :  usernameOrEmail.toLowerCase() }
 		] }, function(err, user) {
 			var successResponse = function (req, res) {
-				var msg = 'If that email address exists in our database, we have emailed that address with the reset password link.';
+				var msg = 'If the specified user exists in our database and the associated email address is valid, we have sent the reset password link to that address.';
 				req.flash('success', msg);
 				res.redirect('/login');
 			}

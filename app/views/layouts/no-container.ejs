@@ -7,10 +7,12 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta content="<%= csrfToken %>" name="csrfToken">
 
-		<!-- bootstrap and jquery css and js-->
+		<!-- bootstrap, jquery and angular -->
 		<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
 		<script src="/jquery/jquery.min.js"></script>
 		<script src="/bootstrap/js/bootstrap.min.js"></script>
+		<script src="/angular/angular.min.js"></script>
+		<script src="/angular-route/angular-route.min.js"></script>
 
 		<!-- custom css and js -->
 		<link rel="stylesheet" href="/stylesheets/style.css" />
@@ -18,8 +20,7 @@
 		<link rel="stylesheet" href="/stylesheets/sidebar.css" />
 		<%- style %>
 		<script src="/javascripts/navbar.js"></script>
-		<script src="/angular/angular.min.js"></script>
-		<script src="/angular-route/angular-route.min.js"></script>
+		<script src="/javascripts/script.js"></script>
 	</head>
 	<body>
 		<% include _navbar %>
