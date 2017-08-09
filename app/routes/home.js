@@ -188,7 +188,13 @@ module.exports = function(passport) {
 
 	router.get('/reset-password', function(req, res) {
 		var token = req.query.token;
-		/*console.log('token: ' + token);*/
+		
+		if (!token) {
+			req.flash('error', 'Token invalid or expired.');
+			res.redirect('/login');
+			return;
+		}
+
 		User.findOne({
 			'resetPassword.token': token,
 			'resetPassword.expiry': { $gt: Date.now() }
