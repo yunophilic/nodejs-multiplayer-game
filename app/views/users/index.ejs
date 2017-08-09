@@ -17,18 +17,18 @@
 	<div class="form-inline">
 		<label>Search: </label>
 		<input type="text" class="form-control" ng-model="search.local.username">
+		<label ng-if="isLogged1()">(Login to see number of mutual friend(s))</label>
 	</div>
 	<ul class="users-list">
 		<li ng-repeat="user in users | filter: search" >
 		<br>
 			<img class="user-image" ng-src="/users/{{user._id}}/img"  >
         <label class="name" >
-           <a href="/users/{{user._id}}">{{user.local.username}}</a>
-            
+			<a href="/users/{{user._id}}">{{user.local.username}}</a>
+			&nbsp;
+			<label class="pull-right" ng-if="isLogged()" ng-bind="{{'mutual' +user._id}}" ng-init="getMutual(user._id)">{{$scope.id}}</label>  
         </label>
-        <label class="pull-right">
            
-        </label>
         <div class="break"></div>
 		</li>
 	</ul>
@@ -48,6 +48,45 @@
 				var users = response.data;
 				$scope.users = users;
 			});
+
+			$http.get('profile/username', {
+				headers: {
+					'Accept': 'application/json'
+				}
+			}).then(function(response) {
+				     if(response.data.status == 403){
+				         $scope.isLogged = function(){
+                             return false;
+                           };
+
+                           $scope.isLogged1 = function(){
+                             return true;
+                           };
+				     }else{
+                         $scope.isLogged = function(){
+                             return true;
+                           };
+                         $scope.isLogged1 = function(){
+                             return false;
+                           };
+				}
+			});
+
+			$scope.getMutual = function (data) {
+				$http.get('/users/'+ data +'/mutual', {_csrf: '<%= csrfToken %>'})
+				.then(function (result) {
+				        var output = "mutual" + data;
+				        if(result["data"] == "It's yourself") {
+                            $scope[output] = result["data"].toString();
+				        }
+				        else {
+				           $scope[output] = '[ ' + result["data"].length + " Mutual Friend(s)" + ' ]';
+				        }
+                        
+
+				})
+			};
+
 		})
 
 		//---------------
