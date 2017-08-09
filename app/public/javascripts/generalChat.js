@@ -7,6 +7,8 @@ $(function() {
 		'#3b88eb', '#3824aa', '#a700ff', '#d300e7'
 	];
 	
+	// Initialize variables
+
 	const CHAT_ROOM = 'general_chat';
 
 	var chatname;
@@ -14,8 +16,6 @@ $(function() {
 		chatname = data.username;
 	});
 	
-	// Initialize variables
-
 	var $window = $(window);
 	// var $usernameInput = $('.usernameInput'); // Input for username
 
@@ -33,6 +33,20 @@ $(function() {
 	// var $currentInput = $usernameInput.focus();
 	var $currentInput;
 	var socket = io();
+
+	function displayPreviousMessages(data) {
+		var previousMessages = data.previousMessages;
+		for(var i = 0; i < previousMessages.length; i++) {
+			addChatMessage(previousMessages[i], {
+				prepend: true
+			});
+		}
+		if(previousMessages.length > 0) {
+			log('displaying previous messages (up to 50)', {prepend: true});
+		} else {
+			log('no previous messages', {prepend: true});
+		}
+	}
 
 	function addParticipantsMessage (data) {
 		var message = '';
@@ -68,7 +82,7 @@ $(function() {
 	// Sends a chat message
 	function sendMessage () {
 		var message = $inputMessage.val();
-		console.log(message);
+		/*console.log(message);*/
 		// Prevent markup from being injected into the message
 		message = cleanInput(message);
 		// if there is a non-empty message and a socket connection
@@ -251,12 +265,15 @@ $(function() {
 	// Whenever the server emits 'join', log the join message
 	socket.on('join', function (data) {
 		connected = true;
+		displayPreviousMessages(data);
+		
 		// Display the welcome message
 		var message = "Welcome to chatting room";
 		log(message, {
 			prepend: true
 		});
-		addParticipantsMessage(data);
+
+		addParticipantsMessage(data);	
 	});
 
 	// Whenever the server emits 'new message', update the chat body

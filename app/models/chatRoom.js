@@ -1,8 +1,9 @@
 var User = require('../models/user');
 var ChatLog = require('../models/chatLog');
 
-function ChatRoom(){
-	this.users = {}; //hash table of (username, tabs) entry to handle multiple tabs
+function ChatRoom(room) {
+	this.room = room; // room identifier
+	this.users = {}; // hash table of (username, tabs) entry to handle multiple tabs
 }
 
 ChatRoom.prototype = {
@@ -42,13 +43,31 @@ ChatRoom.prototype = {
 		return Object.keys(this.users).length;
 	},
 
-	saveMessage: function(room, username, message) {
-		console.log('saving new message');
+	saveMessage: function(username, message) {
+		/*console.log('saving new message');
+		console.log('room: ' + this.room);
+		console.log('username: ' + username);
+		console.log('message: ' + message);*/
+
+		//fails if username not found
+		if(!this.users[username]) {
+			return false;
+		}
+
 		var chatLog = new ChatLog();
-		chatLog.room = room;
-		chatLog.senderUsername = username;
-		chatLog.content = message;
+		chatLog.room = this.room;
+		chatLog.username = username;
+		chatLog.message = message;
 		chatLog.save();
+		return true;
+	},
+
+	//have to use callback func since mongoose doesn't support synchronous calls
+	getMessages: function(callback) {
+		//reference: https://stackoverflow.com/questions/5830513/how-do-i-limit-the-number-of-returned-items
+		ChatLog.find({
+			room: this.room
+		}).sort({timestamp: -1}).limit(50).exec(callback);
 	}
 };
 

@@ -16,7 +16,7 @@ $(document).ready(function() {
 	});
 	
 	$.get('/profile/username', function(data) {
-		console.log(data);
+		//console.log(data);
 		if(data.status == 403) {
 			return;
 		}

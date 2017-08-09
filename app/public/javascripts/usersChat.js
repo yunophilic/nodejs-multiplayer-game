@@ -11,6 +11,8 @@ $(function() {
 
 	var CHAT_ROOM;
 	$.get(window.location.href, function(data) {
+		/*console.log('this');
+		console.log(data);*/
 		CHAT_ROOM = data.roomId;
 	}, 'json')
 
@@ -36,6 +38,20 @@ $(function() {
 	// var $currentInput = $usernameInput.focus();
 	var $currentInput;
 	var socket = io();
+
+	function displayPreviousMessages(data) {
+		var previousMessages = data.previousMessages;
+		for(var i = 0; i < previousMessages.length; i++) {
+			addChatMessage(previousMessages[i], {
+				prepend: true
+			});
+		}
+		if(previousMessages.length > 0) {
+			log('displaying previous messages (up to 50)', {prepend: true});
+		} else {
+			log('no previous messages', {prepend: true});
+		}
+	}
 
 	/*function addParticipantsMessage (data) {
 		var message = '';
@@ -69,7 +85,7 @@ $(function() {
 	// Sends a chat message
 	function sendMessage () {
 		var message = $inputMessage.val();
-		console.log(message);
+		/*console.log(message);*/
 		// Prevent markup from being injected into the message
 		message = cleanInput(message);
 		// if there is a non-empty message and a socket connection
@@ -252,6 +268,8 @@ $(function() {
 	// Whenever the server emits 'join', log the join message
 	socket.on('join', function (data) {
 		connected = true;
+		displayPreviousMessages(data);
+
 		// Display the welcome message
 		var message = "Chatting with " + $("#friend-username").text();
 		log(message, {

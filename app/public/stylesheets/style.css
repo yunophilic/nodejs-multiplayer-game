@@ -77,15 +77,12 @@ img {
     max-width: 100%;
     height: auto;
 }
+
 #bgm{
   display: none;
   text-align: center;
 }
-#bg-music{
-  width: 300px;
-  height: 33px;
 
-}
 #buttonarea{
   margin-top: 100px;
   margin-bottom: 100px;
@@ -99,4 +96,8 @@ img {
   border-top-right-radius: 50% 50%;
   border-bottom-right-radius: 50% 50%;
   border-bottom-left-radius: 50% 50%;
+}
+
+.tooltip-help:hover {
+  color: #337ab7
 }

@@ -8,7 +8,7 @@ var helpers = require('../utils/helpers');
 var middlewares = require('../utils/middlewares');
 var router = express.Router();
 
-//mcsrfTokenodels
+//models
 var User = require('../models/user');
 
 //constants
@@ -35,7 +35,7 @@ router.get('/username', middlewares.isLoggedIn, function(req, res) {
 	res.json({username: req.user.local.username});
 });
 
-router.get('/friend-requests', middlewares.isLoggedIn, function(req, res) {
+router.get('/friend-requests', middlewares.isLoggedIn, function(req, res, next) {
 	res.format({
 		html: function() {
 			res.render('profile/friend-requests', {
@@ -46,7 +46,7 @@ router.get('/friend-requests', middlewares.isLoggedIn, function(req, res) {
 		json: function() {
 			User.find({ _id: { $in: req.user.friendRequests } }, function(err, users) {
 				if (err) {
-					return console.error(err);
+					return next(err);
 				} else {
 					res.json(users);
 				}
@@ -64,8 +64,7 @@ router.get('/friend-requests-num', middlewares.isLoggedIn, function(req, res) {
 	});
 });
 
-
-router.get('/friends', middlewares.isLoggedIn, function(req, res) {
+router.get('/friends', middlewares.isLoggedIn, function(req, res, next) {
 	res.format({
 		html: function() {
 			res.render('profile/friends', {
@@ -74,16 +73,43 @@ router.get('/friends', middlewares.isLoggedIn, function(req, res) {
 			});
 		},
 		json: function() {
-			console.log(req.user.friends);
+			/*console.log(req.user.friends);*/
 			User.find({ _id: { $in: req.user.friends } }, function(err, users) {
 				if (err) {
-					return console.error(err);
+					return next(err);
 				} else {
-					console.log(users);
+					/*console.log(users);*/
 					res.json(users);
 				}
 			});
 		}
+	});
+});
+
+router.get('/settings', middlewares.isLoggedIn, function(req, res, next) {
+	res.json(req.user.settings);
+});
+
+router.put('/settings', middlewares.isLoggedIn, function(req, res, next) {
+	/*console.log('saving settings');*/
+
+	var sidePanelFlag = req.body.sidePanelFlag;
+	var bgmFlag = req.body.bgmFlag;
+	var user = req.user;
+	
+	if (sidePanelFlag !== undefined) {
+		user.settings.sidePanelFlag = sidePanelFlag;
+	}
+
+	if (bgmFlag !== undefined) {
+		user.settings.bgmFlag = bgmFlag;
+	}
+
+	user.save(function(err, user) {
+		if(err) {
+			next(err);
+		}
+		res.json(user.settings);
 	});
 });
 
@@ -110,7 +136,7 @@ router.post('/upload-photo', middlewares.isLoggedIn, function(req, res, next) {
 			var magicNumberInBody = data.toString('hex', 0, 4);
 			
 			if (!(magicNumberInBody == magic.jpg || magicNumberInBody == magic.png )) {				
-				req.flash('error', 'Invalid type');
+				req.flash('error', 'Invalid profile pictures');
 				res.redirect('/profile');
 				return;
 			}

@@ -1,0 +1,38 @@
+h2 {
+  color: #a7e8f8;
+  font-family: 'Julius Sans One',sans-serif;
+  font-size: 24px;
+  font-weight: bold;
+  line-height: 32px;
+  text-shadow: 1px 1px 1px #082b34;
+}
+
+
+p {
+   color: #2CA4B0;
+   font-family: 'Oleo Script', cursive;
+   font-size: 20px;
+   font-weight: normal;
+   line-height: 32px;
+   text-shadow: 1px 0 0 #fff;
+}
+#list {
+  color: #605833;
+  font-family: Enriqueta;
+  font-size: 16px;
+}
+h3 {
+  font-family: 'Inder', sans-serif;
+  line-height: 22px;
+  color: #666;
+}
+#list2 {
+  color: #605833;
+  font-family: Enriqueta;
+  font-size: 16px;
+}
+#acknowledgements {
+  color: #605833;
+  font-family: Enriqueta;
+  font-size: 16px;
+}

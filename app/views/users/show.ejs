@@ -44,10 +44,9 @@
 <% } else if (currentUser.friends.includes(user._id.toString()) &&
 			user.friends.includes(currentUser.id.toString())) { %>
 	<span id="remove-friend-btn" class="btn btn-danger">Unfriend</span>
-	<a href="/users/<%= user._id %>/chat"><span id="chat-req-btn" class="btn btn-info">Send Message</span></a>
+	<a href="/users/<%= user._id %>/chat"><span id="chat-req-btn" class="btn btn-warning">Send Message</span></a>
 <% } else { %>
 	<span id="send-req-btn" class="btn btn-info">Send Friend Request</span>
-	<a href="/users/<%= user._id %>/chat"><span id="chat-req-btn" class="btn btn-info">Send Message</span></a>
 <% } %>
 
 <script type="text/javascript">

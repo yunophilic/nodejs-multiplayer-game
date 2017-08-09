@@ -7,15 +7,15 @@ $(function() {
 		'#3b88eb', '#3824aa', '#a700ff', '#d300e7'
 	];
 
+	// Initialize variables
+
 	const CHAT_ROOM = 'game_chat';
 
 	var chatname;
 	$.get('/profile/username', function(data) {
 		chatname = data.username;
 	});
-
-	// Initialize variables
-
+	
 	var $window = $(window);
 	// var $usernameInput = $('.usernameInput'); // Input for username
 

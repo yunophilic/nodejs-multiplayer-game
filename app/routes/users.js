@@ -48,7 +48,7 @@ router.param('id', function(req, res, next, id) {
 	User.findById(id, function (err, user) {
 		//if it isn't found, we are going to respond with 404
 		if (err || !user) {
-			console.log(id + ' was not found');
+			/*console.log(id + ' was not found');*/
 			res.status(404)
 			var err = new Error('Not Found');
 			err.status = 404;
@@ -114,7 +114,7 @@ router.get('/:id/img', function(req, res) {
 router.put('/:id/add', middlewares.isLoggedIn, function(req, res) {
 	User.findById(req.id, function(err, user) {
 		if (err) {
-			console.log("error retrieving user");
+			/*console.log("error retrieving user");*/
 			return next(err);
 		}
 
@@ -124,7 +124,7 @@ router.put('/:id/add', middlewares.isLoggedIn, function(req, res) {
 			user.friendRequests.push(currentUserIdStr);
 			user.save(function(err, updatedUser) {
 				if (err) {
-					console.log("error saving user");
+					/*console.log("error saving user");*/
 					return next(err);
 				}
 
@@ -139,7 +139,7 @@ router.put('/:id/add', middlewares.isLoggedIn, function(req, res) {
 router.put('/:id/cancel', middlewares.isLoggedIn, function(req, res) {
 	User.findById(req.id, function(err, user) {
 		if (err) {
-			console.log("error retrieving user");
+			/*console.log("error retrieving user");*/
 			return next(err);
 		}
 
@@ -149,7 +149,7 @@ router.put('/:id/cancel', middlewares.isLoggedIn, function(req, res) {
 			user.friendRequests.remove(currentUserIdStr);
 			user.save(function(err, updatedUser) {
 				if (err) {
-					console.log("error saving user");
+					/*console.log("error saving user");*/
 					return next(err);
 				}
 
@@ -164,7 +164,7 @@ router.put('/:id/cancel', middlewares.isLoggedIn, function(req, res) {
 router.put('/:id/accept', middlewares.isLoggedIn, function(req, res) {
 	User.findById(req.id, function(err, user) {
 		if (err) {
-			console.log("error retrieving user");
+			/*console.log("error retrieving user");*/
 			return next(err);
 		}
 
@@ -178,7 +178,7 @@ router.put('/:id/accept', middlewares.isLoggedIn, function(req, res) {
 			currentUser.friends.push(userIdStr)
 			currentUser.save(function(err, updatedUser) {
 				if (err) {
-					console.log("error saving user");
+					/*console.log("error saving user");*/
 					return next(err);
 				}
 
@@ -188,7 +188,7 @@ router.put('/:id/accept', middlewares.isLoggedIn, function(req, res) {
 			user.friends.push(currentUser._id.toString());
 			user.save(function(err, updatedUser) {
 				if (err) {
-					console.log("error saving user");
+					/*console.log("error saving user");*/
 					return next(err);
 				}
 
@@ -210,7 +210,7 @@ router.put('/:id/reject', middlewares.isLoggedIn, function(req, res) {
 		currentUser.friendRequests.remove(req.id);
 		currentUser.save(function(err, updatedUser) {
 			if (err) {
-				console.log("error saving user");
+				/*console.log("error saving user");*/
 				return next(err);
 			}
 
@@ -224,7 +224,7 @@ router.put('/:id/reject', middlewares.isLoggedIn, function(req, res) {
 router.put('/:id/remove', middlewares.isLoggedIn, function(req, res) {
 	User.findById(req.id, function(err, user) {
 		if (err) {
-			console.log("error retrieving user");
+			/*console.log("error retrieving user");*/
 			return next(err);
 		}
 
@@ -239,7 +239,7 @@ router.put('/:id/remove', middlewares.isLoggedIn, function(req, res) {
 			user.friends.remove(currentUserIdStr);
 			user.save(function(err, updatedUser) {
 				if (err) {
-					console.log("error saving user");
+					/*console.log("error saving user");*/
 					return next(err);
 				}
 
@@ -249,7 +249,7 @@ router.put('/:id/remove', middlewares.isLoggedIn, function(req, res) {
 			currentUser.friends.remove(userIdStr);
 			currentUser.save(function(err, updatedUser) {
 				if (err) {
-					console.log("error saving user");
+					/*console.log("error saving user");*/
 					return next(err);
 				}
 
@@ -266,7 +266,7 @@ router.put('/:id/remove', middlewares.isLoggedIn, function(req, res) {
 router.get('/:id/chat', middlewares.isLoggedIn, function(req, res) {
 	User.findById(req.id, function(err, user) {
 		if (err) {
-			console.log("error retrieving user");
+			/*console.log("error retrieving user");*/
 			return next(err);
 		}
 
@@ -278,7 +278,9 @@ router.get('/:id/chat', middlewares.isLoggedIn, function(req, res) {
 		res.format({
 			html: function() {
 				if (!isConnected) {
-					return res.render('users/not-connected');
+					return res.render('users/not-connected', {
+						user: user
+					});
 				}
 				res.render('users/chat', {
 					currentUser: currentUser,
@@ -288,24 +290,14 @@ router.get('/:id/chat', middlewares.isLoggedIn, function(req, res) {
 			},
 			json: function() {
 				if (!isConnected) {
-					res.status = 403;
 					res.json({
 						status: 403,
 						message: 'Not Connected'
 					});
 				}
 
-				var username1 = currentUser.local.username1;
-				var username2 = user.local.username2;
-				
-				if (!username1 || !username2){
-					res.status = 400;
-					res.json({
-						status: 400, 
-						message: 'Bad Input'
-					});
-					return;
-				}
+				var username1 = currentUser.local.username;
+				var username2 = user.local.username;
 
 				//sort to disregard order
 				var x = [username1, username2];

@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "forever start ./bin/www"
+    "start": "cross-env NODE_ENV=production forever start ./bin/www"
   },
   "dependencies": {
     "angular": "^1.6.5",
@@ -18,6 +18,7 @@
     "express": "~4.15.2",
     "express-ejs-layouts": "^2.3.0",
     "express-flash": "0.0.2",
+    "express-recaptcha": "^2.2.0",
     "express-session": "~1.0.0",
     "formidable": "^1.1.1",
     "fs": "0.0.1-security",
@@ -26,6 +27,7 @@
     "mongoose": "^4.11.3",
     "morgan": "~1.8.1",
     "mv": "^2.1.1",
+    "nodemailer": "^4.0.1",
     "passport": "~0.1.17",
     "passport-facebook": "~1.0.2",
     "passport-google-oauth": "~0.1.5",
@@ -33,6 +35,10 @@
     "passport-twitter": "~1.0.2",
     "path": "^0.12.7",
     "serve-favicon": "~2.4.2",
-    "socket.io": "^2.0.3"
+    "socket.io": "^2.0.3",
+    "xoauth2": "^1.2.0"
+  },
+  "devDependencies": {
+    "cross-env": "^5.0.4"
   }
 }

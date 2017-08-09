@@ -8,14 +8,16 @@ module.exports = function(socket, chatRooms) {
 	
 	// when the client emits 'new message', this listens and executes
 	socket.on('new message', function (message) {
-		console.log(message);
+		/*console.log(message);
+		console.log(socket.room);*/
 
 		if (!socket.room)
 			return;
 
 		// don't save in game messages
 		if(socket.room != 'game_chat') {
-			chatRooms[socket.room].saveMessage(socket.room, socket.username, message);
+			/*console.log('try saving');*/
+			chatRooms[socket.room].saveMessage(socket.username, message);
 		}
 
 		// we tell the client subscribed in current room to execute 'new message'
@@ -30,7 +32,7 @@ module.exports = function(socket, chatRooms) {
 		if (addedUser)
 			return;
 
-		console.log('HEY' + data.username + ', ' + data.room);
+		/*console.log('(' + data.username + ', ' + data.room + ')');*/
 
 		// store stuffs in the socket session for this client
 		socket.username = data.username;
@@ -41,12 +43,13 @@ module.exports = function(socket, chatRooms) {
 		
 		var chatRoom = chatRooms[socket.room];
 		if (!chatRoom) {
-			chatRooms[socket.room] = new ChatRoom();
+			/*console.log('new room');*/
+			chatRooms[socket.room] = new ChatRoom(socket.room);
 			chatRoom = chatRooms[socket.room];
 		}
 
-		var isGroupChat = (socket.room == 'general_chat' || socket.room == 'game_chat');
-		if (isGroupChat && chatRoom.userExists(socket.username)) {
+		/*var isGroupChat = (socket.room == 'general_chat' || socket.room == 'game_chat');*/
+		if (chatRoom.userExists(socket.username)) {
 			socket.emit('deny chat access');
 			socket.disconnect(true);
 			return;
@@ -57,15 +60,26 @@ module.exports = function(socket, chatRooms) {
 
 		addedUser = true;
 
-		// echo current client
-		socket.emit('join', {
-			numUsers: numUsers
-		});
+		chatRoom.getMessages(function(err, chatLogs) {
+			var previousMessages = [];
+			if (!err) {
+				/*console.log('chat logs:')
+				console.log(chatLogs);*/
+				previousMessages = chatLogs;
+			}
+			
 
-		// echo other clients in current room that a person has connected
-		socket.broadcast.to(socket.room).emit('user joined', {
-			username: socket.username,
-			numUsers: numUsers
+			// echo current client
+			socket.emit('join', {
+				numUsers: numUsers,
+				previousMessages: previousMessages
+			});
+
+			// echo other clients in current room that a person has connected
+			socket.broadcast.to(socket.room).emit('user joined', {
+				username: socket.username,
+				numUsers: numUsers
+			});
 		});
 	});
 
@@ -86,7 +100,7 @@ module.exports = function(socket, chatRooms) {
 	// when the user disconnects.. perform this
 	socket.on('disconnect', function () {
 		if (addedUser) {
-			console.log('disconnecting from chat');
+			/*console.log('disconnecting from chat');*/
 
 			var username = socket.username;
 			var room = socket.room;

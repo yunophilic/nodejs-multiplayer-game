@@ -2,7 +2,8 @@ const TANK_INIT_HP = 100;
 
 var helpers = require('../utils/helpers');
 
-var Ball = require('../models/ball.js');
+var Tank = require('../models/tank');
+var Ball = require('../models/ball');
 
 module.exports = function(socket, gameRoom) {
 	var joinedGame = false;
@@ -14,13 +15,13 @@ module.exports = function(socket, gameRoom) {
 			return;
 		}
 
-		console.log(tank.id + ' joined the game');
+		/*console.log(tank.id + ' joined the game');*/
 		var initX = helpers.getRandomInt(40, 900);
 		var initY = helpers.getRandomInt(40, 500);
 		socket.emit('addTank', { id: tank.id, type: tank.type, isLocal: true, x: initX, y: initY, hp: TANK_INIT_HP });
 		socket.broadcast.emit('addTank', { id: tank.id, type: tank.type, isLocal: false, x: initX, y: initY, hp: TANK_INIT_HP} );
 
-		gameRoom.addTank({ id: tank.id, type: tank.type, hp: TANK_INIT_HP});
+		gameRoom.addTank(new Tank(tank.id, tank.type, TANK_INIT_HP));
 
 		joinedGame = true;
 	});

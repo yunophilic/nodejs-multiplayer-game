@@ -1,6 +1,6 @@
 module.exports = {
 	isLoggedIn: function (req, res, next) {
-		// if user is authenticated in the session, carry on 
+		// if user is authenticated in the session, carry on
 		if (req.isAuthenticated())
 			return next();
 
@@ -10,7 +10,6 @@ module.exports = {
 				res.redirect('/login?next=' + req.originalUrl);
 			},
 			json: function() {
-				res.status = 403;
 				res.json({
 					status: 403,
 					message: 'Must be logged in.'

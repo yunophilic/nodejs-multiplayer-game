@@ -53,7 +53,13 @@ var userSchema = mongoose.Schema({
                     'an uppercase letter, a lowercase letter, a number, and a special character.'
             },
             required: [true, 'Password Required']
-        }
+        }        
+    },
+
+    resetPassword: {
+        // should be random (prevent attacks) and unique (identify the user)
+        token: String,
+        expiry: Date
     },
 
     facebook         : {
@@ -67,6 +73,11 @@ var userSchema = mongoose.Schema({
 
 	friends: [String],
     friendRequests: [String],
+
+    settings: {
+        sidePanelFlag: Boolean,
+        bgmFlag: Boolean
+    }
 
     /*img: {
         data: Buffer,
