@@ -12,7 +12,7 @@
 	<script type="text/ng-template" id="/sidebar.html">
 		<input class="form-control" placeholder="Search..." type="text" ng-model="search.local.username" />
 		<li ng-repeat="user in users | filter: search">
-			<a href="/users/{{user._id}}/chat">
+			<a href="/users/{{user._id}}/chat" target="_blank"> <!-- open chat in new tab -->
 				<img ng-src="/users/{{user._id}}/img" src="" class="avatar-small">
 				&nbsp;{{user.local.username}}&nbsp;
 				<div id="online-status-{{user.local.username}}" ng-class="{ 'online-indicator': user.online }"></div>

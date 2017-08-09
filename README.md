@@ -42,22 +42,20 @@ To start the server, just pull the repo and type vagrant up.
 These features are cancelled due to 3rd party API related issues
 - Login with facebook
 
-# URLs 
-- /login
-- /signup
-- /profile
-- /logout
-- /game
-- /chat
-- /help
-- /users
-- /users/:id
+# Easily missed URLs 
+- /forgot-password
+- /reset-password
+
+# Important Notes
+- Side Panel is not available on chat and game pages
+- General chat and game pages cannot be opened on multiple tabs
+- You are allowed to chat with different users on different tabs but cannot chat with the same user on multiple tabs
 
 # References
-- https://scotch.io/tutorials/easy-node-authentication-setup-and-local (basic login and signup)
+- https://scotch.io/tutorials/easy-node-authentication-setup-and-local (basic login and signup without username)
 - http://rubentd.com/blog/creating-a-multiplayer-game-with-node-js/ (game code and assets modified from this)
 - https://github.com/socketio/socket.io/blob/master/examples/chat (basic chat code without multiple chat rooms)
-- https://startbootstrap.com/template-overviews/simple-sidebar/ 
+- https://startbootstrap.com/template-overviews/simple-sidebar/ (for side panel)
 - https://www.flaticon.com/free-icon/user_149071#term=avatar&page=1&position=3 (default user avatar)
 - http://www.bensound.com/royalty-free-music/track/epic (background music)
 - https://www.freefavicon.com/freefavicons/objects/iconinfo/nuclear-explosion-152-166696.html (favicon)
