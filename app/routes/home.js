@@ -173,7 +173,10 @@ module.exports = function(passport) {
 						from: 'Dawn of the Tanks <cmpt470.summer2017@gmail.com>',
 						to: user.local.email,
 						subject: 'Reset Password Link',
-						text: 'Reset password link: ' + link
+						text: 'You are receiving this email because you (or someone else) have requested to reset your password.\n\n' +
+							'Click on the following link, or paste it into your browser to complete the process:\n\n' +
+							'Reset password link: ' + link + '\n\n' +
+							'If you did not request this, please ignore this email and your password will remain unchanged.\n\n'
 					}, function (err) {
 						if (err) {
 							return errorResponse(err);
