@@ -24,9 +24,9 @@
 		<br>
 			<img class="user-image" ng-src="/users/{{user._id}}/img"  >
         <label class="name" >
-           <a href="/users/{{user._id}}">{{user.local.username}}</a>
-          
-           <label style="margin-left: 400px;" ng-if="isLogged()" ng-bind="{{'mutual' +user._id}}" ng-init="getMutual(user._id)">{{$scope.id}}</label>  
+			<a href="/users/{{user._id}}">{{user.local.username}}</a>
+			&nbsp;
+			<label class="pull-right" ng-if="isLogged()" ng-bind="{{'mutual' +user._id}}" ng-init="getMutual(user._id)">{{$scope.id}}</label>  
         </label>
            
         <div class="break"></div>
@@ -75,12 +75,12 @@
 			$scope.getMutual = function (data) {
 				$http.get('/users/'+ data +'/mutual', {_csrf: '<%= csrfToken %>'})
 				.then(function (result) {
-				        var output = "mutual"+data;
-				        if(result["data"] == "It's yourself"){
+				        var output = "mutual" + data;
+				        if(result["data"] == "It's yourself") {
                             $scope[output] = result["data"].toString();
 				        }
-				        else{
-				           $scope[output] = result["data"].length + " Mutual Friend(s)";
+				        else {
+				           $scope[output] = '[ ' + result["data"].length + " Mutual Friend(s)" + ' ]';
 				        }
                         
 
