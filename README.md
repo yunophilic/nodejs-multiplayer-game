@@ -19,6 +19,7 @@ To start the server, just pull the repo and type vagrant up.
 	* User's location displayed on tank (google maps API used)
 * General chat room
 * Friendship system
+	* Search users on users page with num of mutual friends displayed next to each user
 	* See online friends (on side panel, online friends marked with green circle icon)
 	* Chat with friends
 * Toggleable side panel and in-game bgm settings
