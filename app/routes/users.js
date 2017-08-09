@@ -328,21 +328,31 @@ router.get('/:id/mutual', function(req, res) {
 			next(err);
 		} 
 		else {
-			var currentUser = req.user;
-			var mutual_friend = [];
-
-           for (var i = 0; i < user.friends.length; i++) {
-                  if (req.user.friends.indexOf(user.friends[i]) !== -1) {
-                  mutual_friend.push(user.friends[i]);
-              }
-
-        }
-        console.log(mutual_friend.length);
-			res.format({
+             
+             if(req.user.local.username == user.local.username){
+             	res.format({
 				json: function(){
-					res.json(mutual_friend);
+					res.json(["It's yourself"]);
 				}
-			});
+			    });
+             }else{
+             	var mutual_friend = [];
+
+                 for (var i = 0; i < user.friends.length; i++) {
+                      if (req.user.friends.indexOf(user.friends[i]) !== -1) {
+                       mutual_friend.push(user.friends[i]);
+                 }
+
+               }
+                  console.log(mutual_friend.length);
+			      res.format({
+				  json: function(){
+				     	res.json(mutual_friend);
+				    }
+		    	});
+             }
+
+			
 		}
 	});
 });
