@@ -238,10 +238,15 @@ module.exports = function(passport) {
 
 			var newPassword = req.body.newPassword;
 			var confirmPassword = req.body.confirmPassword;
+			
+			if (newPassword == '') {
+				req.flash('error', 'New password cannot be empty.');
+				return res.redirect('/profile');
+			}
+
 			if (newPassword != confirmPassword) {
-				req.flash('error', 'New Password and Confirm Password do not match.');
-				res.redirect('back');
-				return;
+				req.flash('error', 'New password and confirm password do not match.');
+				return res.redirect('/profile');
 			}
 
 			//change pwd and clear reset password token and expiry on db
