@@ -25,9 +25,9 @@ To start the server, just pull the repo and type vagrant up.
 	* These settings are saved in the database
 * Chat logs are stored in the database to display previous messages
 * Add Security Header
-    * X-Frame-Options
-    * X-XSS-Protection
-    * Content-Security-Policy
+    * X-Frame-Options  (Avoid clickjacking attacks)
+    * X-XSS-Protection (Avoid cross-site scripting attacks)
+    * Content-Security-Policy (Whitelisting third party resources)
     
 # Future Features
 * Quick Play game mode (refer to issue #14)
