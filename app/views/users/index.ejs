@@ -17,7 +17,7 @@
 	<div class="form-inline">
 		<label>Search: </label>
 		<input type="text" class="form-control" ng-model="search.local.username">
-		<label ng-if="isLogged1()">(Login to see your mutual friend(s))</label>
+		<label ng-if="isLogged1()">(Login to see number of mutual friend(s))</label>
 	</div>
 	<ul class="users-list">
 		<li ng-repeat="user in users | filter: search" >
