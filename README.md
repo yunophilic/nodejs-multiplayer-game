@@ -28,6 +28,7 @@ To start the server, just pull the repo and type vagrant up.
     * X-Frame-Options
     * X-XSS-Protection
     * Content-Security-Policy
+    
 # Future Features
 * Quick Play game mode (refer to issue #14)
 * Competitive game mode (refer to issue #13)
