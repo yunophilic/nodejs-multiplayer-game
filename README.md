@@ -24,7 +24,10 @@ To start the server, just pull the repo and type vagrant up.
 * Toggleable side panel and in-game bgm settings
 	* These settings are saved in the database
 * Chat logs are stored in the database to display previous messages
-
+* Add Security Header
+    * X-Frame-Options
+    * X-XSS-Protection
+    * Content-Security-Policy
 # Future Features
 * Quick Play game mode (refer to issue #14)
 * Competitive game mode (refer to issue #13)
